@@ -12,11 +12,3 @@ dependencies:
     - sudo pip install -U crcmod
   override:
     - chmod +x gradlew
-test:
-  override:
-    - ./gradlew testVanillaDebugUnitTest -PdisablePreDex
-    - echo "y" | sudo /opt/google-cloud-sdk/bin/gcloud beta test android run --app app/build/outputs/apk/app-vanilla-debug.apk --test app/build/outputs/apk/app-vanilla-debug-androidTest.apk --device-ids Nexus5 --os-version-ids 22 --locales en --orientations portrait
-  post:
-    - mkdir -p $CIRCLE_TEST_REPORTS/junit/
-    - find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
-    - sudo /opt/google-cloud-sdk/bin/gsutil -m cp -r -U `sudo /opt/google-cloud-sdk/bin/gsutil ls gs://$TEST_LAB_BUCKET | tail -1` $CIRCLE_ARTIFACTS/ | true
