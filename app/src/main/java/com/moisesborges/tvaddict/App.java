@@ -2,6 +2,8 @@ package com.moisesborges.tvaddict;
 
 import android.app.Application;
 
+import com.squareup.leakcanary.LeakCanary;
+
 import timber.log.Timber;
 
 /**
@@ -15,6 +17,8 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        if (!installLeakCanary()) return;
+
         Timber.plant(new Timber.DebugTree() {
             @Override
             protected String createStackElementTag(StackTraceElement element) {
@@ -23,6 +27,16 @@ public class App extends Application {
         });
 
         mAppComponent = createComponent();
+    }
+
+    private boolean installLeakCanary() {
+        if (LeakCanary.isInAnalyzerProcess(this)) {
+            // This process is dedicated to LeakCanary for heap analysis.
+            // You should not init your app in this process.
+            return false;
+        }
+        LeakCanary.install(this);
+        return true;
     }
 
     protected AppComponent createComponent() {
