@@ -1,5 +1,6 @@
 package com.moisesborges.tvaddict.homescreen;
 
+import android.support.test.espresso.action.ViewActions;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -12,6 +13,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.*;
 import static android.support.test.espresso.assertion.ViewAssertions.*;
 import static android.support.test.espresso.matcher.ViewMatchers.*;
 
@@ -31,17 +33,39 @@ public class HomeActivityTest {
     @Test
     public void shouldDisplayThreeTabs() throws Exception {
         onView(withText(R.string.tab_shows))
-                .check(matches(ViewMatchers.isDisplayed()));
+                .check(matches(isDisplayed()));
 
         onView(withText(R.string.tab_watching))
-                .check(matches(ViewMatchers.isDisplayed()));
+                .check(matches(isDisplayed()));
 
         onView(withText(R.string.tab_upcoming))
-                .check(matches(ViewMatchers.isDisplayed()));
+                .check(matches(isDisplayed()));
     }
 
     @Test
-    public void shouldDisplayNavigationDrawer() throws Exception {
+    public void shouldDisplayShowsFragment() throws Exception {
+        onView(withText(R.string.tab_shows))
+                .perform(click());
 
+        onView(withId(R.id.shows_layout))
+                .check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void shouldDisplayWatchingShows() throws Exception {
+        onView(withText(R.string.tab_watching))
+                .perform(click());
+
+        onView(withId(R.id.watching_shows_layout))
+                .check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void shouldDisplayUpcomingEpisodes() throws Exception {
+        onView(withText(R.string.tab_upcoming))
+                .perform(click());
+
+        onView(withId(R.id.upcoming_episodes_layout))
+                .check(matches(isDisplayed()));
     }
 }

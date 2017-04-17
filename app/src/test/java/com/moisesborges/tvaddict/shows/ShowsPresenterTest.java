@@ -2,6 +2,7 @@ package com.moisesborges.tvaddict.shows;
 
 import com.moisesborges.tvaddict.data.ShowsRepository;
 import com.moisesborges.tvaddict.exceptions.ViewNotAttachedException;
+import com.moisesborges.tvaddict.models.Show;
 import com.moisesborges.tvaddict.models.ShowInfo;
 
 import org.junit.Before;
@@ -45,15 +46,15 @@ public class ShowsPresenterTest {
 
     @Test
     public void shouldDisplayShows() throws Exception {
-        List<ShowInfo> showInfos = Arrays.asList(new ShowInfo(), new ShowInfo());
-        when(mMockShowsRepository.getShows()).thenReturn(Single.just(showInfos));
+        List<Show> shows = Arrays.asList(new Show(), new Show());
+        when(mMockShowsRepository.getShows()).thenReturn(Single.just(shows));
 
         mShowsPresenter.bindView(mMockShowsView);
         mShowsPresenter.loadShows();
 
         verify(mMockShowsView).displayProgress(true);
         verify(mMockShowsView).displayProgress(false);
-        verify(mMockShowsView).displayTvShows(showInfos);
+        verify(mMockShowsView).displayTvShows(shows);
     }
 
     @Test
@@ -65,5 +66,19 @@ public class ShowsPresenterTest {
         verify(mMockShowsView).displayProgress(true);
         verify(mMockShowsView).displayProgress(false);
         verify(mMockShowsView).displayError();
+    }
+
+    @Test(expected = ViewNotAttachedException.class)
+    public void shouldThrowExceptionIfNavigateBeforeBindView() throws Exception {
+        Show show = new Show();
+        mShowsPresenter.selectShow(show);
+    }
+
+    @Test
+    public void shouldNavigateToShowDetails() throws Exception {
+        Show show = new Show();
+        mShowsPresenter.bindView(mMockShowsView);
+        mShowsPresenter.selectShow(show);
+        verify(mMockShowsView).navigateToShowDetails(show);
     }
 }

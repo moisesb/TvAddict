@@ -2,7 +2,7 @@ package com.moisesborges.tvaddict.shows;
 
 import android.support.annotation.NonNull;
 
-import com.moisesborges.tvaddict.models.ShowInfo;
+import com.moisesborges.tvaddict.models.Show;
 import com.moisesborges.tvaddict.mvp.BaseView;
 
 import java.util.List;
@@ -14,7 +14,9 @@ import java.util.List;
 public interface ShowsView extends BaseView {
     void displayProgress(boolean loading);
 
-    void displayTvShows(@NonNull List<ShowInfo> showInfos);
+    void displayTvShows(@NonNull List<Show> shows);
 
     void displayError();
+
+    void navigateToShowDetails(@NonNull Show show);
 }

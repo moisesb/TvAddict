@@ -1,5 +1,6 @@
 package com.moisesborges.tvaddict.shows;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -9,15 +10,20 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.moisesborges.tvaddict.App;
 import com.moisesborges.tvaddict.R;
+import com.moisesborges.tvaddict.models.Show;
 import com.moisesborges.tvaddict.models.ShowInfo;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -36,7 +42,16 @@ public class ShowsFragment extends Fragment implements ShowsView {
     @BindView(R.id.progress_bar)
     ProgressBar mProgressBar;
 
+    @Inject
+    ShowsPresenter mShowsPresenter;
+
     private final ShowsAdapter mShowsAdapter = new ShowsAdapter();
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        ((App)context.getApplicationContext()).getAppComponent().inject(this);
+    }
 
     @Nullable
     @Override
@@ -47,9 +62,21 @@ public class ShowsFragment extends Fragment implements ShowsView {
         return layout;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        mShowsPresenter.bindView(this);
+        mShowsPresenter.loadShows();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        mShowsPresenter.unbindView();
+    }
+
     private void setupRecyclerView() {
         mShowsRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
-        mShowsRecyclerView.setHasFixedSize(true);
         mShowsRecyclerView.setAdapter(mShowsAdapter);
     }
 
@@ -65,12 +92,17 @@ public class ShowsFragment extends Fragment implements ShowsView {
     }
 
     @Override
-    public void displayTvShows(@NonNull List<ShowInfo> showInfos) {
-        mShowsAdapter.setShowInfos(showInfos);
+    public void displayTvShows(@NonNull List<Show> shows) {
+        mShowsAdapter.setShows(shows);
     }
 
     @Override
     public void displayError() {
+
+    }
+
+    @Override
+    public void navigateToShowDetails(@NonNull Show show) {
 
     }
 
@@ -80,14 +112,14 @@ public class ShowsFragment extends Fragment implements ShowsView {
 
     public static class ShowsAdapter extends RecyclerView.Adapter<ShowsAdapter.ViewHolder> {
 
-        private final List<ShowInfo> mShowInfos = new ArrayList<>();
+        private final List<Show> mShows = new ArrayList<>();
 
         public ShowsAdapter() {
         }
 
-        public void setShowInfos(@NonNull List<ShowInfo> showInfos) {
-            mShowInfos.clear();
-            mShowInfos.addAll(showInfos);
+        public void setShows(@NonNull List<Show> shows) {
+            mShows.clear();
+            mShows.addAll(shows);
             notifyDataSetChanged();
         }
 
@@ -100,26 +132,31 @@ public class ShowsFragment extends Fragment implements ShowsView {
 
         @Override
         public void onBindViewHolder(ShowsAdapter.ViewHolder holder, int position) {
-            ShowInfo showInfo = mShowInfos.get(position);
-            holder.bind(showInfo);
+            Show show = mShows.get(position);
+            holder.bind(show);
         }
 
         @Override
         public int getItemCount() {
-            return 0;
+            return mShows.size();
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder {
             @BindView(R.id.show_name_text_view)
             TextView mShowNameTextView;
+            @BindView(R.id.show_image_view)
+            ImageView mImageView;
 
             public ViewHolder(View itemView) {
                 super(itemView);
                 ButterKnife.bind(this, itemView);
             }
 
-            public void bind(ShowInfo showInfo) {
-                mShowNameTextView.setText(showInfo.getShow().getName());
+            public void bind(Show show) {
+                Glide.with(itemView.getContext())
+                        .load(show.getImage().getMedium())
+                        .into(mImageView);
+                mShowNameTextView.setText(show.getName());
             }
         }
     }
