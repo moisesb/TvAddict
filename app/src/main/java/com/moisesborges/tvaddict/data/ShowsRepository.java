@@ -1,6 +1,6 @@
 package com.moisesborges.tvaddict.data;
 
-import com.moisesborges.tvaddict.models.ShowInfo;
+import com.moisesborges.tvaddict.models.Show;
 
 import java.util.List;
 
@@ -11,5 +11,5 @@ import io.reactivex.Single;
  */
 
 public interface ShowsRepository {
-    Single<List<ShowInfo>> getShows();
+    Single<List<Show>> getShows();
 }

@@ -1,11 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
+              xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
-              android:layout_height="match_parent">
+              android:layout_height="wrap_content"
+              android:orientation="vertical">
+
+    <com.moisesborges.tvaddict.ui.SquareFrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/show_image_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </com.moisesborges.tvaddict.ui.SquareFrameLayout>
 
     <TextView
         android:id="@+id/show_name_text_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:textSize="16sp"
+        android:textColor="@color/primary_text"
+        tools:text="Breaking Bad"/>
 </LinearLayout>

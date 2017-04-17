@@ -17,6 +17,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.moisesborges.tvaddict.R;
+import com.moisesborges.tvaddict.shows.ShowsFragment;
+import com.moisesborges.tvaddict.upcoming.UpcomingEpisodesFragment;
+import com.moisesborges.tvaddict.watching.WatchingShowsFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +29,6 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
@@ -131,7 +133,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         }
 
         private void initFragments() {
-
+            mFragments.add(ShowsFragment.newInstance());
+            mFragments.add(WatchingShowsFragment.newInstance());
+            mFragments.add(UpcomingEpisodesFragment.newInstance());
         }
 
         @Override

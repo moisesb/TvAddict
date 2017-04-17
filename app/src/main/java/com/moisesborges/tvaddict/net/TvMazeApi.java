@@ -1,5 +1,6 @@
 package com.moisesborges.tvaddict.net;
 
+import com.moisesborges.tvaddict.models.Show;
 import com.moisesborges.tvaddict.models.ShowInfo;
 
 import java.util.List;
@@ -15,4 +16,7 @@ import retrofit2.http.Query;
 public interface TvMazeApi {
     @GET("search/shows")
     Single<List<ShowInfo>> searchShows(@Query("q") String query);
+
+    @GET("shows")
+    Single<List<Show>> listShows(@Query("page") int page);
 }
