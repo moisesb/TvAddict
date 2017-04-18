@@ -1,5 +1,6 @@
 package com.moisesborges.tvaddict;
 
+import com.moisesborges.tvaddict.showdetails.ShowDetailsActivity;
 import com.moisesborges.tvaddict.shows.ShowsFragment;
 
 import javax.inject.Singleton;
@@ -17,6 +18,8 @@ import dagger.Component;
 public interface AppComponent {
 
     void inject(MainActivity activity);
+
+    void inject(ShowDetailsActivity activity);
 
     void inject(ShowsFragment fragment);
 }

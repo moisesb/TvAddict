@@ -7,29 +7,28 @@ import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Self implements Parcelable {
+public class EpisodeRef implements Parcelable {
 
     @SerializedName("href")
     @Expose
     private String href;
 
-    public Self() {
-
+    public EpisodeRef() {
     }
 
-    protected Self(Parcel in) {
+    protected EpisodeRef(Parcel in) {
         href = in.readString();
     }
 
-    public static final Creator<Self> CREATOR = new Creator<Self>() {
+    public static final Creator<EpisodeRef> CREATOR = new Creator<EpisodeRef>() {
         @Override
-        public Self createFromParcel(Parcel in) {
-            return new Self(in);
+        public EpisodeRef createFromParcel(Parcel in) {
+            return new EpisodeRef(in);
         }
 
         @Override
-        public Self[] newArray(int size) {
-            return new Self[size];
+        public EpisodeRef[] newArray(int size) {
+            return new EpisodeRef[size];
         }
     };
 

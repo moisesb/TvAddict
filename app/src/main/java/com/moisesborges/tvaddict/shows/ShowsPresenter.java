@@ -40,9 +40,9 @@ public class ShowsPresenter extends BasePresenter<ShowsView> {
         Disposable disposable = mShowsRepository.getShows()
                 .subscribeOn(mIoScheduler)
                 .observeOn(mAndroidScheduler)
-                .subscribe(showInfos -> {
+                .subscribe(shows -> {
                             getView().displayProgress(false);
-                            getView().displayTvShows(showInfos);
+                            getView().displayTvShows(shows);
 
                         }, throwable -> {
                             getView().displayProgress(false);
@@ -53,7 +53,7 @@ public class ShowsPresenter extends BasePresenter<ShowsView> {
         addDisposable(disposable);
     }
 
-    public void selectShow(@NonNull Show show) {
+    public void openShowDetails(@NonNull Show show) {
         checkView();
         getView().navigateToShowDetails(show);
     }

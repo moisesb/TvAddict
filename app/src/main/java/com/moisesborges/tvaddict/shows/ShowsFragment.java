@@ -17,8 +17,9 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.moisesborges.tvaddict.App;
 import com.moisesborges.tvaddict.R;
+import com.moisesborges.tvaddict.adapters.ItemClickListener;
 import com.moisesborges.tvaddict.models.Show;
-import com.moisesborges.tvaddict.models.ShowInfo;
+import com.moisesborges.tvaddict.showdetails.ShowDetailsActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +28,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 
 /**
@@ -45,7 +47,9 @@ public class ShowsFragment extends Fragment implements ShowsView {
     @Inject
     ShowsPresenter mShowsPresenter;
 
-    private final ShowsAdapter mShowsAdapter = new ShowsAdapter();
+    private ItemClickListener<Show> mShowItemClickListener = show -> mShowsPresenter.openShowDetails(show);
+
+    private final ShowsAdapter mShowsAdapter = new ShowsAdapter(mShowItemClickListener);
 
     @Override
     public void onAttach(Context context) {
@@ -103,7 +107,7 @@ public class ShowsFragment extends Fragment implements ShowsView {
 
     @Override
     public void navigateToShowDetails(@NonNull Show show) {
-
+        ShowDetailsActivity.start(getContext(), show);
     }
 
     public static Fragment newInstance() {
@@ -113,8 +117,10 @@ public class ShowsFragment extends Fragment implements ShowsView {
     public static class ShowsAdapter extends RecyclerView.Adapter<ShowsAdapter.ViewHolder> {
 
         private final List<Show> mShows = new ArrayList<>();
+        private final ItemClickListener<Show> mListener;
 
-        public ShowsAdapter() {
+        public ShowsAdapter(@Nullable ItemClickListener<Show> listener) {
+            mListener = listener;
         }
 
         public void setShows(@NonNull List<Show> shows) {
@@ -150,6 +156,16 @@ public class ShowsFragment extends Fragment implements ShowsView {
             public ViewHolder(View itemView) {
                 super(itemView);
                 ButterKnife.bind(this, itemView);
+            }
+
+            @OnClick(R.id.show_item_layout)
+            @SuppressWarnings("unused")
+            public void onShowClick() {
+                if (mListener != null) {
+                    int position = getAdapterPosition();
+                    final Show show = mShows.get(position);
+                    mListener.consume(show);
+                }
             }
 
             public void bind(Show show) {

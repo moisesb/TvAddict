@@ -3,12 +3,10 @@ package com.moisesborges.tvaddict.shows;
 import com.moisesborges.tvaddict.data.ShowsRepository;
 import com.moisesborges.tvaddict.exceptions.ViewNotAttachedException;
 import com.moisesborges.tvaddict.models.Show;
-import com.moisesborges.tvaddict.models.ShowInfo;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import java.util.Arrays;
@@ -17,7 +15,6 @@ import java.util.List;
 import io.reactivex.Scheduler;
 import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
-import io.reactivex.schedulers.TestScheduler;
 
 import static org.mockito.Mockito.*;
 
@@ -71,14 +68,14 @@ public class ShowsPresenterTest {
     @Test(expected = ViewNotAttachedException.class)
     public void shouldThrowExceptionIfNavigateBeforeBindView() throws Exception {
         Show show = new Show();
-        mShowsPresenter.selectShow(show);
+        mShowsPresenter.openShowDetails(show);
     }
 
     @Test
     public void shouldNavigateToShowDetails() throws Exception {
         Show show = new Show();
         mShowsPresenter.bindView(mMockShowsView);
-        mShowsPresenter.selectShow(show);
+        mShowsPresenter.openShowDetails(show);
         verify(mMockShowsView).navigateToShowDetails(show);
     }
 }

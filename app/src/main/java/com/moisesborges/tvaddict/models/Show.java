@@ -1,11 +1,15 @@
 
 package com.moisesborges.tvaddict.models;
 
-import java.util.List;
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Show {
+import java.util.List;
+
+public class Show implements Parcelable{
 
     @SerializedName("id")
     @Expose
@@ -64,6 +68,58 @@ public class Show {
     @SerializedName("_links")
     @Expose
     private Links links;
+
+    public Show() {
+    }
+
+    protected Show(Parcel in) {
+        if (in.readByte() == 0) {
+            id = null;
+        } else {
+            id = in.readInt();
+        }
+        url = in.readString();
+        name = in.readString();
+        type = in.readString();
+        language = in.readString();
+        genres = in.createStringArrayList();
+        status = in.readString();
+        if (in.readByte() == 0) {
+            runtime = null;
+        } else {
+            runtime = in.readInt();
+        }
+        premiered = in.readString();
+        schedule = in.readParcelable(Schedule.class.getClassLoader());
+        rating = in.readParcelable(Rating.class.getClassLoader());
+        if (in.readByte() == 0) {
+            weight = null;
+        } else {
+            weight = in.readInt();
+        }
+        network = in.readParcelable(Network.class.getClassLoader());
+        externals = in.readParcelable(Externals.class.getClassLoader());
+        image = in.readParcelable(Image.class.getClassLoader());
+        summary = in.readString();
+        if (in.readByte() == 0) {
+            updated = null;
+        } else {
+            updated = in.readInt();
+        }
+        links = in.readParcelable(Links.class.getClassLoader());
+    }
+
+    public static final Creator<Show> CREATOR = new Creator<Show>() {
+        @Override
+        public Show createFromParcel(Parcel in) {
+            return new Show(in);
+        }
+
+        @Override
+        public Show[] newArray(int size) {
+            return new Show[size];
+        }
+    };
 
     public Integer getId() {
         return id;
@@ -217,4 +273,50 @@ public class Show {
         this.links = links;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        if (id == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeInt(id);
+        }
+        dest.writeString(url);
+        dest.writeString(name);
+        dest.writeString(type);
+        dest.writeString(language);
+        dest.writeStringList(genres);
+        dest.writeString(status);
+        if (runtime == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeInt(runtime);
+        }
+        dest.writeString(premiered);
+        dest.writeParcelable(schedule, flags);
+        dest.writeParcelable(rating, flags);
+        if (weight == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeInt(weight);
+        }
+        dest.writeParcelable(network, flags);
+        dest.writeParcelable(externals, flags);
+        dest.writeParcelable(image, flags);
+        dest.writeString(summary);
+        if (updated == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeInt(updated);
+        }
+        dest.writeParcelable(links, flags);
+    }
 }
