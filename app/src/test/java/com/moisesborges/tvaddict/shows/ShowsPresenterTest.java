@@ -3,6 +3,7 @@ package com.moisesborges.tvaddict.shows;
 import com.moisesborges.tvaddict.data.ShowsRepository;
 import com.moisesborges.tvaddict.exceptions.ViewNotAttachedException;
 import com.moisesborges.tvaddict.models.Show;
+import com.moisesborges.tvaddict.utils.RxJavaTestConfig;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -31,9 +32,8 @@ public class ShowsPresenterTest {
 
     @Before
     public void setUp() throws Exception {
-        Scheduler scheduler = Schedulers.trampoline();
         MockitoAnnotations.initMocks(this);
-        mShowsPresenter = new ShowsPresenter(mMockShowsRepository, scheduler, scheduler);
+        mShowsPresenter = new ShowsPresenter(mMockShowsRepository, new RxJavaTestConfig());
     }
 
     @Test(expected = ViewNotAttachedException.class)

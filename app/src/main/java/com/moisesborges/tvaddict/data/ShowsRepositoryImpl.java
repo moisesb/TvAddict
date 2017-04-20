@@ -2,6 +2,7 @@ package com.moisesborges.tvaddict.data;
 
 import android.support.annotation.NonNull;
 
+import com.moisesborges.tvaddict.models.Season;
 import com.moisesborges.tvaddict.models.Show;
 import com.moisesborges.tvaddict.net.TvMazeApi;
 
@@ -24,5 +25,10 @@ public class ShowsRepositoryImpl implements ShowsRepository {
     @Override
     public Single<List<Show>> getShows() {
         return mTvMazeApi.listShows(0);
+    }
+
+    @Override
+    public Single<List<Season>> getSeasons(int showId) {
+        return mTvMazeApi.listShowSeasons(showId);
     }
 }

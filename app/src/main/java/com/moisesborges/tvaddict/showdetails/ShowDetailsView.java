@@ -1,6 +1,11 @@
 package com.moisesborges.tvaddict.showdetails;
 
+import android.support.annotation.NonNull;
+
+import com.moisesborges.tvaddict.models.Season;
 import com.moisesborges.tvaddict.mvp.BaseView;
+
+import java.util.List;
 
 /**
  * Created by moises.anjos on 18/04/2017.
@@ -12,4 +17,10 @@ interface ShowDetailsView extends BaseView{
     void setShowImage(String imageUrl);
 
     void setShowSummary(String summary);
+
+    void displaySeasons(@NonNull List<Season> seasons);
+
+    void displaySeasonsProgress(boolean isLoading);
+
+    void displaySeasonsNotLoaded(boolean hasError);
 }

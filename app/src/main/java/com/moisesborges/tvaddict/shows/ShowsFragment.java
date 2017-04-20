@@ -20,6 +20,7 @@ import com.moisesborges.tvaddict.R;
 import com.moisesborges.tvaddict.adapters.ItemClickListener;
 import com.moisesborges.tvaddict.models.Show;
 import com.moisesborges.tvaddict.showdetails.ShowDetailsActivity;
+import com.moisesborges.tvaddict.utils.ProgressBarHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,7 +55,7 @@ public class ShowsFragment extends Fragment implements ShowsView {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        ((App)context.getApplicationContext()).getAppComponent().inject(this);
+        ((App) context.getApplicationContext()).getAppComponent().inject(this);
     }
 
     @Nullable
@@ -91,8 +92,8 @@ public class ShowsFragment extends Fragment implements ShowsView {
     }
 
     @Override
-    public void displayProgress(boolean loading) {
-        mProgressBar.setVisibility(loading ? View.VISIBLE : View.GONE);
+    public void displayProgress(boolean isLoading) {
+        ProgressBarHelper.show(mProgressBar, isLoading);
     }
 
     @Override
@@ -132,7 +133,7 @@ public class ShowsFragment extends Fragment implements ShowsView {
         @Override
         public ShowsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View layout = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.item_show_info, parent, false);
+                    .inflate(R.layout.item_show, parent, false);
             return new ViewHolder(layout);
         }
 

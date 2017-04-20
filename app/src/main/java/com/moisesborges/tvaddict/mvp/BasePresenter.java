@@ -1,6 +1,7 @@
 package com.moisesborges.tvaddict.mvp;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.moisesborges.tvaddict.exceptions.ViewNotAttachedException;
 
@@ -14,10 +15,19 @@ import io.reactivex.disposables.Disposable;
 public abstract class BasePresenter<T extends BaseView> {
 
     private T mView;
+    private final RxJavaConfig mRxJavaConfig;
     private CompositeDisposable mCompositeDisposable = new CompositeDisposable();
+
+    public BasePresenter(@NonNull RxJavaConfig rxJavaConfig) {
+        mRxJavaConfig = rxJavaConfig;
+    }
 
     public T getView() {
         return mView;
+    }
+
+    public RxJavaConfig getRxJavaConfig() {
+        return mRxJavaConfig;
     }
 
     public void bindView(T view) {

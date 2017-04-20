@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:id="@+id/season_item_layout"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical">
+
+    <com.moisesborges.tvaddict.ui.SquareFrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/season_image_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </com.moisesborges.tvaddict.ui.SquareFrameLayout>
+
+    <TextView
+        android:id="@+id/season_text_view"
+        tools:text="Season 1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:textColor="@color/primary_text"
+        android:textSize="16sp"/>
+
+</LinearLayout>
