@@ -35,7 +35,7 @@ public abstract class BasePresenter<T extends BaseView> {
     }
 
     public void unbindView() {
-        mCompositeDisposable.dispose();
+        mCompositeDisposable.clear();
         mView = null;
     }
 

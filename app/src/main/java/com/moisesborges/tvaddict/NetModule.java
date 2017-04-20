@@ -1,11 +1,16 @@
 package com.moisesborges.tvaddict;
 
+import android.content.Context;
+import android.support.annotation.NonNull;
+
 import com.moisesborges.tvaddict.net.TvMazeApi;
 
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import okhttp3.Cache;
+import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -20,19 +25,34 @@ import timber.log.Timber;
 @Singleton
 public class NetModule {
 
+    private final Context mContext;
+
+    public NetModule(@NonNull Context context) {
+        mContext = context;
+    }
+
     @Singleton
     @Provides
     public OkHttpClient providesOkHttpClient() {
-        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
-            @Override
-            public void log(String message) {
-                Timber.tag("OkHttp").d(message);
-            }
-        });
-        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BASIC);
+        Interceptor interceptor = buildInterceptor();
+        Cache cache = buildCache();
+
         return new OkHttpClient().newBuilder()
-                .addInterceptor(loggingInterceptor)
+                .cache(cache)
+                .addInterceptor(interceptor)
                 .build();
+    }
+
+    private Cache buildCache() {
+        int cacheSize = 10 * 1024 * 1024;
+        return new Cache(mContext.getCacheDir() , cacheSize);
+    }
+
+    @NonNull
+    private Interceptor buildInterceptor() {
+        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(message -> Timber.tag("OkHttp").d(message));
+        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BASIC);
+        return loggingInterceptor;
     }
 
     @Singleton

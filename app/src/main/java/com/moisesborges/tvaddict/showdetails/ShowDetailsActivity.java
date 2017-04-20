@@ -116,7 +116,7 @@ public class ShowDetailsActivity extends AppCompatActivity implements ShowDetail
 
     @Override
     public void setShowName(String showName) {
-        mToolbar.setTitle(showName);
+        this.setTitle(showName);
     }
 
     @Override
@@ -213,10 +213,13 @@ public class ShowDetailsActivity extends AppCompatActivity implements ShowDetail
             }
 
             public void bind(@NonNull Season season) {
-                Glide.with(itemView.getContext())
-                        .load(season.getImage().getMedium())
-                        .into(mSeasonImageView);
                 mNumberTextView.setText(season.getName());
+
+                if (season.getImage() != null) {
+                    Glide.with(itemView.getContext())
+                            .load(season.getImage().getMedium())
+                            .into(mSeasonImageView);
+                }
             }
         }
     }

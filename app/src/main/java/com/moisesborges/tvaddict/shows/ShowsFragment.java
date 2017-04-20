@@ -31,6 +31,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import timber.log.Timber;
 
 /**
  * Created by Moisés on 12/04/2017.
@@ -62,6 +63,7 @@ public class ShowsFragment extends Fragment implements ShowsView {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View layout = inflater.inflate(R.layout.fragment_shows, container, false);
+        setRetainInstance(true);
         mUnbinder = ButterKnife.bind(this, layout);
         setupRecyclerView();
         return layout;
@@ -70,6 +72,7 @@ public class ShowsFragment extends Fragment implements ShowsView {
     @Override
     public void onStart() {
         super.onStart();
+        Timber.d("onStart");
         mShowsPresenter.bindView(this);
         mShowsPresenter.loadShows();
     }

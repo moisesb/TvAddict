@@ -41,7 +41,7 @@ public class App extends Application {
 
     protected AppComponent createComponent() {
         return DaggerAppComponent.builder()
-                .netModule(new NetModule())
+                .netModule(new NetModule(getApplicationContext()))
                 .build();
     }
 

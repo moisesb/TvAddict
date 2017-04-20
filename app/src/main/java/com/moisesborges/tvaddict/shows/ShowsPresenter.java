@@ -13,6 +13,7 @@ import javax.inject.Named;
 
 import io.reactivex.Scheduler;
 import io.reactivex.disposables.Disposable;
+import timber.log.Timber;
 
 /**
  * Created by Moisés on 12/04/2017.
