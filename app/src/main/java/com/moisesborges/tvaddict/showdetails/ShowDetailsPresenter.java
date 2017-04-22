@@ -38,15 +38,25 @@ public class ShowDetailsPresenter extends BasePresenter<ShowDetailsView> {
         getView().displaySeasonsNotLoaded(false);
 
         getView().displaySeasonsProgress(true);
-        mShowsRepository.getSeasons(show.getId())
+        mShowsRepository.getFullShowInfo(show.getId())
                 .subscribeOn(getRxJavaConfig().ioScheduler())
                 .observeOn(getRxJavaConfig().androidScheduler())
-                .subscribe(seasons -> {
+                .subscribe(showFullInfo -> {
                     getView().displaySeasonsProgress(false);
-                    getView().displaySeasons(seasons);
+                    getView().setShow(showFullInfo);
+                    if (showFullInfo.getEmbedded() != null) {
+                        getView().displaySeasons(showFullInfo.getEmbedded().getSeasons());
+                    }
                 }, throwable -> {
                     getView().displaySeasonsProgress(false);
                     getView().displaySeasonsNotLoaded(true);
                 });
+
+    }
+
+    public void openEpisodes(Show show, Season season) {
+        checkView();
+
+        getView().navigateToEpisodes(show.getId(), season.getNumber(), show.getEmbedded());
     }
 }

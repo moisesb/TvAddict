@@ -23,6 +23,8 @@ import com.bumptech.glide.Glide;
 import com.moisesborges.tvaddict.App;
 import com.moisesborges.tvaddict.R;
 import com.moisesborges.tvaddict.adapters.ItemClickListener;
+import com.moisesborges.tvaddict.episodes.EpisodesActivity;
+import com.moisesborges.tvaddict.models.Embedded;
 import com.moisesborges.tvaddict.models.Season;
 import com.moisesborges.tvaddict.models.Show;
 import com.moisesborges.tvaddict.utils.ProgressBarHelper;
@@ -62,7 +64,9 @@ public class ShowDetailsActivity extends AppCompatActivity implements ShowDetail
     @BindView(R.id.progress_bar)
     ProgressBar mProgressBar;
 
-    private SeasonsAdapter mAdapter = new SeasonsAdapter(null);
+    private ItemClickListener<Season> mSeasonItemClickListener = (season) -> mShowDetailsPresenter.openEpisodes(mShow, season);
+
+    private SeasonsAdapter mAdapter = new SeasonsAdapter(mSeasonItemClickListener);
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -83,6 +87,7 @@ public class ShowDetailsActivity extends AppCompatActivity implements ShowDetail
 
     private void setupToolbar() {
         setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
@@ -144,6 +149,16 @@ public class ShowDetailsActivity extends AppCompatActivity implements ShowDetail
     @Override
     public void displaySeasonsNotLoaded(boolean hasError) {
 
+    }
+
+    @Override
+    public void setShow(@NonNull Show show) {
+        mShow = show;
+    }
+
+    @Override
+    public void navigateToEpisodes(int showId, int seasonNumber, Embedded embeddedData) {
+        EpisodesActivity.start(this, showId, seasonNumber, embeddedData);
     }
 
     private Spanned extractFromHtml(String html) {

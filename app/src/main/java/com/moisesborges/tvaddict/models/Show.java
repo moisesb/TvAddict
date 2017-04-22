@@ -3,6 +3,7 @@ package com.moisesborges.tvaddict.models;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.Nullable;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -68,6 +69,9 @@ public class Show implements Parcelable{
     @SerializedName("_links")
     @Expose
     private Links links;
+    @SerializedName("_embedded")
+    @Expose
+    private Embedded embedded;
 
     public Show() {
     }
@@ -271,6 +275,15 @@ public class Show implements Parcelable{
 
     public void setLinks(Links links) {
         this.links = links;
+    }
+
+    @Nullable
+    public Embedded getEmbedded() {
+        return embedded;
+    }
+
+    public void setEmbedded(Embedded embedded) {
+        this.embedded = embedded;
     }
 
     @Override

@@ -23,6 +23,9 @@ public interface TvMazeApi {
     @GET("shows")
     Single<List<Show>> listShows(@Query("page") int page);
 
+    @GET("shows/{id}?embed[]=episodes&embed[]=cast&embed[]=seasons")
+    Single<Show> fetchShowFullInfo(@Path("id") int showId);
+
     @GET("shows/{id}/episodes")
     Single<List<Episode>> listShowEpisodes(@Path("id") int showId);
 

@@ -2,9 +2,11 @@ package com.moisesborges.tvaddict.showdetails;
 
 import com.moisesborges.tvaddict.data.ShowsRepository;
 import com.moisesborges.tvaddict.exceptions.ViewNotAttachedException;
+import com.moisesborges.tvaddict.models.Embedded;
 import com.moisesborges.tvaddict.models.Image;
 import com.moisesborges.tvaddict.models.Season;
 import com.moisesborges.tvaddict.models.Show;
+import com.moisesborges.tvaddict.utils.MockShow;
 import com.moisesborges.tvaddict.utils.RxJavaTestConfig;
 
 import org.junit.Before;
@@ -27,7 +29,7 @@ public class ShowDetailsPresenterTest {
 
     private ShowDetailsPresenter mShowDetailsPresenter;
     private Show mShow;
-
+    private Show mShowFullInfo;
     @Mock
     ShowDetailsView mShowDetailsView;
     @Mock
@@ -36,7 +38,9 @@ public class ShowDetailsPresenterTest {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        mShow = new Show();
+        mShow = MockShow.newMockShowInstance();
+        mShowFullInfo = MockShow.newMockShowInstance();
+        mShowFullInfo.setEmbedded(MockShow.newEmbeddedInstance());
         mShowDetailsPresenter = new ShowDetailsPresenter(mShowsRepository, new RxJavaTestConfig());
     }
 
@@ -47,15 +51,8 @@ public class ShowDetailsPresenterTest {
 
     @Test
     public void shouldDisplayShowDetailsIntoView() throws Exception {
-        mShow.setId(1);
-        mShow.setName("The newest show");
-        Image image = new Image();
-        image.setMedium("http://showimageurl.com");
-        mShow.setImage(image);
-        mShow.setSummary("<p>this is the newest show of this weeekend</p>");
-
-        when(mShowsRepository.getSeasons(mShow.getId()))
-                .thenReturn(Single.fromCallable(ArrayList::new));
+        when(mShowsRepository.getFullShowInfo(mShow.getId()))
+                .thenReturn(Single.fromCallable(() -> mShowFullInfo));
 
         mShowDetailsPresenter.bindView(mShowDetailsView);
 
@@ -66,8 +63,18 @@ public class ShowDetailsPresenterTest {
         verify(mShowDetailsView).setShowImage(mShow.getImage().getMedium());
         verify(mShowDetailsView).setShowSummary(mShow.getSummary());
         verify(mShowDetailsView).displaySeasonsProgress(true);
-        verify(mShowsRepository).getSeasons(mShow.getId());
+        verify(mShowsRepository).getFullShowInfo(mShow.getId());
+        verify(mShowDetailsView).setShow(mShowFullInfo);
         verify(mShowDetailsView).displaySeasonsProgress(false);
         verify(mShowDetailsView).displaySeasons(anyList());
+    }
+
+    @Test
+    public void showOpenSeasonEpisodes() throws Exception {
+        mShowDetailsPresenter.bindView(mShowDetailsView);
+        Season season = mShowFullInfo.getEmbedded().getSeasons().get(0);
+        mShowDetailsPresenter.openEpisodes(mShowFullInfo, season);
+
+        verify(mShowDetailsView).navigateToEpisodes(mShowFullInfo.getId(), season.getNumber(), mShowFullInfo.getEmbedded());
     }
 }

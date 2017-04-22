@@ -4,6 +4,7 @@
               android:id="@+id/season_item_layout"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
+              android:background="?attr/selectableItemBackgroundBorderless"
               android:orientation="vertical">
 
     <com.moisesborges.tvaddict.ui.SquareFrameLayout

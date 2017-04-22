@@ -14,5 +14,7 @@ import io.reactivex.Single;
 public interface ShowsRepository {
     Single<List<Show>> getShows();
 
+    Single<Show> getFullShowInfo(int showId);
+
     Single<List<Season>> getSeasons(int showId);
 }

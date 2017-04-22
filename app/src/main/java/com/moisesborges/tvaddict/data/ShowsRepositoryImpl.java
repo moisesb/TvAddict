@@ -28,6 +28,11 @@ public class ShowsRepositoryImpl implements ShowsRepository {
     }
 
     @Override
+    public Single<Show> getFullShowInfo(int showId) {
+        return mTvMazeApi.fetchShowFullInfo(showId);
+    }
+
+    @Override
     public Single<List<Season>> getSeasons(int showId) {
         return mTvMazeApi.listShowSeasons(showId);
     }
