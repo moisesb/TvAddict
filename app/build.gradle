@@ -27,6 +27,8 @@ android {
     }
 }
 
+def dbflow_version = "4.0.0-beta7"
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
@@ -34,6 +36,7 @@ dependencies {
     })
     testCompile 'junit:junit:4.12'
     testCompile "org.mockito:mockito-core:2.7.22"
+    testCompile "org.robolectric:robolectric:3.3.2"
 
     //Android support library
     compile 'com.android.support:appcompat-v7:25.3.0'
@@ -73,4 +76,10 @@ dependencies {
 
     //Glide
     compile 'com.github.bumptech.glide:glide:3.7.0'
+
+    //DbFlow
+    annotationProcessor "com.github.Raizlabs.DBFlow:dbflow-processor:${dbflow_version}"
+    compile "com.github.Raizlabs.DBFlow:dbflow-core:${dbflow_version}"
+    compile "com.github.Raizlabs.DBFlow:dbflow:${dbflow_version}"
+    compile "com.github.Raizlabs.DBFlow:dbflow-rx2:${dbflow_version}"
 }

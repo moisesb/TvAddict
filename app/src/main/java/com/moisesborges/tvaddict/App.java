@@ -2,6 +2,7 @@ package com.moisesborges.tvaddict;
 
 import android.app.Application;
 
+import com.raizlabs.android.dbflow.config.FlowManager;
 import com.squareup.leakcanary.LeakCanary;
 
 import timber.log.Timber;
@@ -18,6 +19,8 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         if (!installLeakCanary()) return;
+
+        FlowManager.init(this);
 
         Timber.plant(new Timber.DebugTree() {
             @Override
