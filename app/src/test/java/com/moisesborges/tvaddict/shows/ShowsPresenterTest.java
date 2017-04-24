@@ -3,6 +3,7 @@ package com.moisesborges.tvaddict.shows;
 import com.moisesborges.tvaddict.data.ShowsRepository;
 import com.moisesborges.tvaddict.exceptions.ViewNotAttachedException;
 import com.moisesborges.tvaddict.models.Show;
+import com.moisesborges.tvaddict.utils.MockShow;
 import com.moisesborges.tvaddict.utils.RxJavaTestConfig;
 
 import org.junit.Before;
@@ -13,6 +14,7 @@ import org.mockito.MockitoAnnotations;
 import java.util.Arrays;
 import java.util.List;
 
+import io.reactivex.Completable;
 import io.reactivex.Scheduler;
 import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
@@ -25,6 +27,7 @@ import static org.mockito.Mockito.*;
 public class ShowsPresenterTest {
 
     private ShowsPresenter mShowsPresenter;
+    private Show mShow;
     @Mock
     ShowsRepository mMockShowsRepository;
     @Mock
@@ -33,6 +36,8 @@ public class ShowsPresenterTest {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
+        mShow = MockShow.newMockShowInstance();
+        mShow.setEmbedded(MockShow.newEmbeddedInstance());
         mShowsPresenter = new ShowsPresenter(mMockShowsRepository, new RxJavaTestConfig());
     }
 
@@ -67,15 +72,14 @@ public class ShowsPresenterTest {
 
     @Test(expected = ViewNotAttachedException.class)
     public void shouldThrowExceptionIfNavigateBeforeBindView() throws Exception {
-        Show show = new Show();
-        mShowsPresenter.openShowDetails(show);
+        mShowsPresenter.openShowDetails(mShow);
     }
 
     @Test
     public void shouldNavigateToShowDetails() throws Exception {
-        Show show = new Show();
         mShowsPresenter.bindView(mMockShowsView);
-        mShowsPresenter.openShowDetails(show);
-        verify(mMockShowsView).navigateToShowDetails(show);
+        mShowsPresenter.openShowDetails(mShow);
+        verify(mMockShowsView).navigateToShowDetails(mShow);
     }
+
 }

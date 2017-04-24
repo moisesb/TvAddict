@@ -51,6 +51,7 @@ public class ShowsPresenter extends BasePresenter<ShowsView> {
         addDisposable(disposable);
     }
 
+
     public void openShowDetails(@NonNull Show show) {
         checkView();
         getView().navigateToShowDetails(show);

@@ -7,68 +7,113 @@ import android.support.annotation.Nullable;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.moisesborges.tvaddict.data.AppDatabase;
+import com.moisesborges.tvaddict.data.typeadapters.StringListTypeAdapter;
+import com.raizlabs.android.dbflow.annotation.Column;
+import com.raizlabs.android.dbflow.annotation.ForeignKey;
+import com.raizlabs.android.dbflow.annotation.OneToMany;
+import com.raizlabs.android.dbflow.annotation.PrimaryKey;
+import com.raizlabs.android.dbflow.annotation.Table;
+import com.raizlabs.android.dbflow.sql.language.SQLite;
 
 import java.util.List;
 
+@Table(database = AppDatabase.class)
 public class Show implements Parcelable{
 
+    @PrimaryKey
     @SerializedName("id")
     @Expose
     private Integer id;
+
+    @Column
     @SerializedName("url")
     @Expose
     private String url;
+
+    @Column
     @SerializedName("name")
     @Expose
     private String name;
+
+    @Column
     @SerializedName("type")
     @Expose
     private String type;
+
+    @Column
     @SerializedName("language")
     @Expose
     private String language;
+
+    @Column(typeConverter = StringListTypeAdapter.class)
     @SerializedName("genres")
     @Expose
-    private List<String> genres = null;
+    private List genres = null;
+
+    @Column
     @SerializedName("status")
     @Expose
     private String status;
+
+    @Column
     @SerializedName("runtime")
     @Expose
     private Integer runtime;
+
+    @Column
     @SerializedName("premiered")
     @Expose
     private String premiered;
+
+    @ForeignKey(saveForeignKeyModel = true)
     @SerializedName("schedule")
     @Expose
     private Schedule schedule;
+
+    @ForeignKey(saveForeignKeyModel = true)
     @SerializedName("rating")
     @Expose
     private Rating rating;
+
+    @Column
     @SerializedName("weight")
     @Expose
     private Integer weight;
+
+    @ForeignKey(saveForeignKeyModel = true)
     @SerializedName("network")
     @Expose
     private Network network;
+
     @SerializedName("webChannel")
     @Expose
-    private Object webChannel;
+    private Object webChannel; // TODO: 24/04/2017 Fix this field
     @SerializedName("externals")
     @Expose
     private Externals externals;
+
+    @ForeignKey(saveForeignKeyModel = true)
     @SerializedName("image")
     @Expose
     private Image image;
+
+    @Column
     @SerializedName("summary")
     @Expose
     private String summary;
+
+    @Column
     @SerializedName("updated")
     @Expose
     private Integer updated;
+
+    @ForeignKey(saveForeignKeyModel = true)
     @SerializedName("_links")
     @Expose
     private Links links;
+
+    @ForeignKey(saveForeignKeyModel = true)
     @SerializedName("_embedded")
     @Expose
     private Embedded embedded;

@@ -6,15 +6,25 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.moisesborges.tvaddict.data.AppDatabase;
+import com.raizlabs.android.dbflow.annotation.Column;
+import com.raizlabs.android.dbflow.annotation.PrimaryKey;
+import com.raizlabs.android.dbflow.annotation.Table;
 
+@Table(database = AppDatabase.class)
 public class Country implements Parcelable {
 
+    @Column
     @SerializedName("name")
     @Expose
     private String name;
+
+    @PrimaryKey
     @SerializedName("code")
     @Expose
     private String code;
+
+    @Column
     @SerializedName("timezone")
     @Expose
     private String timezone;

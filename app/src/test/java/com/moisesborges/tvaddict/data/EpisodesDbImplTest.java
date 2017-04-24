@@ -1,5 +1,7 @@
 package com.moisesborges.tvaddict.data;
 
+import com.moisesborges.tvaddict.App;
+import com.moisesborges.tvaddict.BuildConfig;
 import com.moisesborges.tvaddict.models.Episode;
 import com.moisesborges.tvaddict.models.Show;
 import com.moisesborges.tvaddict.rules.DBFlow;
@@ -21,7 +23,12 @@ import static org.junit.Assert.*;
  * Created by Moisés on 22/04/2017.
  */
 @RunWith(RobolectricTestRunner.class)
-@Config(sdk = 21)
+@Config(
+        sdk = 21,
+        constants = BuildConfig.class,
+        application = App.class,
+        manifest = "/src/main/AndroidManifest.xml"
+)
 public class EpisodesDbImplTest {
 
     @Rule

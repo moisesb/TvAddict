@@ -6,18 +6,32 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.moisesborges.tvaddict.data.AppDatabase;
+import com.raizlabs.android.dbflow.annotation.Column;
+import com.raizlabs.android.dbflow.annotation.ForeignKey;
+import com.raizlabs.android.dbflow.annotation.PrimaryKey;
+import com.raizlabs.android.dbflow.annotation.Table;
 
+@Table(database = AppDatabase.class)
 public class Network implements Parcelable {
 
+    @PrimaryKey
     @SerializedName("id")
     @Expose
     private Integer id;
+
+    @Column
     @SerializedName("name")
     @Expose
     private String name;
+
+    @ForeignKey(saveForeignKeyModel = true)
     @SerializedName("country")
     @Expose
     private Country country;
+
+    public Network() {
+    }
 
     protected Network(Parcel in) {
         if (in.readByte() == 0) {

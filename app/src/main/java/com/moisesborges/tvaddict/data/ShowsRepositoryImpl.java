@@ -8,6 +8,7 @@ import com.moisesborges.tvaddict.net.TvMazeApi;
 
 import java.util.List;
 
+import io.reactivex.Completable;
 import io.reactivex.Single;
 
 /**
@@ -17,9 +18,12 @@ import io.reactivex.Single;
 public class ShowsRepositoryImpl implements ShowsRepository {
 
     private final TvMazeApi mTvMazeApi;
+    private final ShowDb mShowDb;
 
-    public ShowsRepositoryImpl(@NonNull TvMazeApi tvMazeApi) {
+    public ShowsRepositoryImpl(@NonNull TvMazeApi tvMazeApi,
+                               @NonNull ShowDb showDb) {
         mTvMazeApi = tvMazeApi;
+        mShowDb = showDb;
     }
 
     @Override
@@ -33,7 +37,13 @@ public class ShowsRepositoryImpl implements ShowsRepository {
     }
 
     @Override
-    public Single<List<Season>> getSeasons(int showId) {
-        return mTvMazeApi.listShowSeasons(showId);
+    public Completable saveShow(@NonNull Show show) {
+        return mShowDb.save(show);
     }
+
+    @Override
+    public Single<List<Show>> getSavedShows() {
+        return mShowDb.findAllShows();
+    }
+
 }

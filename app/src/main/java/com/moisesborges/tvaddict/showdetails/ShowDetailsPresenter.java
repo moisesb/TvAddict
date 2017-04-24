@@ -13,6 +13,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import io.reactivex.functions.Consumer;
+import timber.log.Timber;
 
 /**
  * Created by moises.anjos on 18/04/2017.
@@ -52,6 +53,16 @@ public class ShowDetailsPresenter extends BasePresenter<ShowDetailsView> {
                     getView().displaySeasonsNotLoaded(true);
                 });
 
+    }
+
+    public void addToWatchingList(@NonNull Show show) {
+        checkView();
+
+        mShowsRepository.saveShow(show)
+                .subscribeOn(getRxJavaConfig().ioScheduler())
+                .observeOn(getRxJavaConfig().androidScheduler())
+                .subscribe(() -> getView().displaySavedShowMessage(),
+                        Timber::e);
     }
 
     public void openEpisodes(Show show, Season season) {

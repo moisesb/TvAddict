@@ -5,6 +5,12 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.moisesborges.tvaddict.data.AppDatabase;
+import com.raizlabs.android.dbflow.annotation.ForeignKey;
+import com.raizlabs.android.dbflow.annotation.OneToMany;
+import com.raizlabs.android.dbflow.annotation.PrimaryKey;
+import com.raizlabs.android.dbflow.annotation.Table;
+import com.raizlabs.android.dbflow.sql.language.SQLite;
 
 import java.util.List;
 
@@ -12,22 +18,30 @@ import java.util.List;
  * Created by Moisés on 21/04/2017.
  */
 
+@Table(database = AppDatabase.class)
 public class Embedded implements Parcelable{
+
+    @PrimaryKey(autoincrement = true)
+    private long id;
 
     @SerializedName("episodes")
     @Expose
-    private List<Episode> episodes;
+    private List<Episode> episodes = null;
+
     @SerializedName("seasons")
     @Expose
-    private List<Season> seasons;
+    private List<Season> seasons = null;
+
     @SerializedName("cast")
     @Expose
-    private List<CastMember> cast;
+    private List<CastMember> cast = null;
 
     public Embedded() {
     }
 
+
     protected Embedded(Parcel in) {
+        id = in.readLong();
         episodes = in.createTypedArrayList(Episode.CREATOR);
         seasons = in.createTypedArrayList(Season.CREATOR);
         cast = in.createTypedArrayList(CastMember.CREATOR);
@@ -45,8 +59,20 @@ public class Embedded implements Parcelable{
         }
     };
 
+    @OneToMany(methods = {OneToMany.Method.ALL}, variableName = "episodes", isVariablePrivate = true)
     public List<Episode> getEpisodes() {
+        if (episodes == null) {
+            // TODO: 24/04/2017 fetch Episodes
+        }
         return episodes;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public void setEpisodes(List<Episode> episodes) {
@@ -69,15 +95,17 @@ public class Embedded implements Parcelable{
         this.cast = cast;
     }
 
+
     @Override
     public int describeContents() {
         return 0;
     }
 
     @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeTypedList(episodes);
-        parcel.writeTypedList(seasons);
-        parcel.writeTypedList(cast);
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(id);
+        dest.writeTypedList(episodes);
+        dest.writeTypedList(seasons);
+        dest.writeTypedList(cast);
     }
 }

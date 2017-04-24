@@ -12,6 +12,7 @@ import java.util.List;
  */
 
 public interface ShowsView extends BaseView {
+
     void displayProgress(boolean isLoading);
 
     void displayTvShows(@NonNull List<Show> shows);

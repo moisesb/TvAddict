@@ -6,16 +6,29 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.moisesborges.tvaddict.data.AppDatabase;
+import com.raizlabs.android.dbflow.annotation.Column;
+import com.raizlabs.android.dbflow.annotation.ForeignKey;
+import com.raizlabs.android.dbflow.annotation.PrimaryKey;
+import com.raizlabs.android.dbflow.annotation.Table;
 
+@Table(database = AppDatabase.class)
 public class Links implements Parcelable{
 
+    @PrimaryKey(autoincrement = true)
+    private long id;
 
+    @ForeignKey(saveForeignKeyModel = true)
     @SerializedName("self")
     @Expose
     private Self self;
+
+    @ForeignKey(saveForeignKeyModel = true)
     @SerializedName("previousepisode")
     @Expose
     private EpisodeRef previousepisode;
+
+    @ForeignKey(saveForeignKeyModel = true)
     @SerializedName("nextepisode")
     @Expose
     private EpisodeRef nextepisode;
@@ -24,6 +37,7 @@ public class Links implements Parcelable{
     }
 
     protected Links(Parcel in) {
+        id = in.readLong();
         self = in.readParcelable(Self.class.getClassLoader());
         previousepisode = in.readParcelable(EpisodeRef.class.getClassLoader());
         nextepisode = in.readParcelable(EpisodeRef.class.getClassLoader());
@@ -40,6 +54,14 @@ public class Links implements Parcelable{
             return new Links[size];
         }
     };
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
 
     public Self getSelf() {
         return self;
@@ -72,6 +94,7 @@ public class Links implements Parcelable{
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(id);
         dest.writeParcelable(self, flags);
         dest.writeParcelable(previousepisode, flags);
         dest.writeParcelable(nextepisode, flags);

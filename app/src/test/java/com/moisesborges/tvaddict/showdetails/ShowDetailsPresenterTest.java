@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 
+import io.reactivex.Completable;
 import io.reactivex.Single;
 
 import static org.mockito.Mockito.*;
@@ -76,5 +77,17 @@ public class ShowDetailsPresenterTest {
         mShowDetailsPresenter.openEpisodes(mShowFullInfo, season);
 
         verify(mShowDetailsView).navigateToEpisodes(mShowFullInfo.getId(), season.getNumber(), mShowFullInfo.getEmbedded());
+    }
+
+    @Test
+    public void shouldSaveShowInWatchingList() throws Exception {
+        when(mShowsRepository.saveShow(any())).thenReturn(Completable.complete());
+
+        mShowDetailsPresenter.bindView(mShowDetailsView);
+        mShowDetailsPresenter.addToWatchingList(mShow);
+
+        verify(mShowsRepository).saveShow(mShow);
+        verify(mShowDetailsView).displaySavedShowMessage();
+
     }
 }

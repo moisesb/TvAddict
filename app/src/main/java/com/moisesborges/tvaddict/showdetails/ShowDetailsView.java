@@ -29,4 +29,6 @@ interface ShowDetailsView extends BaseView{
     void setShow(@NonNull Show show);
 
     void navigateToEpisodes(int showId, int seasonNumber, Embedded embeddedData);
+
+    void displaySavedShowMessage();
 }

@@ -6,9 +6,16 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.moisesborges.tvaddict.data.AppDatabase;
+import com.raizlabs.android.dbflow.annotation.PrimaryKey;
+import com.raizlabs.android.dbflow.annotation.Table;
 
+import dagger.Provides;
+
+@Table(database = AppDatabase.class)
 public class Rating implements Parcelable {
 
+    @PrimaryKey
     @SerializedName("average")
     @Expose
     private Double average;

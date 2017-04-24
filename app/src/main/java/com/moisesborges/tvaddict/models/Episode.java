@@ -6,42 +6,71 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.moisesborges.tvaddict.data.AppDatabase;
+import com.raizlabs.android.dbflow.annotation.Column;
+import com.raizlabs.android.dbflow.annotation.ForeignKey;
+import com.raizlabs.android.dbflow.annotation.PrimaryKey;
+import com.raizlabs.android.dbflow.annotation.Table;
 
+@Table(database = AppDatabase.class)
 public class Episode implements Parcelable{
 
+    @PrimaryKey
     @SerializedName("id")
     @Expose
     private Integer id;
+
+    @Column
     @SerializedName("url")
     @Expose
     private String url;
+
+    @Column
     @SerializedName("name")
     @Expose
     private String name;
+
+    @Column
     @SerializedName("season")
     @Expose
     private Integer season;
+
+    @Column
     @SerializedName("number")
     @Expose
     private Integer number;
+
+    @Column
     @SerializedName("airdate")
     @Expose
     private String airdate;
+
+    @Column
     @SerializedName("airtime")
     @Expose
     private String airtime;
+
+    @Column
     @SerializedName("airstamp")
     @Expose
     private String airstamp;
+
+    @Column
     @SerializedName("runtime")
     @Expose
     private Integer runtime;
+
+    @ForeignKey(saveForeignKeyModel = true)
     @SerializedName("image")
     @Expose
     private Image image;
+
+    @Column
     @SerializedName("summary")
     @Expose
     private String summary;
+
+    @ForeignKey(saveForeignKeyModel = true)
     @SerializedName("_links")
     @Expose
     private Links links;

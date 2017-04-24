@@ -1,5 +1,7 @@
 package com.moisesborges.tvaddict;
 
+import com.moisesborges.tvaddict.data.ShowDb;
+import com.moisesborges.tvaddict.data.ShowDbImpl;
 import com.moisesborges.tvaddict.data.ShowsRepository;
 import com.moisesborges.tvaddict.data.ShowsRepositoryImpl;
 import com.moisesborges.tvaddict.di.DaggerConstrants;
@@ -22,8 +24,14 @@ import io.reactivex.schedulers.Schedulers;
 public class DataModule {
 
     @Provides
-    public ShowsRepository providesShowsRepository(TvMazeApi tvMazeApi) {
-        return new ShowsRepositoryImpl(tvMazeApi);
+    @Singleton
+    public ShowDb providesShowDb() {
+        return new ShowDbImpl();
+    }
+
+    @Provides
+    public ShowsRepository providesShowsRepository(TvMazeApi tvMazeApi, ShowDb showDb) {
+        return new ShowsRepositoryImpl(tvMazeApi, showDb);
     }
 
     @Provides
@@ -41,4 +49,5 @@ public class DataModule {
             }
         };
     }
+
 }

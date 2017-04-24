@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.moisesborges.tvaddict.App;
@@ -119,6 +120,11 @@ public class ShowDetailsActivity extends AppCompatActivity implements ShowDetail
         context.startActivity(intent);
     }
 
+    @OnClick(R.id.save_show_float_action_button)
+    public void onSaveShowClick(View view) {
+        mShowDetailsPresenter.addToWatchingList(mShow);
+    }
+
     @Override
     public void setShowName(String showName) {
         this.setTitle(showName);
@@ -159,6 +165,11 @@ public class ShowDetailsActivity extends AppCompatActivity implements ShowDetail
     @Override
     public void navigateToEpisodes(int showId, int seasonNumber, Embedded embeddedData) {
         EpisodesActivity.start(this, showId, seasonNumber, embeddedData);
+    }
+
+    @Override
+    public void displaySavedShowMessage() {
+        Toast.makeText(this, R.string.show_saved_with_success, Toast.LENGTH_SHORT).show();
     }
 
     private Spanned extractFromHtml(String html) {

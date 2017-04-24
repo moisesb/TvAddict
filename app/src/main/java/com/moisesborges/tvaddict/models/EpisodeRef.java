@@ -6,9 +6,14 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.moisesborges.tvaddict.data.AppDatabase;
+import com.raizlabs.android.dbflow.annotation.PrimaryKey;
+import com.raizlabs.android.dbflow.annotation.Table;
 
+@Table(database = AppDatabase.class)
 public class EpisodeRef implements Parcelable {
 
+    @PrimaryKey
     @SerializedName("href")
     @Expose
     private String href;
