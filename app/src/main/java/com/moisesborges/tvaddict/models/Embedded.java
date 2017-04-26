@@ -18,11 +18,7 @@ import java.util.List;
  * Created by Moisés on 21/04/2017.
  */
 
-@Table(database = AppDatabase.class)
-public class Embedded implements Parcelable{
-
-    @PrimaryKey(autoincrement = true)
-    private long id;
+public class Embedded implements Parcelable {
 
     @SerializedName("episodes")
     @Expose
@@ -41,7 +37,6 @@ public class Embedded implements Parcelable{
 
 
     protected Embedded(Parcel in) {
-        id = in.readLong();
         episodes = in.createTypedArrayList(Episode.CREATOR);
         seasons = in.createTypedArrayList(Season.CREATOR);
         cast = in.createTypedArrayList(CastMember.CREATOR);
@@ -65,14 +60,6 @@ public class Embedded implements Parcelable{
             // TODO: 24/04/2017 fetch Episodes
         }
         return episodes;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public void setEpisodes(List<Episode> episodes) {
@@ -103,7 +90,6 @@ public class Embedded implements Parcelable{
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(id);
         dest.writeTypedList(episodes);
         dest.writeTypedList(seasons);
         dest.writeTypedList(cast);

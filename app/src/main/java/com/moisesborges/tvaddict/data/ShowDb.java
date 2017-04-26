@@ -14,5 +14,7 @@ import io.reactivex.Single;
 public interface ShowDb {
     Completable save(Show show);
 
+    Completable remove(Show show);
+
     Single<List<Show>> findAllShows();
 }

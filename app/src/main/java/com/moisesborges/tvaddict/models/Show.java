@@ -113,7 +113,6 @@ public class Show implements Parcelable{
     @Expose
     private Links links;
 
-    @ForeignKey(saveForeignKeyModel = true)
     @SerializedName("_embedded")
     @Expose
     private Embedded embedded;

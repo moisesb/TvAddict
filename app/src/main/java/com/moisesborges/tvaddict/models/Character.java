@@ -6,27 +6,43 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.moisesborges.tvaddict.data.AppDatabase;
+import com.raizlabs.android.dbflow.annotation.Column;
+import com.raizlabs.android.dbflow.annotation.ForeignKey;
+import com.raizlabs.android.dbflow.annotation.PrimaryKey;
+import com.raizlabs.android.dbflow.annotation.Table;
 
+@Table(database = AppDatabase.class)
 public class Character implements Parcelable {
 
+    @PrimaryKey
     @SerializedName("id")
     @Expose
     private Integer id;
+
+    @Column
     @SerializedName("url")
     @Expose
     private String url;
+
+    @Column
     @SerializedName("name")
     @Expose
     private String name;
+
+    @ForeignKey(saveForeignKeyModel = true)
     @SerializedName("image")
     @Expose
-    private Object image;
+    private Image image;
+
+    @ForeignKey(saveForeignKeyModel = true)
     @SerializedName("_links")
     @Expose
     private Links links;
 
     public Character() {
     }
+
 
     protected Character(Parcel in) {
         if (in.readByte() == 0) {
@@ -36,6 +52,7 @@ public class Character implements Parcelable {
         }
         url = in.readString();
         name = in.readString();
+        image = in.readParcelable(Image.class.getClassLoader());
         links = in.readParcelable(Links.class.getClassLoader());
     }
 
@@ -75,11 +92,11 @@ public class Character implements Parcelable {
         this.name = name;
     }
 
-    public Object getImage() {
+    public Image getImage() {
         return image;
     }
 
-    public void setImage(Object image) {
+    public void setImage(Image image) {
         this.image = image;
     }
 
@@ -91,21 +108,23 @@ public class Character implements Parcelable {
         this.links = links;
     }
 
+
     @Override
     public int describeContents() {
         return 0;
     }
 
     @Override
-    public void writeToParcel(Parcel parcel, int i) {
+    public void writeToParcel(Parcel dest, int flags) {
         if (id == null) {
-            parcel.writeByte((byte) 0);
+            dest.writeByte((byte) 0);
         } else {
-            parcel.writeByte((byte) 1);
-            parcel.writeInt(id);
+            dest.writeByte((byte) 1);
+            dest.writeInt(id);
         }
-        parcel.writeString(url);
-        parcel.writeString(name);
-        parcel.writeParcelable(links, i);
+        dest.writeString(url);
+        dest.writeString(name);
+        dest.writeParcelable(image, flags);
+        dest.writeParcelable(links, flags);
     }
 }

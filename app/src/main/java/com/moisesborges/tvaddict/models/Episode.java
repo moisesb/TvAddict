@@ -13,7 +13,7 @@ import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
 
 @Table(database = AppDatabase.class)
-public class Episode implements Parcelable{
+public class Episode implements Parcelable {
 
     @PrimaryKey
     @SerializedName("id")
@@ -29,6 +29,9 @@ public class Episode implements Parcelable{
     @SerializedName("name")
     @Expose
     private String name;
+
+    @ForeignKey(tableClass = Show.class)
+    private Integer showId;
 
     @Column
     @SerializedName("season")
@@ -87,6 +90,11 @@ public class Episode implements Parcelable{
         url = in.readString();
         name = in.readString();
         if (in.readByte() == 0) {
+            showId = null;
+        } else {
+            showId = in.readInt();
+        }
+        if (in.readByte() == 0) {
             season = null;
         } else {
             season = in.readInt();
@@ -143,6 +151,14 @@ public class Episode implements Parcelable{
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Integer getShowId() {
+        return showId;
+    }
+
+    public void setShowId(Integer showId) {
+        this.showId = showId;
     }
 
     public Integer getSeason() {
@@ -223,38 +239,44 @@ public class Episode implements Parcelable{
     }
 
     @Override
-    public void writeToParcel(Parcel parcel, int i) {
+    public void writeToParcel(Parcel dest, int flags) {
         if (id == null) {
-            parcel.writeByte((byte) 0);
+            dest.writeByte((byte) 0);
         } else {
-            parcel.writeByte((byte) 1);
-            parcel.writeInt(id);
+            dest.writeByte((byte) 1);
+            dest.writeInt(id);
         }
-        parcel.writeString(url);
-        parcel.writeString(name);
-        if (season == null) {
-            parcel.writeByte((byte) 0);
+        dest.writeString(url);
+        dest.writeString(name);
+        if (showId == null) {
+            dest.writeByte((byte) 0);
         } else {
-            parcel.writeByte((byte) 1);
-            parcel.writeInt(season);
+            dest.writeByte((byte) 1);
+            dest.writeInt(showId);
+        }
+        if (season == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeInt(season);
         }
         if (number == null) {
-            parcel.writeByte((byte) 0);
+            dest.writeByte((byte) 0);
         } else {
-            parcel.writeByte((byte) 1);
-            parcel.writeInt(number);
+            dest.writeByte((byte) 1);
+            dest.writeInt(number);
         }
-        parcel.writeString(airdate);
-        parcel.writeString(airtime);
-        parcel.writeString(airstamp);
+        dest.writeString(airdate);
+        dest.writeString(airtime);
+        dest.writeString(airstamp);
         if (runtime == null) {
-            parcel.writeByte((byte) 0);
+            dest.writeByte((byte) 0);
         } else {
-            parcel.writeByte((byte) 1);
-            parcel.writeInt(runtime);
+            dest.writeByte((byte) 1);
+            dest.writeInt(runtime);
         }
-        parcel.writeParcelable(image, i);
-        parcel.writeString(summary);
-        parcel.writeParcelable(links, i);
+        dest.writeParcelable(image, flags);
+        dest.writeString(summary);
+        dest.writeParcelable(links, flags);
     }
 }

@@ -6,48 +6,81 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.moisesborges.tvaddict.data.AppDatabase;
+import com.raizlabs.android.dbflow.annotation.Column;
+import com.raizlabs.android.dbflow.annotation.ForeignKey;
+import com.raizlabs.android.dbflow.annotation.PrimaryKey;
+import com.raizlabs.android.dbflow.annotation.Table;
 
+@Table(database = AppDatabase.class)
 public class Season implements Parcelable {
 
+
+    @PrimaryKey
     @SerializedName("id")
     @Expose
     private Integer id;
+
+    @Column
     @SerializedName("url")
     @Expose
     private String url;
+
+    @Column
     @SerializedName("number")
     @Expose
     private Integer number;
+
+    @Column
     @SerializedName("name")
     @Expose
     private String name;
+
+    @Column
     @SerializedName("episodeOrder")
     @Expose
     private Integer episodeOrder;
+
+    @Column
     @SerializedName("premiereDate")
     @Expose
     private String premiereDate;
+
+    @Column
     @SerializedName("endDate")
     @Expose
     private String endDate;
+
+    @ForeignKey(saveForeignKeyModel = true)
     @SerializedName("network")
     @Expose
     private Network network;
+
     @SerializedName("webChannel")
     @Expose
     private Object webChannel;
+
+    @ForeignKey(saveForeignKeyModel = true)
     @SerializedName("image")
     @Expose
     private Image image;
+
+    @Column
     @SerializedName("summary")
     @Expose
     private String summary;
+
+    @ForeignKey(saveForeignKeyModel = true)
     @SerializedName("_links")
     @Expose
     private Links links;
 
+    @ForeignKey(tableClass = Show.class)
+    private Integer showId;
+
     public Season() {
     }
+
 
     protected Season(Parcel in) {
         if (in.readByte() == 0) {
@@ -73,6 +106,11 @@ public class Season implements Parcelable {
         image = in.readParcelable(Image.class.getClassLoader());
         summary = in.readString();
         links = in.readParcelable(Links.class.getClassLoader());
+        if (in.readByte() == 0) {
+            showId = null;
+        } else {
+            showId = in.readInt();
+        }
     }
 
     public static final Creator<Season> CREATOR = new Creator<Season>() {
@@ -183,38 +221,52 @@ public class Season implements Parcelable {
         this.links = links;
     }
 
+    public Integer getShowId() {
+        return showId;
+    }
+
+    public void setShowId(Integer showId) {
+        this.showId = showId;
+    }
+
     @Override
     public int describeContents() {
         return 0;
     }
 
     @Override
-    public void writeToParcel(Parcel parcel, int i) {
+    public void writeToParcel(Parcel dest, int flags) {
         if (id == null) {
-            parcel.writeByte((byte) 0);
+            dest.writeByte((byte) 0);
         } else {
-            parcel.writeByte((byte) 1);
-            parcel.writeInt(id);
+            dest.writeByte((byte) 1);
+            dest.writeInt(id);
         }
-        parcel.writeString(url);
+        dest.writeString(url);
         if (number == null) {
-            parcel.writeByte((byte) 0);
+            dest.writeByte((byte) 0);
         } else {
-            parcel.writeByte((byte) 1);
-            parcel.writeInt(number);
+            dest.writeByte((byte) 1);
+            dest.writeInt(number);
         }
-        parcel.writeString(name);
+        dest.writeString(name);
         if (episodeOrder == null) {
-            parcel.writeByte((byte) 0);
+            dest.writeByte((byte) 0);
         } else {
-            parcel.writeByte((byte) 1);
-            parcel.writeInt(episodeOrder);
+            dest.writeByte((byte) 1);
+            dest.writeInt(episodeOrder);
         }
-        parcel.writeString(premiereDate);
-        parcel.writeString(endDate);
-        parcel.writeParcelable(network, i);
-        parcel.writeParcelable(image, i);
-        parcel.writeString(summary);
-        parcel.writeParcelable(links, i);
+        dest.writeString(premiereDate);
+        dest.writeString(endDate);
+        dest.writeParcelable(network, flags);
+        dest.writeParcelable(image, flags);
+        dest.writeString(summary);
+        dest.writeParcelable(links, flags);
+        if (showId == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeInt(showId);
+        }
     }
 }
