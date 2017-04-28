@@ -78,6 +78,9 @@ public class Episode implements Parcelable {
     @Expose
     private Links links;
 
+    @Column(getterName = "wasWatched")
+    private boolean watched;
+
     public Episode() {
     }
 
@@ -115,6 +118,7 @@ public class Episode implements Parcelable {
         image = in.readParcelable(Image.class.getClassLoader());
         summary = in.readString();
         links = in.readParcelable(Links.class.getClassLoader());
+        watched = in.readByte() != 0;
     }
 
     public static final Creator<Episode> CREATOR = new Creator<Episode>() {
@@ -233,50 +237,59 @@ public class Episode implements Parcelable {
         this.links = links;
     }
 
+    public boolean wasWatched() {
+        return watched;
+    }
+
+    public void setWatched(boolean watched) {
+        this.watched = watched;
+    }
+
     @Override
     public int describeContents() {
         return 0;
     }
 
     @Override
-    public void writeToParcel(Parcel dest, int flags) {
+    public void writeToParcel(Parcel parcel, int i) {
         if (id == null) {
-            dest.writeByte((byte) 0);
+            parcel.writeByte((byte) 0);
         } else {
-            dest.writeByte((byte) 1);
-            dest.writeInt(id);
+            parcel.writeByte((byte) 1);
+            parcel.writeInt(id);
         }
-        dest.writeString(url);
-        dest.writeString(name);
+        parcel.writeString(url);
+        parcel.writeString(name);
         if (showId == null) {
-            dest.writeByte((byte) 0);
+            parcel.writeByte((byte) 0);
         } else {
-            dest.writeByte((byte) 1);
-            dest.writeInt(showId);
+            parcel.writeByte((byte) 1);
+            parcel.writeInt(showId);
         }
         if (season == null) {
-            dest.writeByte((byte) 0);
+            parcel.writeByte((byte) 0);
         } else {
-            dest.writeByte((byte) 1);
-            dest.writeInt(season);
+            parcel.writeByte((byte) 1);
+            parcel.writeInt(season);
         }
         if (number == null) {
-            dest.writeByte((byte) 0);
+            parcel.writeByte((byte) 0);
         } else {
-            dest.writeByte((byte) 1);
-            dest.writeInt(number);
+            parcel.writeByte((byte) 1);
+            parcel.writeInt(number);
         }
-        dest.writeString(airdate);
-        dest.writeString(airtime);
-        dest.writeString(airstamp);
+        parcel.writeString(airdate);
+        parcel.writeString(airtime);
+        parcel.writeString(airstamp);
         if (runtime == null) {
-            dest.writeByte((byte) 0);
+            parcel.writeByte((byte) 0);
         } else {
-            dest.writeByte((byte) 1);
-            dest.writeInt(runtime);
+            parcel.writeByte((byte) 1);
+            parcel.writeInt(runtime);
         }
-        dest.writeParcelable(image, flags);
-        dest.writeString(summary);
-        dest.writeParcelable(links, flags);
+        parcel.writeParcelable(image, i);
+        parcel.writeString(summary);
+        parcel.writeParcelable(links, i);
+        parcel.writeByte((byte) (watched ? 1 : 0));
     }
 }

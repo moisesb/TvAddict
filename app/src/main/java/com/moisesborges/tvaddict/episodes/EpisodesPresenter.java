@@ -2,6 +2,7 @@ package com.moisesborges.tvaddict.episodes;
 
 import android.support.annotation.NonNull;
 
+import com.moisesborges.tvaddict.data.ShowsRepository;
 import com.moisesborges.tvaddict.models.Embedded;
 import com.moisesborges.tvaddict.models.Episode;
 import com.moisesborges.tvaddict.mvp.BasePresenter;
@@ -22,9 +23,14 @@ import io.reactivex.functions.BiFunction;
 
 public class EpisodesPresenter extends BasePresenter<EpisodesView> {
 
+
+    private final ShowsRepository mShowsRepository;
+
     @Inject
-    public EpisodesPresenter(@NonNull RxJavaConfig rxJavaConfig) {
+    public EpisodesPresenter(@NonNull RxJavaConfig rxJavaConfig,
+                             @NonNull ShowsRepository showsRepository) {
         super(rxJavaConfig);
+        mShowsRepository = showsRepository;
     }
 
     public void loadEpisodes(int seasonNumber,

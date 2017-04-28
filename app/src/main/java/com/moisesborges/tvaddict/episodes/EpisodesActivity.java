@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.moisesborges.tvaddict.App;
@@ -103,7 +104,6 @@ public class EpisodesActivity extends AppCompatActivity implements EpisodesView 
 
     public static class EpisodesAdapter extends RecyclerView.Adapter<EpisodesAdapter.ViewHolder> {
 
-
         private final List<Episode> mEpisodes = new ArrayList<>();
 
         public EpisodesAdapter() {
@@ -137,6 +137,8 @@ public class EpisodesActivity extends AppCompatActivity implements EpisodesView 
 
             @BindView(R.id.episode_name_text_view)
             TextView mEpisodeNameTextView;
+            @BindView(R.id.watched_check_box)
+            CheckBox mWatchedCheckBox;
 
             public ViewHolder(View itemView) {
                 super(itemView);
@@ -145,6 +147,7 @@ public class EpisodesActivity extends AppCompatActivity implements EpisodesView 
 
             public void bind(@NonNull Episode episode) {
                 mEpisodeNameTextView.setText(episode.getName());
+                mWatchedCheckBox.setChecked(episode.wasWatched());
             }
         }
     }
