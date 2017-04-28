@@ -1,5 +1,6 @@
 package com.moisesborges.tvaddict.episodes;
 
+import com.moisesborges.tvaddict.data.ShowsRepository;
 import com.moisesborges.tvaddict.models.Episode;
 import com.moisesborges.tvaddict.models.Season;
 import com.moisesborges.tvaddict.models.Show;
@@ -33,6 +34,8 @@ public class EpisodesPresenterTest {
     
     @Mock
     EpisodesView mEpisodesView;
+    @Mock
+    ShowsRepository mShowsRepository;
     
     private EpisodesPresenter mEpisodesPresenter;
     private Show mShow;
@@ -44,7 +47,7 @@ public class EpisodesPresenterTest {
         mShow = MockShow.newMockShowInstance();
         mShow.setEmbedded(MockShow.newEmbeddedInstance());
         
-        mEpisodesPresenter = new EpisodesPresenter(new RxJavaTestConfig());
+        mEpisodesPresenter = new EpisodesPresenter(new RxJavaTestConfig(), mShowsRepository);
     }
 
     @Test

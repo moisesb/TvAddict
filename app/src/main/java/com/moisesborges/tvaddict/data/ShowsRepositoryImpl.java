@@ -46,4 +46,14 @@ public class ShowsRepositoryImpl implements ShowsRepository {
         return mShowDb.findAllShows();
     }
 
+    @Override
+    public Single<Show> getSavedShow(int showId) {
+        return mShowDb.findShow(showId);
+    }
+
+    @Override
+    public Completable removeShow(int showId) {
+        return mShowDb.remove(showId);
+    }
+
 }

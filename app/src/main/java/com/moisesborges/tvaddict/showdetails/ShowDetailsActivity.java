@@ -2,10 +2,16 @@ package com.moisesborges.tvaddict.showdetails;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.AnimatedVectorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.res.ResourcesCompat;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -22,9 +28,11 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.moisesborges.tvaddict.App;
+import com.moisesborges.tvaddict.BuildConfig;
 import com.moisesborges.tvaddict.R;
 import com.moisesborges.tvaddict.adapters.ItemClickListener;
 import com.moisesborges.tvaddict.episodes.EpisodesActivity;
+import com.moisesborges.tvaddict.models.CastMember;
 import com.moisesborges.tvaddict.models.Embedded;
 import com.moisesborges.tvaddict.models.Season;
 import com.moisesborges.tvaddict.models.Show;
@@ -64,6 +72,8 @@ public class ShowDetailsActivity extends AppCompatActivity implements ShowDetail
     RecyclerView mSeasonsRecyclerView;
     @BindView(R.id.progress_bar)
     ProgressBar mProgressBar;
+    @BindView(R.id.save_show_float_action_button)
+    FloatingActionButton mFloatingActionButton;
 
     private ItemClickListener<Season> mSeasonItemClickListener = (season) -> mShowDetailsPresenter.openEpisodes(mShow, season);
 
@@ -122,7 +132,7 @@ public class ShowDetailsActivity extends AppCompatActivity implements ShowDetail
 
     @OnClick(R.id.save_show_float_action_button)
     public void onSaveShowClick(View view) {
-        mShowDetailsPresenter.addToWatchingList(mShow);
+        mShowDetailsPresenter.changeWatchingStatus(mShow);
     }
 
     @Override
@@ -169,7 +179,39 @@ public class ShowDetailsActivity extends AppCompatActivity implements ShowDetail
 
     @Override
     public void displaySavedShowMessage() {
-        Toast.makeText(this, R.string.show_saved_with_success, Toast.LENGTH_SHORT).show();
+        showToast(R.string.show_saved_with_success);
+    }
+
+    private void showToast(@StringRes int message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void displayCastMembers(List<CastMember> castMembers) {
+
+    }
+
+    @Override
+    public void displaySaveShowButton(boolean shouldDisplaySavedAction) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP || mFloatingActionButton.getDrawable() == null) {
+            mFloatingActionButton.setImageResource(shouldDisplaySavedAction ?
+                    R.drawable.ic_add_white_24px : R.drawable.ic_clear_white_24px);
+        } else {
+            AnimatedVectorDrawable animatedVectorDrawable = (AnimatedVectorDrawable) getResources()
+                    .getDrawable(shouldDisplaySavedAction ?
+                            R.drawable.ic_clear_to_add : R.drawable.ic_add_to_clear, null);
+
+            mFloatingActionButton.setImageDrawable(animatedVectorDrawable);
+            animatedVectorDrawable.start();
+
+        }
+
+        mFloatingActionButton.setEnabled(true);
+    }
+
+    @Override
+    public void displayShowRemovedMessage() {
+        showToast(R.string.show_removed_with_success);
     }
 
     private Spanned extractFromHtml(String html) {

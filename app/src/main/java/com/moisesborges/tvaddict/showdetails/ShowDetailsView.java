@@ -2,6 +2,7 @@ package com.moisesborges.tvaddict.showdetails;
 
 import android.support.annotation.NonNull;
 
+import com.moisesborges.tvaddict.models.CastMember;
 import com.moisesborges.tvaddict.models.Embedded;
 import com.moisesborges.tvaddict.models.Season;
 import com.moisesborges.tvaddict.models.Show;
@@ -31,4 +32,10 @@ interface ShowDetailsView extends BaseView{
     void navigateToEpisodes(int showId, int seasonNumber, Embedded embeddedData);
 
     void displaySavedShowMessage();
+
+    void displayCastMembers(List<CastMember> castMembers);
+
+    void displaySaveShowButton(boolean shouldDisplaySavedAction);
+
+    void displayShowRemovedMessage();
 }

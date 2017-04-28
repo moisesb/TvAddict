@@ -12,6 +12,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import timber.log.Timber;
 
@@ -39,7 +40,7 @@ public class ShowDetailsPresenter extends BasePresenter<ShowDetailsView> {
         getView().displaySeasonsNotLoaded(false);
 
         getView().displaySeasonsProgress(true);
-        mShowsRepository.getFullShowInfo(show.getId())
+        Disposable loadShowDataDisposable = mShowsRepository.getFullShowInfo(show.getId())
                 .subscribeOn(getRxJavaConfig().ioScheduler())
                 .observeOn(getRxJavaConfig().androidScheduler())
                 .subscribe(showFullInfo -> {
@@ -47,22 +48,64 @@ public class ShowDetailsPresenter extends BasePresenter<ShowDetailsView> {
                     getView().setShow(showFullInfo);
                     if (showFullInfo.getEmbedded() != null) {
                         getView().displaySeasons(showFullInfo.getEmbedded().getSeasons());
+                        getView().displayCastMembers(showFullInfo.getEmbedded().getCast());
                     }
                 }, throwable -> {
                     getView().displaySeasonsProgress(false);
                     getView().displaySeasonsNotLoaded(true);
                 });
 
+        addDisposable(loadShowDataDisposable);
+
+        verifySavedShowStatus(show);
     }
 
-    public void addToWatchingList(@NonNull Show show) {
-        checkView();
-
-        mShowsRepository.saveShow(show)
+    private void verifySavedShowStatus(@NonNull Show show) {
+        Disposable checkSavedShowDisposable = mShowsRepository.getSavedShow(show.getId())
                 .subscribeOn(getRxJavaConfig().ioScheduler())
                 .observeOn(getRxJavaConfig().androidScheduler())
-                .subscribe(() -> getView().displaySavedShowMessage(),
+                .subscribe(savedShow -> getView().displaySaveShowButton(false),
+                        ignored -> getView().displaySaveShowButton(true));
+
+        addDisposable(checkSavedShowDisposable);
+    }
+
+    public void changeWatchingStatus(@NonNull Show show) {
+        checkView();
+
+        Disposable checkStatusDisposable = mShowsRepository.getSavedShow(show.getId())
+                .subscribeOn(getRxJavaConfig().ioScheduler())
+                .subscribe(this::removeShow,
+                        ignored -> saveShow(show));
+
+        addDisposable(checkStatusDisposable);
+    }
+
+    private void removeShow(Show show) {
+        Disposable removeShowDisposable = mShowsRepository.removeShow(show.getId())
+                .subscribeOn(getRxJavaConfig().ioScheduler())
+                .observeOn(getRxJavaConfig().androidScheduler())
+                .subscribe(() -> {
+                            getView().displayShowRemovedMessage();
+                            getView().displaySaveShowButton(true);
+                        },
                         Timber::e);
+
+        addDisposable(removeShowDisposable);
+    }
+
+    private void saveShow(@NonNull Show show) {
+        Disposable saveShowDisposable = mShowsRepository.saveShow(show)
+                .subscribeOn(getRxJavaConfig().ioScheduler())
+                .observeOn(getRxJavaConfig().androidScheduler())
+                .subscribe(() -> {
+                            getView().displaySavedShowMessage();
+                            getView().displaySaveShowButton(false);
+                        },
+                        Timber::e);
+
+        addDisposable(saveShowDisposable);
+
     }
 
     public void openEpisodes(Show show, Season season) {
