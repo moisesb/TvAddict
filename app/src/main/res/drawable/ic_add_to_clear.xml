@@ -6,6 +6,10 @@
 
     <target
         android:animation="@animator/ic_add_morph"
-        android:name="clear"/>
+        android:name="Add"/>
+
+    <target
+        android:animation="@animator/clockwise_rotation"
+        android:name="rotation"/>
 
 </animated-vector>

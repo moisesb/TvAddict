@@ -3,17 +3,13 @@ package com.moisesborges.tvaddict.shows;
 import android.support.annotation.NonNull;
 
 import com.moisesborges.tvaddict.data.ShowsRepository;
-import com.moisesborges.tvaddict.di.DaggerConstrants;
 import com.moisesborges.tvaddict.models.Show;
 import com.moisesborges.tvaddict.mvp.BasePresenter;
 import com.moisesborges.tvaddict.mvp.RxJavaConfig;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
-import io.reactivex.Scheduler;
 import io.reactivex.disposables.Disposable;
-import timber.log.Timber;
 
 /**
  * Created by Moisés on 12/04/2017.

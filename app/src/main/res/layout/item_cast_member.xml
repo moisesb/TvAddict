@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content">
+
+    <com.moisesborges.tvaddict.ui.SquareFrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/cast_member_image_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </com.moisesborges.tvaddict.ui.SquareFrameLayout>
+
+    <TextView
+        android:id="@+id/cast_member_name_text_view"
+        tools:text="Actor name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:layout_marginTop="8dp"
+        android:textColor="@color/primary_text"
+        android:singleLine="true"
+        android:ellipsize="end"
+        android:textSize="12sp"/>
+
+    <TextView
+        android:id="@+id/character_name_text_view"
+        tools:text="Character"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:layout_marginBottom="8dp"
+        android:textColor="@color/primary_text"
+        android:singleLine="true"
+        android:ellipsize="end"
+        android:textSize="12sp"/>
+
+</LinearLayout>

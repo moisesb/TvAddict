@@ -2,25 +2,19 @@ package com.moisesborges.tvaddict.showdetails;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.AnimatedVectorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.content.res.ResourcesCompat;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.Spanned;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -28,17 +22,18 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.moisesborges.tvaddict.App;
-import com.moisesborges.tvaddict.BuildConfig;
 import com.moisesborges.tvaddict.R;
+import com.moisesborges.tvaddict.adapters.CastAdapter;
 import com.moisesborges.tvaddict.adapters.ItemClickListener;
+import com.moisesborges.tvaddict.adapters.SeasonsAdapter;
 import com.moisesborges.tvaddict.episodes.EpisodesActivity;
 import com.moisesborges.tvaddict.models.CastMember;
 import com.moisesborges.tvaddict.models.Embedded;
+import com.moisesborges.tvaddict.models.Externals;
 import com.moisesborges.tvaddict.models.Season;
 import com.moisesborges.tvaddict.models.Show;
 import com.moisesborges.tvaddict.utils.ProgressBarHelper;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -70,14 +65,28 @@ public class ShowDetailsActivity extends AppCompatActivity implements ShowDetail
     Toolbar mToolbar;
     @BindView(R.id.seasons_recycler_view)
     RecyclerView mSeasonsRecyclerView;
-    @BindView(R.id.progress_bar)
-    ProgressBar mProgressBar;
+    @BindView(R.id.seasons_progress_bar)
+    ProgressBar mSeasonsProgressBar;
+    @BindView(R.id.cast_recycler_view)
+    RecyclerView mCastRecyclerView;
+    @BindView(R.id.cast_progress_bar)
+    ProgressBar mCastProgressBar;
     @BindView(R.id.save_show_float_action_button)
     FloatingActionButton mFloatingActionButton;
+    @BindView(R.id.show_genres_text_view)
+    TextView mGenresTextView;
+    @BindView(R.id.show_network_text_view)
+    TextView mNetworkTextView;
+    @BindView(R.id.show_runtime_text_view)
+    TextView mRuntimeTextView;
+    @BindView(R.id.show_ration_text_view)
+    TextView mRatingTextView;
 
     private ItemClickListener<Season> mSeasonItemClickListener = (season) -> mShowDetailsPresenter.openEpisodes(mShow, season);
 
-    private SeasonsAdapter mAdapter = new SeasonsAdapter(mSeasonItemClickListener);
+    private SeasonsAdapter mSeasonsAdapter = new SeasonsAdapter(mSeasonItemClickListener);
+
+    private CastAdapter mCastAdapter = new CastAdapter();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -85,15 +94,19 @@ public class ShowDetailsActivity extends AppCompatActivity implements ShowDetail
         setContentView(R.layout.activity_show_details);
         mUnbinder = ButterKnife.bind(this);
         setupToolbar();
-        setupRecyclerView();
-        injectDependecies();
+        setupRecyclerViews();
+        injectDependencies();
         mShow = getIntent().getParcelableExtra(SHOW_ARG);
     }
 
-    private void setupRecyclerView() {
-        mSeasonsRecyclerView.setLayoutManager(new GridLayoutManager(this, 4));
+    private void setupRecyclerViews() {
+        mSeasonsRecyclerView.setLayoutManager(new GridLayoutManager(this, 3));
         mSeasonsRecyclerView.setHasFixedSize(true);
-        mSeasonsRecyclerView.setAdapter(mAdapter);
+        mSeasonsRecyclerView.setAdapter(mSeasonsAdapter);
+
+        mCastRecyclerView.setLayoutManager(new GridLayoutManager(this, 3));
+        mCastRecyclerView.setHasFixedSize(true);
+        mCastRecyclerView.setAdapter(mCastAdapter);
     }
 
     private void setupToolbar() {
@@ -120,7 +133,7 @@ public class ShowDetailsActivity extends AppCompatActivity implements ShowDetail
         mUnbinder.unbind();
     }
 
-    private void injectDependecies() {
+    private void injectDependencies() {
         ((App) getApplicationContext()).getAppComponent().inject(this);
     }
 
@@ -154,16 +167,17 @@ public class ShowDetailsActivity extends AppCompatActivity implements ShowDetail
 
     @Override
     public void displaySeasons(@NonNull List<Season> seasons) {
-        mAdapter.setSeasons(seasons);
+        mSeasonsAdapter.setSeasons(seasons);
     }
 
     @Override
-    public void displaySeasonsProgress(boolean isLoading) {
-        ProgressBarHelper.show(mProgressBar, isLoading);
+    public void displayAdditionalInfoLoadingInProgress(boolean isLoading) {
+        ProgressBarHelper.show(mSeasonsProgressBar, isLoading);
+        ProgressBarHelper.show(mCastProgressBar, isLoading);
     }
 
     @Override
-    public void displaySeasonsNotLoaded(boolean hasError) {
+    public void displayAdditionalInfoNotLoaded(boolean hasError) {
 
     }
 
@@ -188,30 +202,59 @@ public class ShowDetailsActivity extends AppCompatActivity implements ShowDetail
 
     @Override
     public void displayCastMembers(List<CastMember> castMembers) {
-
+        mCastAdapter.setCast(castMembers);
     }
 
     @Override
     public void displaySaveShowButton(boolean shouldDisplaySavedAction) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP || mFloatingActionButton.getDrawable() == null) {
-            mFloatingActionButton.setImageResource(shouldDisplaySavedAction ?
-                    R.drawable.ic_add_white_24px : R.drawable.ic_clear_white_24px);
-        } else {
-            AnimatedVectorDrawable animatedVectorDrawable = (AnimatedVectorDrawable) getResources()
-                    .getDrawable(shouldDisplaySavedAction ?
-                            R.drawable.ic_clear_to_add : R.drawable.ic_add_to_clear, null);
-
-            mFloatingActionButton.setImageDrawable(animatedVectorDrawable);
-            animatedVectorDrawable.start();
-
-        }
-
+        mFloatingActionButton.setImageResource(shouldDisplaySavedAction ?
+                R.drawable.ic_add_white_24px : R.drawable.ic_clear_white_24px);
         mFloatingActionButton.setEnabled(true);
     }
 
     @Override
     public void displayShowRemovedMessage() {
         showToast(R.string.show_removed_with_success);
+    }
+
+    @Override
+    public void setShowRating(Double rating) {
+        String ratingLabel = rating != null ?
+                rating.toString() : getResources().getString(R.string.not_available);
+        mRatingTextView.setText(ratingLabel);
+    }
+
+    @Override
+    public void setShowRuntime(Integer runtime) {
+        String runtimeLabel = runtime != null ?
+                getResources().getString(R.string.runtime_label, runtime) : getResources().getString(R.string.not_available);
+        mRuntimeTextView.setText(runtimeLabel);
+    }
+
+    @Override
+    public void setShowNetwork(String networkName) {
+        mNetworkTextView.setText(networkName);
+    }
+
+    @Override
+    public void setShowGenres(List<String> genres) {
+        mGenresTextView.setText(listOfGenres(genres));
+    }
+
+    private String listOfGenres(List<String> genres) {
+        StringBuilder builder = new StringBuilder();
+        for (int pos = 0; pos < genres.size(); pos++) {
+            if (pos != 0) {
+                builder.append(" - ");
+            }
+            builder.append(genres.get(pos));
+        }
+        return builder.toString();
+    }
+
+    @Override
+    public void setShowExternalLinks(Externals externals) {
+
     }
 
     private Spanned extractFromHtml(String html) {
@@ -223,72 +266,4 @@ public class ShowDetailsActivity extends AppCompatActivity implements ShowDetail
     }
 
 
-    public static class SeasonsAdapter extends RecyclerView.Adapter<SeasonsAdapter.ViewHolder> {
-
-        private final List<Season> mSeasons = new ArrayList<>();
-        private final ItemClickListener<Season> mItemClickListener;
-
-        public SeasonsAdapter(@Nullable ItemClickListener<Season> itemClickListener) {
-            super();
-            mItemClickListener = itemClickListener;
-        }
-
-        public void setSeasons(@NonNull List<Season> seasons) {
-            mSeasons.clear();
-            mSeasons.addAll(seasons);
-            notifyDataSetChanged();
-        }
-
-        @Override
-        public SeasonsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View layout = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.item_season, parent, false);
-            return new ViewHolder(layout);
-        }
-
-        @Override
-        public void onBindViewHolder(SeasonsAdapter.ViewHolder holder, int position) {
-            Season season = mSeasons.get(position);
-            holder.bind(season);
-        }
-
-        @Override
-        public int getItemCount() {
-            return mSeasons.size();
-        }
-
-        public class ViewHolder extends RecyclerView.ViewHolder {
-
-            @BindView(R.id.season_image_view)
-            ImageView mSeasonImageView;
-            @BindView(R.id.season_text_view)
-            TextView mNumberTextView;
-
-            public ViewHolder(View itemView) {
-                super(itemView);
-                ButterKnife.bind(this, itemView);
-            }
-
-            @OnClick(R.id.season_item_layout)
-            public void onSeasonClick() {
-                if (mItemClickListener == null) {
-                    return;
-                }
-
-                int position = getAdapterPosition();
-                Season season = mSeasons.get(position);
-                mItemClickListener.consume(season);
-            }
-
-            public void bind(@NonNull Season season) {
-                mNumberTextView.setText(season.getName());
-
-                if (season.getImage() != null) {
-                    Glide.with(itemView.getContext())
-                            .load(season.getImage().getMedium())
-                            .into(mSeasonImageView);
-                }
-            }
-        }
-    }
 }

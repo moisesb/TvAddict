@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.moisesborges.tvaddict.models.CastMember;
 import com.moisesborges.tvaddict.models.Embedded;
+import com.moisesborges.tvaddict.models.Externals;
 import com.moisesborges.tvaddict.models.Season;
 import com.moisesborges.tvaddict.models.Show;
 import com.moisesborges.tvaddict.mvp.BaseView;
@@ -23,9 +24,9 @@ interface ShowDetailsView extends BaseView{
 
     void displaySeasons(@NonNull List<Season> seasons);
 
-    void displaySeasonsProgress(boolean isLoading);
+    void displayAdditionalInfoLoadingInProgress(boolean isLoading);
 
-    void displaySeasonsNotLoaded(boolean hasError);
+    void displayAdditionalInfoNotLoaded(boolean hasError);
 
     void setShow(@NonNull Show show);
 
@@ -38,4 +39,14 @@ interface ShowDetailsView extends BaseView{
     void displaySaveShowButton(boolean shouldDisplaySavedAction);
 
     void displayShowRemovedMessage();
+
+    void setShowRating(Double rating);
+
+    void setShowRuntime(Integer runtime);
+
+    void setShowNetwork(String networkName);
+
+    void setShowGenres(List<String> genres);
+
+    void setShowExternalLinks(Externals externals);
 }

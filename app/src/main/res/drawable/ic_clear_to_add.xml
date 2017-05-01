@@ -8,4 +8,7 @@
         android:animation="@animator/ic_clear_morph"
         android:name="clear"/>
 
+    <target
+        android:animation="@animator/counter_clockwise_rotation"
+        android:name="rotation"/>
 </animated-vector>

@@ -1,10 +1,11 @@
 package com.moisesborges.tvaddict.mvp;
 
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import com.moisesborges.tvaddict.exceptions.ViewNotAttachedException;
 
+import io.reactivex.CompletableTransformer;
+import io.reactivex.SingleTransformer;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
@@ -47,5 +48,16 @@ public abstract class BasePresenter<T extends BaseView> {
         if (mView == null) {
             throw new ViewNotAttachedException("View not attached to " + getClass().getSimpleName() + " Presenter");
         }
+    }
+
+    @NonNull
+    protected <T> SingleTransformer<T, T> applySchedulersToSingle() {
+        return single -> single.subscribeOn(getRxJavaConfig().ioScheduler())
+                .observeOn(getRxJavaConfig().androidScheduler());
+    }
+
+    @NonNull
+    protected CompletableTransformer applySchedulersToCompletable() {
+        return completable -> completable.subscribeOn(getRxJavaConfig().ioScheduler()).observeOn(getRxJavaConfig().androidScheduler());
     }
 }

@@ -8,12 +8,9 @@ import com.moisesborges.tvaddict.models.Show;
 import com.moisesborges.tvaddict.mvp.BasePresenter;
 import com.moisesborges.tvaddict.mvp.RxJavaConfig;
 
-import java.util.List;
-
 import javax.inject.Inject;
 
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 import timber.log.Timber;
 
 /**
@@ -34,36 +31,47 @@ public class ShowDetailsPresenter extends BasePresenter<ShowDetailsView> {
     public void loadShowDetails(@NonNull Show show) {
         checkView();
 
+        displayBasicShowInfo(show);
+
+        loadShowAdditionalInfo(show);
+
+        verifySavedShowStatus(show);
+    }
+
+    private void displayBasicShowInfo(@NonNull Show show) {
         getView().setShowImage(show.getImage().getMedium());
         getView().setShowName(show.getName());
         getView().setShowSummary(show.getSummary());
-        getView().displaySeasonsNotLoaded(false);
+        getView().displayAdditionalInfoNotLoaded(false);
+        getView().setShowRating(show.getRating() != null ? show.getRating().getAverage() : null);
+        getView().setShowNetwork(show.getNetwork() != null ? show.getNetwork().getName() : null);
+        getView().setShowRuntime(show.getRuntime());
+        getView().setShowGenres(show.getGenres());
+        getView().setShowExternalLinks(show.getExternals());
+    }
 
-        getView().displaySeasonsProgress(true);
+    private void loadShowAdditionalInfo(@NonNull Show show) {
+        getView().displayAdditionalInfoLoadingInProgress(true);
         Disposable loadShowDataDisposable = mShowsRepository.getFullShowInfo(show.getId())
-                .subscribeOn(getRxJavaConfig().ioScheduler())
-                .observeOn(getRxJavaConfig().androidScheduler())
+                .compose(applySchedulersToSingle())
                 .subscribe(showFullInfo -> {
-                    getView().displaySeasonsProgress(false);
+                    getView().displayAdditionalInfoLoadingInProgress(false);
                     getView().setShow(showFullInfo);
                     if (showFullInfo.getEmbedded() != null) {
                         getView().displaySeasons(showFullInfo.getEmbedded().getSeasons());
                         getView().displayCastMembers(showFullInfo.getEmbedded().getCast());
                     }
                 }, throwable -> {
-                    getView().displaySeasonsProgress(false);
-                    getView().displaySeasonsNotLoaded(true);
+                    getView().displayAdditionalInfoLoadingInProgress(false);
+                    getView().displayAdditionalInfoNotLoaded(true);
                 });
 
         addDisposable(loadShowDataDisposable);
-
-        verifySavedShowStatus(show);
     }
 
     private void verifySavedShowStatus(@NonNull Show show) {
         Disposable checkSavedShowDisposable = mShowsRepository.getSavedShow(show.getId())
-                .subscribeOn(getRxJavaConfig().ioScheduler())
-                .observeOn(getRxJavaConfig().androidScheduler())
+                .compose(applySchedulersToSingle())
                 .subscribe(savedShow -> getView().displaySaveShowButton(false),
                         ignored -> getView().displaySaveShowButton(true));
 
@@ -83,8 +91,7 @@ public class ShowDetailsPresenter extends BasePresenter<ShowDetailsView> {
 
     private void removeShow(Show show) {
         Disposable removeShowDisposable = mShowsRepository.removeShow(show.getId())
-                .subscribeOn(getRxJavaConfig().ioScheduler())
-                .observeOn(getRxJavaConfig().androidScheduler())
+                .compose(applySchedulersToCompletable())
                 .subscribe(() -> {
                             getView().displayShowRemovedMessage();
                             getView().displaySaveShowButton(true);
@@ -96,8 +103,7 @@ public class ShowDetailsPresenter extends BasePresenter<ShowDetailsView> {
 
     private void saveShow(@NonNull Show show) {
         Disposable saveShowDisposable = mShowsRepository.saveShow(show)
-                .subscribeOn(getRxJavaConfig().ioScheduler())
-                .observeOn(getRxJavaConfig().androidScheduler())
+                .compose(applySchedulersToCompletable())
                 .subscribe(() -> {
                             getView().displaySavedShowMessage();
                             getView().displaySaveShowButton(false);

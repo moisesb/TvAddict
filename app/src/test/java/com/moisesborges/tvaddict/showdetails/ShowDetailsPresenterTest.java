@@ -13,7 +13,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import io.reactivex.Completable;
-import io.reactivex.Maybe;
 import io.reactivex.Single;
 
 import static org.mockito.Mockito.*;
@@ -52,20 +51,33 @@ public class ShowDetailsPresenterTest {
     }
 
     @Test
-    public void shouldDisplayShowDetailsIntoView() throws Exception {
+    public void shouldDisplayShowBasicInfoIntoView() throws Exception {
+        loadShowDetails();
 
-        mShowDetailsPresenter.bindView(mShowDetailsView);
-
-        mShowDetailsPresenter.loadShowDetails(mShow);
-
-        verify(mShowDetailsView).displaySeasonsNotLoaded(false);
         verify(mShowDetailsView).setShowName(mShow.getName());
         verify(mShowDetailsView).setShowImage(mShow.getImage().getMedium());
         verify(mShowDetailsView).setShowSummary(mShow.getSummary());
-        verify(mShowDetailsView).displaySeasonsProgress(true);
+        verify(mShowDetailsView).setShowRating(mShow.getRating().getAverage());
+        verify(mShowDetailsView).setShowRuntime(mShow.getRuntime());
+        verify(mShowDetailsView).setShowNetwork(mShow.getNetwork().getName());
+        verify(mShowDetailsView).setShowGenres(mShow.getGenres());
+        verify(mShowDetailsView).setShowExternalLinks(mShow.getExternals());
+    }
+
+    private void loadShowDetails() {
+        mShowDetailsPresenter.bindView(mShowDetailsView);
+        mShowDetailsPresenter.loadShowDetails(mShow);
+    }
+
+    @Test
+    public void shouldDisplayShowDetailsIntoView() throws Exception {
+        loadShowDetails();
+
+        verify(mShowDetailsView).displayAdditionalInfoNotLoaded(false);
+        verify(mShowDetailsView).displayAdditionalInfoLoadingInProgress(true);
         verify(mShowsRepository).getFullShowInfo(mShow.getId());
         verify(mShowDetailsView).setShow(mShowFullInfo);
-        verify(mShowDetailsView).displaySeasonsProgress(false);
+        verify(mShowDetailsView).displayAdditionalInfoLoadingInProgress(false);
         verify(mShowDetailsView).displaySeasons(anyList());
         verify(mShowDetailsView).displayCastMembers(anyList());
     }
@@ -74,8 +86,7 @@ public class ShowDetailsPresenterTest {
     public void showDisplaySaveMainAction() throws Exception {
         when(mShowsRepository.getSavedShow(mShow.getId())).thenReturn(Single.error(new NullPointerException()));
 
-        mShowDetailsPresenter.bindView(mShowDetailsView);
-        mShowDetailsPresenter.loadShowDetails(mShow);
+        loadShowDetails();
 
         verify(mShowDetailsView).displaySaveShowButton(true);
     }
@@ -84,8 +95,7 @@ public class ShowDetailsPresenterTest {
     public void shouldDisplayRemoveMainAction() throws Exception {
         when(mShowsRepository.getSavedShow(mShow.getId())).thenReturn(Single.fromCallable(() -> mShow));
 
-        mShowDetailsPresenter.bindView(mShowDetailsView);
-        mShowDetailsPresenter.loadShowDetails(mShow);
+        loadShowDetails();
 
         verify(mShowDetailsView).displaySaveShowButton(false);
     }
@@ -103,12 +113,16 @@ public class ShowDetailsPresenterTest {
     public void shouldSaveShowInWatchingList() throws Exception {
         when(mShowsRepository.saveShow(any())).thenReturn(Completable.complete());
 
-        mShowDetailsPresenter.bindView(mShowDetailsView);
-        mShowDetailsPresenter.changeWatchingStatus(mShow);
+        changeWatchingStatus();
 
         verify(mShowsRepository).saveShow(mShow);
         verify(mShowDetailsView).displaySavedShowMessage();
         verify(mShowDetailsView).displaySaveShowButton(false);
+    }
+
+    private void changeWatchingStatus() {
+        mShowDetailsPresenter.bindView(mShowDetailsView);
+        mShowDetailsPresenter.changeWatchingStatus(mShow);
     }
 
     @Test
@@ -116,8 +130,7 @@ public class ShowDetailsPresenterTest {
         when(mShowsRepository.getSavedShow(mShow.getId())).thenReturn(Single.just(mShow));
         when(mShowsRepository.removeShow(mShow.getId())).thenReturn(Completable.complete());
 
-        mShowDetailsPresenter.bindView(mShowDetailsView);
-        mShowDetailsPresenter.changeWatchingStatus(mShow);
+        changeWatchingStatus();
 
         verify(mShowsRepository).removeShow(mShow.getId());
         verify(mShowDetailsView).displayShowRemovedMessage();
