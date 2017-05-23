@@ -21,6 +21,8 @@ import java.util.List;
 @Table(database = AppDatabase.class)
 public class Show implements Parcelable{
 
+    public static final Show NOT_FOUND = new Show();
+
     @PrimaryKey
     @SerializedName("id")
     @Expose

@@ -5,11 +5,17 @@
              android:layout_height="match_parent"
              tools:context="com.moisesborges.tvaddict.watching.WatchingShowsFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:id="@+id/list"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/shows_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Watching_fragment"/>
+        android:layout_marginTop="8dp"/>
+
+    <ViewStub
+        android:id="@+id/watching_no_shows_view_stub"
+        android:layout="@layout/view_stub_empty_watching_shows_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"/>
 
 </FrameLayout>

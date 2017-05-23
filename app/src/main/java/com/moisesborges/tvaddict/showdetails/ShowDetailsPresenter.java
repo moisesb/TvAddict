@@ -54,16 +54,19 @@ public class ShowDetailsPresenter extends BasePresenter<ShowDetailsView> {
         getView().displayAdditionalInfoLoadingInProgress(true);
         Disposable loadShowDataDisposable = mShowsRepository.getFullShowInfo(show.getId())
                 .compose(applySchedulersToSingle())
+                .onErrorReturn(ignored -> Show.NOT_FOUND)
                 .subscribe(showFullInfo -> {
                     getView().displayAdditionalInfoLoadingInProgress(false);
+                    if (showFullInfo == Show.NOT_FOUND) {
+                        getView().displayAdditionalInfoNotLoaded(true);
+                        return;
+                    }
+
                     getView().setShow(showFullInfo);
                     if (showFullInfo.getEmbedded() != null) {
                         getView().displaySeasons(showFullInfo.getEmbedded().getSeasons());
                         getView().displayCastMembers(showFullInfo.getEmbedded().getCast());
                     }
-                }, throwable -> {
-                    getView().displayAdditionalInfoLoadingInProgress(false);
-                    getView().displayAdditionalInfoNotLoaded(true);
                 });
 
         addDisposable(loadShowDataDisposable);
@@ -83,8 +86,14 @@ public class ShowDetailsPresenter extends BasePresenter<ShowDetailsView> {
 
         Disposable checkStatusDisposable = mShowsRepository.getSavedShow(show.getId())
                 .subscribeOn(getRxJavaConfig().ioScheduler())
-                .subscribe(this::removeShow,
-                        ignored -> saveShow(show));
+                .onErrorReturn(ignored -> Show.NOT_FOUND)
+                .subscribe(showFromDb -> {
+                    if (showFromDb == Show.NOT_FOUND) {
+                        saveShow(show);
+                    } else {
+                        removeShow(show);
+                    }
+                });
 
         addDisposable(checkStatusDisposable);
     }

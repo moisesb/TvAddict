@@ -27,4 +27,6 @@ public interface ShowsRepository {
     Single<Show> getSavedShow(int showId);
 
     Completable removeShow(int showId);
+
+    Single<List<Show>> getWatchingShows();
 }

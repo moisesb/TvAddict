@@ -56,4 +56,9 @@ public class ShowsRepositoryImpl implements ShowsRepository {
         return mShowDb.remove(showId);
     }
 
+    @Override
+    public Single<List<Show>> getWatchingShows() {
+        return mShowDb.findAllShows();
+    }
+
 }
