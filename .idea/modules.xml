@@ -3,9 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/TvAddict.iml" filepath="$PROJECT_DIR$/TvAddict.iml" />
-      <module fileurl="file://C:\projects\TvAddict\TvAddict.iml" filepath="C:\projects\TvAddict\TvAddict.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://C:\projects\TvAddict\app\app.iml" filepath="C:\projects\TvAddict\app\app.iml" />
     </modules>
   </component>
 </project>
