@@ -10,14 +10,12 @@ import com.raizlabs.android.dbflow.sql.language.SQLite;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
-
-import static org.junit.Assert.*;
 
 /**
  * Created by Moisés on 22/04/2017.
@@ -29,6 +27,7 @@ import static org.junit.Assert.*;
         application = App.class,
         manifest = "/src/main/AndroidManifest.xml"
 )
+@Ignore
 public class EpisodesDbImplTest {
 
     @Rule
