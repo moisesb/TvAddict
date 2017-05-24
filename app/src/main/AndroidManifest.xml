@@ -28,8 +28,7 @@
             android:parentActivityName=".homescreen.HomeActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
 
-        <activity android:name=".episodes.EpisodesActivity"
-            android:parentActivityName=".showdetails.ShowDetailsActivity">
+        <activity android:name=".episodes.EpisodesActivity">
         </activity>
     </application>
 
