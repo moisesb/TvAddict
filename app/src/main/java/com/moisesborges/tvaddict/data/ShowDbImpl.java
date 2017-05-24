@@ -15,6 +15,7 @@ import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.raizlabs.android.dbflow.structure.ModelAdapter;
 
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import hugo.weaving.DebugLog;
 import io.reactivex.Completable;
@@ -64,6 +65,21 @@ public class ShowDbImpl implements ShowDb {
                 .from(Show.class)
                 .where(Show_Table.id.eq(showId)))
                 .querySingle();
+    }
+
+    @Override
+    public Single<Show> update(Show show) {
+        return Single.fromCallable(updateShow(show));
+    }
+
+    @NonNull
+    private Callable<Show> updateShow(Show show) {
+        return () -> {
+            FlowManager.getModelAdapter(Show.class)
+                    .update(show);
+
+            return show;
+        };
     }
 
 }

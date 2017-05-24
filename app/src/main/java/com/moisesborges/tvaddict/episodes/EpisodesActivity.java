@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,8 +16,10 @@ import android.widget.TextView;
 
 import com.moisesborges.tvaddict.App;
 import com.moisesborges.tvaddict.R;
+import com.moisesborges.tvaddict.adapters.ItemClickListener;
 import com.moisesborges.tvaddict.models.Embedded;
 import com.moisesborges.tvaddict.models.Episode;
+import com.moisesborges.tvaddict.models.Show;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,17 +28,16 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 
 public class EpisodesActivity extends AppCompatActivity implements EpisodesView {
 
-    public static final String ARG_SHOW_ID = "com.moisesborges.tvaddict.episodesshow.EpisodesActivity.showId";
     public static final String ARG_SEASON_NUMBER = "com.moisesborges.tvaddict.episodesshow.EpisodesActivity.seasonNumber";
-    public static final String ARG_EMBEDDED = "com.moisesborges.tvaddict.episodesshow.EpisodesActivity.embedded";
+    private static final String ARG_SHOW = "com.moisesborges.tvaddict.episodesshow.EpisodesActivity.show";
 
-    private int mShowId;
+    private Show mShow;
     private int mSeasonNumber;
-    private Embedded mEmbeddedData;
 
     @BindView(R.id.episodes_recycler_view)
     RecyclerView mRecyclerView;
@@ -43,7 +45,10 @@ public class EpisodesActivity extends AppCompatActivity implements EpisodesView 
     @Inject
     EpisodesPresenter mEpisodesPresenter;
 
-    private EpisodesAdapter mEpisodesAdapter = new EpisodesAdapter();
+    private ItemClickListener<Episode> mEpisodeClickListener =
+            episode -> mEpisodesPresenter.changeEpisodeSeenStatus(episode, mShow);
+
+    private EpisodesAdapter mEpisodesAdapter = new EpisodesAdapter(mEpisodeClickListener);
 
     private Unbinder mUnbinder;
 
@@ -52,13 +57,16 @@ public class EpisodesActivity extends AppCompatActivity implements EpisodesView 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_episodes);
         mUnbinder = ButterKnife.bind(this);
-        ((App) getApplicationContext()).getAppComponent().inject(this);
+        injectDependecies();
 
-        mShowId = getIntent().getIntExtra(ARG_SHOW_ID, 0);
+        mShow = getIntent().getParcelableExtra(ARG_SHOW);
         mSeasonNumber = getIntent().getIntExtra(ARG_SEASON_NUMBER, 0);
-        mEmbeddedData = getIntent().getParcelableExtra(ARG_EMBEDDED);
 
         setupRecyclerView();
+    }
+
+    private void injectDependecies() {
+        ((App) getApplicationContext()).getAppComponent().inject(this);
     }
 
     private void setupRecyclerView() {
@@ -71,7 +79,7 @@ public class EpisodesActivity extends AppCompatActivity implements EpisodesView 
     protected void onStart() {
         super.onStart();
         mEpisodesPresenter.bindView(this);
-        mEpisodesPresenter.loadEpisodes(mSeasonNumber, mEmbeddedData);
+        mEpisodesPresenter.loadEpisodes(mSeasonNumber, mShow);
     }
 
     @Override
@@ -87,13 +95,11 @@ public class EpisodesActivity extends AppCompatActivity implements EpisodesView 
     }
 
     public static void start(@NonNull Context context,
-                             int showId,
-                             int seasonNumber,
-                             @NonNull Embedded embeddedData) {
+                             @NonNull Show show,
+                             int seasonNumber) {
         Intent intent = new Intent(context, EpisodesActivity.class);
-        intent.putExtra(ARG_SHOW_ID, showId);
+        intent.putExtra(ARG_SHOW, show);
         intent.putExtra(ARG_SEASON_NUMBER, seasonNumber);
-        intent.putExtra(ARG_EMBEDDED, embeddedData);
         context.startActivity(intent);
     }
 
@@ -102,11 +108,23 @@ public class EpisodesActivity extends AppCompatActivity implements EpisodesView 
         mEpisodesAdapter.setEpisodes(episodes);
     }
 
+    @Override
+    public void refreshEpisode(@NonNull Episode episode) {
+        mEpisodesAdapter.updateEpisode(episode);
+    }
+
+    @Override
+    public void setShow(@NonNull Show showFromDb) {
+        mShow = showFromDb;
+    }
+
     public static class EpisodesAdapter extends RecyclerView.Adapter<EpisodesAdapter.ViewHolder> {
 
         private final List<Episode> mEpisodes = new ArrayList<>();
+        private final ItemClickListener<Episode> mClickListener;
 
-        public EpisodesAdapter() {
+        public EpisodesAdapter(@Nullable ItemClickListener<Episode> clickListener) {
+            mClickListener = clickListener;
         }
 
         @Override
@@ -133,6 +151,11 @@ public class EpisodesActivity extends AppCompatActivity implements EpisodesView 
             notifyDataSetChanged();
         }
 
+        public void updateEpisode(@NonNull Episode episode) {
+            int indexOf = mEpisodes.indexOf(episode);
+            notifyItemChanged(indexOf);
+        }
+
         public class ViewHolder extends RecyclerView.ViewHolder {
 
             @BindView(R.id.episode_name_text_view)
@@ -143,6 +166,14 @@ public class EpisodesActivity extends AppCompatActivity implements EpisodesView 
             public ViewHolder(View itemView) {
                 super(itemView);
                 ButterKnife.bind(this, itemView);
+            }
+
+            @OnClick(R.id.watched_check_box)
+            @SuppressWarnings("unused")
+            public void onWatchedCheckBoxClick() {
+                int position = getAdapterPosition();
+                Episode episode = mEpisodes.get(position);
+                mClickListener.consume(episode);
             }
 
             public void bind(@NonNull Episode episode) {

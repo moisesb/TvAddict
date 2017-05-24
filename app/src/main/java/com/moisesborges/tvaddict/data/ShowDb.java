@@ -19,4 +19,6 @@ public interface ShowDb {
     Single<List<Show>> findAllShows();
 
     Single<Show> findShow(int showId);
+
+    Single<Show> update(Show show);
 }

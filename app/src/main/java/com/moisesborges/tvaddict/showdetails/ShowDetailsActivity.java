@@ -28,7 +28,6 @@ import com.moisesborges.tvaddict.adapters.ItemClickListener;
 import com.moisesborges.tvaddict.adapters.SeasonsAdapter;
 import com.moisesborges.tvaddict.episodes.EpisodesActivity;
 import com.moisesborges.tvaddict.models.CastMember;
-import com.moisesborges.tvaddict.models.Embedded;
 import com.moisesborges.tvaddict.models.Externals;
 import com.moisesborges.tvaddict.models.Season;
 import com.moisesborges.tvaddict.models.Show;
@@ -187,8 +186,8 @@ public class ShowDetailsActivity extends AppCompatActivity implements ShowDetail
     }
 
     @Override
-    public void navigateToEpisodes(int showId, int seasonNumber, Embedded embeddedData) {
-        EpisodesActivity.start(this, showId, seasonNumber, embeddedData);
+    public void navigateToEpisodes(Show show, int seasonNumber) {
+        EpisodesActivity.start(this, show, seasonNumber);
     }
 
     @Override

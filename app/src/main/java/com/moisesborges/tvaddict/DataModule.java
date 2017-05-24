@@ -1,9 +1,5 @@
 package com.moisesborges.tvaddict;
 
-import com.moisesborges.tvaddict.data.EpisodesDb;
-import com.moisesborges.tvaddict.data.EpisodesDbImpl;
-import com.moisesborges.tvaddict.data.SeasonDb;
-import com.moisesborges.tvaddict.data.SeasonDbImpl;
 import com.moisesborges.tvaddict.data.ShowDb;
 import com.moisesborges.tvaddict.data.ShowDbImpl;
 import com.moisesborges.tvaddict.data.ShowsRepository;
@@ -32,23 +28,9 @@ public class DataModule {
     }
 
     @Provides
-    @Singleton
-    public EpisodesDb providesEpisodeDb() {
-        return new EpisodesDbImpl();
-    }
-
-    @Provides
-    @Singleton
-    public SeasonDb providesSeasonDb() {
-        return new SeasonDbImpl();
-    }
-
-    @Provides
     public ShowsRepository providesShowsRepository(TvMazeApi tvMazeApi,
-                                                   ShowDb showDb,
-                                                   SeasonDb seasonDb,
-                                                   EpisodesDb episodesDb) {
-        return new ShowsRepositoryImpl(tvMazeApi, showDb, episodesDb, seasonDb);
+                                                   ShowDb showDb) {
+        return new ShowsRepositoryImpl(tvMazeApi, showDb);
     }
 
     @Provides

@@ -12,7 +12,6 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import io.reactivex.Completable;
 import io.reactivex.Single;
 
 import static org.mockito.Mockito.*;
@@ -106,19 +105,18 @@ public class ShowDetailsPresenterTest {
         Season season = mShowFullInfo.getEmbedded().getSeasons().get(0);
         mShowDetailsPresenter.openEpisodes(mShowFullInfo, season);
 
-        verify(mShowDetailsView).navigateToEpisodes(mShowFullInfo.getId(), season.getNumber(), mShowFullInfo.getEmbedded());
+        verify(mShowDetailsView).navigateToEpisodes(mShowFullInfo, season.getNumber());
     }
 
     @Test
     public void shouldSaveShowInWatchingList() throws Exception {
-        when(mShowsRepository.saveShow(any())).thenReturn(Completable.complete());
+        when(mShowsRepository.saveShow(any())).thenReturn(Single.just(mShow));
 
         changeWatchingStatus();
 
         verify(mShowsRepository).saveShow(mShow);
         verify(mShowDetailsView).displaySavedShowMessage();
         verify(mShowDetailsView).displaySaveShowButton(false);
-        verify(mShowsRepository).saveShowEmbeddedData(mShow);
     }
 
     private void changeWatchingStatus() {
@@ -129,7 +127,7 @@ public class ShowDetailsPresenterTest {
     @Test
     public void shouldRemoveShowFromWatchingList() throws Exception {
         when(mShowsRepository.getSavedShow(mShow.getId())).thenReturn(Single.just(mShow));
-        when(mShowsRepository.removeShow(mShow.getId())).thenReturn(Completable.complete());
+        when(mShowsRepository.removeShow(mShow.getId())).thenReturn(Single.just(Show.REMOVED));
 
         changeWatchingStatus();
 

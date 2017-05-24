@@ -12,73 +12,56 @@ import com.raizlabs.android.dbflow.annotation.ForeignKey;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
 
-@Table(database = AppDatabase.class)
 public class Episode implements Parcelable {
 
-    @PrimaryKey
     @SerializedName("id")
     @Expose
     private Integer id;
 
-    @Column
     @SerializedName("url")
     @Expose
     private String url;
 
-    @Column
     @SerializedName("name")
     @Expose
     private String name;
 
-    @ForeignKey(tableClass = Show.class)
-    private Integer showId;
-
-    @Column
     @SerializedName("season")
     @Expose
     private Integer season;
 
-    @Column
     @SerializedName("number")
     @Expose
     private Integer number;
 
-    @Column
     @SerializedName("airdate")
     @Expose
     private String airdate;
 
-    @Column
     @SerializedName("airtime")
     @Expose
     private String airtime;
 
-    @Column
     @SerializedName("airstamp")
     @Expose
     private String airstamp;
 
-    @Column
     @SerializedName("runtime")
     @Expose
     private Integer runtime;
 
-    @ForeignKey(saveForeignKeyModel = true)
     @SerializedName("image")
     @Expose
     private Image image;
 
-    @Column
     @SerializedName("summary")
     @Expose
     private String summary;
 
-    @ForeignKey(saveForeignKeyModel = true)
     @SerializedName("_links")
     @Expose
     private Links links;
 
-    @Column(getterName = "wasWatched")
     private boolean watched;
 
     public Episode() {
@@ -92,11 +75,6 @@ public class Episode implements Parcelable {
         }
         url = in.readString();
         name = in.readString();
-        if (in.readByte() == 0) {
-            showId = null;
-        } else {
-            showId = in.readInt();
-        }
         if (in.readByte() == 0) {
             season = null;
         } else {
@@ -155,14 +133,6 @@ public class Episode implements Parcelable {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Integer getShowId() {
-        return showId;
-    }
-
-    public void setShowId(Integer showId) {
-        this.showId = showId;
     }
 
     public Integer getSeason() {
@@ -260,12 +230,6 @@ public class Episode implements Parcelable {
         }
         parcel.writeString(url);
         parcel.writeString(name);
-        if (showId == null) {
-            parcel.writeByte((byte) 0);
-        } else {
-            parcel.writeByte((byte) 1);
-            parcel.writeInt(showId);
-        }
         if (season == null) {
             parcel.writeByte((byte) 0);
         } else {

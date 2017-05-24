@@ -3,6 +3,7 @@ package com.moisesborges.tvaddict.episodes;
 import android.support.annotation.NonNull;
 
 import com.moisesborges.tvaddict.models.Episode;
+import com.moisesborges.tvaddict.models.Show;
 import com.moisesborges.tvaddict.mvp.BaseView;
 
 import java.util.List;
@@ -13,4 +14,8 @@ import java.util.List;
 
 public interface EpisodesView extends BaseView {
     void displayEpisodes(@NonNull  List<Episode> episodes);
+
+    void refreshEpisode(@NonNull Episode episode);
+
+    void setShow(@NonNull Show showFromDb);
 }

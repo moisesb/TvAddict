@@ -23,17 +23,11 @@ public class ShowsRepositoryImpl implements ShowsRepository {
 
     private final TvMazeApi mTvMazeApi;
     private final ShowDb mShowDb;
-    private final EpisodesDb mEpisodesDb;
-    private final SeasonDb mSeasonDb;
 
     public ShowsRepositoryImpl(@NonNull TvMazeApi tvMazeApi,
-                               @NonNull ShowDb showDb,
-                               @NonNull EpisodesDb episodesDb,
-                               @NonNull SeasonDb seasonDb) {
+                               @NonNull ShowDb showDb) {
         mTvMazeApi = tvMazeApi;
         mShowDb = showDb;
-        mEpisodesDb = episodesDb;
-        mSeasonDb = seasonDb;
     }
 
     @Override
@@ -43,36 +37,13 @@ public class ShowsRepositoryImpl implements ShowsRepository {
 
     @Override
     public Single<Show> getFullShowInfo(int showId) {
-        return mTvMazeApi.fetchShowFullInfo(showId)
-                .doOnSuccess(addShowIdToEmbeddedData());
-    }
-
-    @NonNull
-    private Consumer<Show> addShowIdToEmbeddedData() {
-        return show -> {
-            for (Season season : show.getSeasons()) {
-                season.setShowId(show.getId());
-            }
-            for (Episode episode : show.getEpisodes()) {
-                episode.setShowId(show.getId());
-            }
-            for (CastMember castMember : show.getCast()) {
-                castMember.setShowId(show.getId());
-            }
-        };
+        return mTvMazeApi.fetchShowFullInfo(showId);
     }
 
     @Override
-    public Completable saveShow(@NonNull Show show) {
-        return mShowDb.save(show);
-    }
-
-    @Override
-    public Completable saveShowEmbeddedData(@NonNull Show show) {
-        return Completable.fromRunnable(() -> {
-            mSeasonDb.saveSeasons(show.getSeasons());
-            mEpisodesDb.saveEpisodes(show.getEpisodes());
-        });
+    public Single<Show> saveShow(@NonNull Show show) {
+        return mShowDb.save(show)
+                .toSingle(() -> show);
     }
 
     @Override
@@ -86,7 +57,13 @@ public class ShowsRepositoryImpl implements ShowsRepository {
     }
 
     @Override
-    public Completable removeShow(int showId) {
-        return mShowDb.remove(showId);
+    public Single<Show> removeShow(int showId) {
+        return mShowDb.remove(showId)
+                .toSingle(() -> Show.NOT_FOUND);
+    }
+
+    @Override
+    public Single<Show> updateShow(Show show) {
+        return mShowDb.update(show);
     }
 }

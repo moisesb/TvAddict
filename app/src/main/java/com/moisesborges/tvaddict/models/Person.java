@@ -6,36 +6,25 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import com.moisesborges.tvaddict.data.AppDatabase;
-import com.raizlabs.android.dbflow.annotation.Column;
-import com.raizlabs.android.dbflow.annotation.ForeignKey;
-import com.raizlabs.android.dbflow.annotation.PrimaryKey;
-import com.raizlabs.android.dbflow.annotation.Table;
 
-@Table(database = AppDatabase.class)
 public class Person implements Parcelable {
 
-    @PrimaryKey
     @SerializedName("id")
     @Expose
     private Integer id;
 
-    @Column
     @SerializedName("url")
     @Expose
     private String url;
 
-    @Column
     @SerializedName("name")
     @Expose
     private String name;
 
-    @ForeignKey(saveForeignKeyModel = true)
     @SerializedName("image")
     @Expose
     private Image image;
 
-    @ForeignKey(saveForeignKeyModel = true)
     @SerializedName("_links")
     @Expose
     private Links links;

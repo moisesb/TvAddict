@@ -3,7 +3,6 @@ package com.moisesborges.tvaddict.showdetails;
 import android.support.annotation.NonNull;
 
 import com.moisesborges.tvaddict.models.CastMember;
-import com.moisesborges.tvaddict.models.Embedded;
 import com.moisesborges.tvaddict.models.Externals;
 import com.moisesborges.tvaddict.models.Season;
 import com.moisesborges.tvaddict.models.Show;
@@ -30,7 +29,7 @@ interface ShowDetailsView extends BaseView{
 
     void setShow(@NonNull Show show);
 
-    void navigateToEpisodes(int showId, int seasonNumber, Embedded embeddedData);
+    void navigateToEpisodes(Show show, int seasonNumber);
 
     void displaySavedShowMessage();
 

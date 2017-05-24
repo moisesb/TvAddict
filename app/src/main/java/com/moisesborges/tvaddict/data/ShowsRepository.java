@@ -20,14 +20,13 @@ public interface ShowsRepository {
 
     Single<Show> getFullShowInfo(int showId);
 
-    Completable saveShow(@NonNull Show show);
-
-    Completable saveShowEmbeddedData(@NonNull Show show);
+    Single<Show> saveShow(@NonNull Show show);
 
     Single<List<Show>> getSavedShows();
 
     Single<Show> getSavedShow(int showId);
 
-    Completable removeShow(int showId);
+    Single<Show> removeShow(int showId);
 
+    Single<Show> updateShow(Show show);
 }

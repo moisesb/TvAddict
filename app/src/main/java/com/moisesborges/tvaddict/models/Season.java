@@ -6,61 +6,43 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import com.moisesborges.tvaddict.data.AppDatabase;
 import com.raizlabs.android.dbflow.annotation.Column;
-import com.raizlabs.android.dbflow.annotation.ForeignKey;
-import com.raizlabs.android.dbflow.annotation.PrimaryKey;
-import com.raizlabs.android.dbflow.annotation.Table;
 
-@Table(database = AppDatabase.class)
 public class Season implements Parcelable {
 
 
-    @PrimaryKey
     @SerializedName("id")
     @Expose
     private Integer id;
 
-    @Column
     @SerializedName("url")
     @Expose
     private String url;
 
-    @Column
     @SerializedName("number")
     @Expose
     private Integer number;
 
-    @Column
     @SerializedName("name")
     @Expose
     private String name;
 
-    @Column
     @SerializedName("episodeOrder")
     @Expose
     private Integer episodeOrder;
 
-    @Column
     @SerializedName("premiereDate")
     @Expose
     private String premiereDate;
 
-    @Column
     @SerializedName("endDate")
     @Expose
     private String endDate;
 
-    @ForeignKey(saveForeignKeyModel = true)
     @SerializedName("network")
     @Expose
     private Network network;
 
-    @SerializedName("webChannel")
-    @Expose
-    private Object webChannel;
-
-    @ForeignKey(saveForeignKeyModel = true)
     @SerializedName("image")
     @Expose
     private Image image;
@@ -70,13 +52,9 @@ public class Season implements Parcelable {
     @Expose
     private String summary;
 
-    @ForeignKey(saveForeignKeyModel = true)
     @SerializedName("_links")
     @Expose
     private Links links;
-
-    @ForeignKey(tableClass = Show.class)
-    private Integer showId;
 
     public Season() {
     }
@@ -106,11 +84,6 @@ public class Season implements Parcelable {
         image = in.readParcelable(Image.class.getClassLoader());
         summary = in.readString();
         links = in.readParcelable(Links.class.getClassLoader());
-        if (in.readByte() == 0) {
-            showId = null;
-        } else {
-            showId = in.readInt();
-        }
     }
 
     public static final Creator<Season> CREATOR = new Creator<Season>() {
@@ -189,14 +162,6 @@ public class Season implements Parcelable {
         this.network = network;
     }
 
-    public Object getWebChannel() {
-        return webChannel;
-    }
-
-    public void setWebChannel(Object webChannel) {
-        this.webChannel = webChannel;
-    }
-
     public Image getImage() {
         return image;
     }
@@ -219,14 +184,6 @@ public class Season implements Parcelable {
 
     public void setLinks(Links links) {
         this.links = links;
-    }
-
-    public Integer getShowId() {
-        return showId;
-    }
-
-    public void setShowId(Integer showId) {
-        this.showId = showId;
     }
 
     @Override
@@ -262,11 +219,5 @@ public class Season implements Parcelable {
         dest.writeParcelable(image, flags);
         dest.writeString(summary);
         dest.writeParcelable(links, flags);
-        if (showId == null) {
-            dest.writeByte((byte) 0);
-        } else {
-            dest.writeByte((byte) 1);
-            dest.writeInt(showId);
-        }
     }
 }

@@ -36,7 +36,7 @@ public class WatchingShowsPresenter extends BasePresenter<WatchingShowsView> {
         Disposable disposable = mShowsRepository.getSavedShows()
                 .compose(applySchedulersToSingle())
                 .subscribe(shows -> {
-                    if (shows.size() == 0) {
+                    if (shows.isEmpty()) {
                         getView().displayEmptyListMessage();
                         return;
                     }

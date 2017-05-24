@@ -8,13 +8,12 @@ import android.support.annotation.Nullable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.moisesborges.tvaddict.data.AppDatabase;
+import com.moisesborges.tvaddict.data.typeadapters.EmbeddedDataTypeAdapter;
 import com.moisesborges.tvaddict.data.typeadapters.StringListTypeAdapter;
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.ForeignKey;
-import com.raizlabs.android.dbflow.annotation.OneToMany;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
-import com.raizlabs.android.dbflow.sql.language.SQLite;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +22,7 @@ import java.util.List;
 public class Show implements Parcelable{
 
     public static final Show NOT_FOUND = new Show();
+    public static final Show REMOVED = new Show();
 
     @PrimaryKey
     @SerializedName("id")
@@ -89,9 +89,6 @@ public class Show implements Parcelable{
     @Expose
     private Network network;
 
-    @SerializedName("webChannel")
-    @Expose
-    private Object webChannel; // TODO: 24/04/2017 Fix this field
     @SerializedName("externals")
     @Expose
     private Externals externals;
@@ -116,6 +113,7 @@ public class Show implements Parcelable{
     @Expose
     private Links links;
 
+    @Column(typeConverter = EmbeddedDataTypeAdapter.class)
     @SerializedName("_embedded")
     @Expose
     private Embedded embedded;
@@ -158,6 +156,7 @@ public class Show implements Parcelable{
             updated = in.readInt();
         }
         links = in.readParcelable(Links.class.getClassLoader());
+        embedded = in.readParcelable(Embedded.class.getClassLoader());
     }
 
     public static final Creator<Show> CREATOR = new Creator<Show>() {
@@ -274,14 +273,6 @@ public class Show implements Parcelable{
 
     public void setNetwork(Network network) {
         this.network = network;
-    }
-
-    public Object getWebChannel() {
-        return webChannel;
-    }
-
-    public void setWebChannel(Object webChannel) {
-        this.webChannel = webChannel;
     }
 
     public Externals getExternals() {
@@ -401,5 +392,6 @@ public class Show implements Parcelable{
             dest.writeInt(updated);
         }
         dest.writeParcelable(links, flags);
+        dest.writeParcelable(embedded, flags);
     }
 }

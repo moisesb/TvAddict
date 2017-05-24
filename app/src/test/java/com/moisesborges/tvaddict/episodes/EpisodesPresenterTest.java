@@ -24,6 +24,7 @@ import io.reactivex.Single;
 import io.reactivex.SingleSource;
 import io.reactivex.functions.Function;
 
+import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
@@ -51,16 +52,70 @@ public class EpisodesPresenterTest {
     }
 
     @Test
-    public void shouldDisplayEpisodesOfRightSeason() throws Exception {
+    public void shouldDisplayEpisodesOfRightSeasonAndLoadSavedShow() throws Exception {
         mEpisodesPresenter.bindView(mEpisodesView);
 
-        Season season = mShow.getEmbedded().getSeasons().get(0);
-        List<Episode> episodes = mShow.getEmbedded().getEpisodes()
+        when(mShowsRepository.getSavedShow(mShow.getId()))
+                .thenReturn(Single.just(mShow));
+
+        Season season = mShow.getSeasons().get(0);
+        List<Episode> episodes = mShow.getEpisodes()
                 .stream()
                 .filter(episode -> episode.getSeason().equals(season.getNumber()))
                 .collect(Collectors.toList());
 
-        mEpisodesPresenter.loadEpisodes(season.getId(), mShow.getEmbedded());
+        mEpisodesPresenter.loadEpisodes(season.getId(), mShow);
+        verify(mEpisodesView).setShow(mShow);
         verify(mEpisodesView).displayEpisodes(episodes);
+    }
+
+    @Test
+    public void shouldDisplayEpisodesOfRightSeasonWithouLoadShow() throws Exception {
+        mEpisodesPresenter.bindView(mEpisodesView);
+
+        when(mShowsRepository.getSavedShow(mShow.getId()))
+                .thenReturn(Single.just(Show.NOT_FOUND));
+
+        Season season = mShow.getSeasons().get(0);
+        List<Episode> episodes = mShow.getEpisodes()
+                .stream()
+                .filter(episode -> episode.getSeason().equals(season.getNumber()))
+                .collect(Collectors.toList());
+
+        mEpisodesPresenter.loadEpisodes(season.getId(), mShow);
+        verify(mEpisodesView, never()).setShow(mShow);
+        verify(mEpisodesView).displayEpisodes(episodes);
+    }
+
+    @Test
+    public void shouldSetEpisodeStatusAsSeen() throws Exception {
+        mEpisodesPresenter.bindView(mEpisodesView);
+
+        Mockito.when(mShowsRepository.updateShow(mShow)).thenReturn(Single.just(mShow));
+
+        Episode episode = mShow.getEpisodes().get(0);
+        episode.setWatched(false);
+
+        mEpisodesPresenter.changeEpisodeSeenStatus(episode, mShow);
+
+        assertThat(episode.wasWatched(), is(true));
+        verify(mShowsRepository).updateShow(mShow);
+        verify(mEpisodesView).refreshEpisode(episode);
+    }
+
+    @Test
+    public void shouldSetEpisodeStatusAsUnseen() throws Exception {
+        mEpisodesPresenter.bindView(mEpisodesView);
+
+        Mockito.when(mShowsRepository.updateShow(mShow)).thenReturn(Single.just(mShow));
+
+        Episode episode = mShow.getEpisodes().get(0);
+        episode.setWatched(true);
+
+        mEpisodesPresenter.changeEpisodeSeenStatus(episode, mShow);
+
+        assertThat(episode.wasWatched(), is(false));
+        verify(mShowsRepository).updateShow(mShow);
+        verify(mEpisodesView).refreshEpisode(episode);
     }
 }

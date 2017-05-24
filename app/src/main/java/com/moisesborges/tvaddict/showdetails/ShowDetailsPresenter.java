@@ -11,7 +11,6 @@ import com.moisesborges.tvaddict.mvp.RxJavaConfig;
 import javax.inject.Inject;
 
 import io.reactivex.disposables.Disposable;
-import timber.log.Timber;
 
 /**
  * Created by moises.anjos on 18/04/2017.
@@ -87,55 +86,32 @@ public class ShowDetailsPresenter extends BasePresenter<ShowDetailsView> {
         checkView();
 
         Disposable checkStatusDisposable = mShowsRepository.getSavedShow(show.getId())
-                .subscribeOn(getRxJavaConfig().ioScheduler())
+                .compose(applySchedulersToSingle())
                 .onErrorReturn(ignored -> Show.NOT_FOUND)
-                .subscribe(showFromDb -> {
+                .flatMap(showFromDb -> {
                     if (showFromDb == Show.NOT_FOUND) {
-                        saveShow(show);
+                        return mShowsRepository.saveShow(show);
                     } else {
-                        removeShow(show);
+                        return mShowsRepository.removeShow(show.getId());
                     }
+                })
+                .subscribe(showAfterChange -> {
+                    if (showAfterChange == Show.REMOVED) {
+                        getView().displayShowRemovedMessage();
+                        getView().displaySaveShowButton(true);
+                    } else {
+                        getView().displaySavedShowMessage();
+                        getView().displaySaveShowButton(false);
+                    }
+
                 });
 
         addDisposable(checkStatusDisposable);
     }
 
-    private void removeShow(Show show) {
-        Disposable removeShowDisposable = mShowsRepository.removeShow(show.getId())
-                .compose(applySchedulersToCompletable())
-                .subscribe(() -> {
-                            getView().displayShowRemovedMessage();
-                            getView().displaySaveShowButton(true);
-                        },
-                        Timber::e);
-
-        addDisposable(removeShowDisposable);
-    }
-
-    private void saveShow(@NonNull Show show) {
-        Disposable saveShowDisposable = mShowsRepository.saveShow(show)
-                .compose(applySchedulersToCompletable())
-                .subscribe(() -> {
-                            getView().displaySavedShowMessage();
-                            getView().displaySaveShowButton(false);
-                            saveEmbeddedData(show);
-                        },
-                        Timber::e);
-
-        addDisposable(saveShowDisposable);
-
-    }
-
-    private void saveEmbeddedData(@NonNull Show show) {
-        Disposable disposable = mShowsRepository.saveShowEmbeddedData(show)
-                .subscribeOn(getRxJavaConfig().ioScheduler())
-                .subscribe(() -> Timber.d("saved"));
-        addDisposable(disposable);
-    }
-
     public void openEpisodes(Show show, Season season) {
         checkView();
 
-        getView().navigateToEpisodes(show.getId(), season.getNumber(), show.getEmbedded());
+        getView().navigateToEpisodes(show, season.getNumber());
     }
 }
