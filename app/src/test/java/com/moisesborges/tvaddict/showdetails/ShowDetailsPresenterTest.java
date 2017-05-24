@@ -118,6 +118,7 @@ public class ShowDetailsPresenterTest {
         verify(mShowsRepository).saveShow(mShow);
         verify(mShowDetailsView).displaySavedShowMessage();
         verify(mShowDetailsView).displaySaveShowButton(false);
+        verify(mShowsRepository).saveShowEmbeddedData(mShow);
     }
 
     private void changeWatchingStatus() {

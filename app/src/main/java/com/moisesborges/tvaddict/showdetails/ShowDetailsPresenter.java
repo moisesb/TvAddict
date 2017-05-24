@@ -63,9 +63,11 @@ public class ShowDetailsPresenter extends BasePresenter<ShowDetailsView> {
                     }
 
                     getView().setShow(showFullInfo);
-                    if (showFullInfo.getEmbedded() != null) {
-                        getView().displaySeasons(showFullInfo.getEmbedded().getSeasons());
-                        getView().displayCastMembers(showFullInfo.getEmbedded().getCast());
+                    if (showFullInfo.getSeasons() != null) {
+                        getView().displaySeasons(showFullInfo.getSeasons());
+                    }
+                    if (showFullInfo.getCast() != null) {
+                        getView().displayCastMembers(showFullInfo.getCast());
                     }
                 });
 
@@ -116,11 +118,19 @@ public class ShowDetailsPresenter extends BasePresenter<ShowDetailsView> {
                 .subscribe(() -> {
                             getView().displaySavedShowMessage();
                             getView().displaySaveShowButton(false);
+                            saveEmbeddedData(show);
                         },
                         Timber::e);
 
         addDisposable(saveShowDisposable);
 
+    }
+
+    private void saveEmbeddedData(@NonNull Show show) {
+        Disposable disposable = mShowsRepository.saveShowEmbeddedData(show)
+                .subscribeOn(getRxJavaConfig().ioScheduler())
+                .subscribe(() -> Timber.d("saved"));
+        addDisposable(disposable);
     }
 
     public void openEpisodes(Show show, Season season) {

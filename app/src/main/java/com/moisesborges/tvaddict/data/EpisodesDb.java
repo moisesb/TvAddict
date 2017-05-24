@@ -20,4 +20,6 @@ public interface EpisodesDb {
     void update(@NonNull Episode episode);
 
     Single<List<Episode>> findEpisodes();
+
+    void saveEpisodes(@NonNull List<Episode> episodes);
 }

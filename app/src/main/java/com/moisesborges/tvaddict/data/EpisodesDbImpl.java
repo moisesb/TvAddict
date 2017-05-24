@@ -3,6 +3,7 @@ package com.moisesborges.tvaddict.data;
 import android.support.annotation.NonNull;
 
 import com.moisesborges.tvaddict.models.Episode;
+import com.raizlabs.android.dbflow.config.FlowManager;
 
 import java.util.List;
 
@@ -31,5 +32,11 @@ public class EpisodesDbImpl implements EpisodesDb {
     @Override
     public Single<List<Episode>> findEpisodes() {
         return null;
+    }
+
+    @Override
+    public void saveEpisodes(@NonNull List<Episode> episodes) {
+        FlowManager.getModelAdapter(Episode.class)
+                .saveAll(episodes);
     }
 }

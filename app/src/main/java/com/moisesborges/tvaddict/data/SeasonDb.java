@@ -19,4 +19,6 @@ public interface SeasonDb {
 
     Completable update(Season season);
 
+    void saveSeasons(List<Season> seasons);
+
 }

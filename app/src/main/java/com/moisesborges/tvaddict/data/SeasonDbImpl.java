@@ -50,4 +50,10 @@ public class SeasonDbImpl implements SeasonDb {
     private Runnable updateSeason(Season season) {
         return () -> FlowManager.getModelAdapter(Season.class).update(season);
     }
+
+    @Override
+    public void saveSeasons(List<Season> seasons) {
+        FlowManager.getModelAdapter(Season.class)
+                .saveAll(seasons);
+    }
 }

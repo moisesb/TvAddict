@@ -22,11 +22,12 @@ public interface ShowsRepository {
 
     Completable saveShow(@NonNull Show show);
 
+    Completable saveShowEmbeddedData(@NonNull Show show);
+
     Single<List<Show>> getSavedShows();
 
     Single<Show> getSavedShow(int showId);
 
     Completable removeShow(int showId);
 
-    Single<List<Show>> getWatchingShows();
 }

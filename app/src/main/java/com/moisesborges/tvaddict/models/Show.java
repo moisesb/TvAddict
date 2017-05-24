@@ -16,6 +16,7 @@ import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Table(database = AppDatabase.class)
@@ -332,6 +333,29 @@ public class Show implements Parcelable{
         this.embedded = embedded;
     }
 
+    public List<Season> getSeasons() {
+        if (embedded == null) {
+            return new ArrayList<>();
+        }
+
+        return embedded.getSeasons();
+    }
+
+    public List<CastMember> getCast() {
+        if (embedded == null) {
+            return new ArrayList<>();
+        }
+
+        return embedded.getCast();
+    }
+
+    public List<Episode> getEpisodes() {
+        if (embedded == null) {
+            return new ArrayList<>();
+        }
+
+        return embedded.getEpisodes();
+    }
     @Override
     public int describeContents() {
         return 0;

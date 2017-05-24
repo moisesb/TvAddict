@@ -38,7 +38,7 @@ public class WatchingShowsPresenterTest {
     @Test
     public void shouldDisplayEmptyWatchingShowsListMessage() throws Exception {
         mPresenter.bindView(mMockView);
-        when(mMockShowsRepository.getWatchingShows()).thenReturn(Single.just(new ArrayList<>()));
+        when(mMockShowsRepository.getSavedShows()).thenReturn(Single.just(new ArrayList<>()));
 
         mPresenter.loadWatchingShows();
         verify(mMockView).displayEmptyListMessage();
@@ -50,7 +50,7 @@ public class WatchingShowsPresenterTest {
         List<Show> shows = new ArrayList<>();
         shows.add(new Show());
         shows.add(new Show());
-        when(mMockShowsRepository.getWatchingShows()).thenReturn(Single.just(shows));
+        when(mMockShowsRepository.getSavedShows()).thenReturn(Single.just(shows));
 
         mPresenter.loadWatchingShows();
         verify(mMockView).displayWatchingShows(shows);

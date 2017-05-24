@@ -33,7 +33,7 @@ public class WatchingShowsPresenter extends BasePresenter<WatchingShowsView> {
     public void loadWatchingShows() {
         checkView();
 
-        Disposable disposable = mShowsRepository.getWatchingShows()
+        Disposable disposable = mShowsRepository.getSavedShows()
                 .compose(applySchedulersToSingle())
                 .subscribe(shows -> {
                     if (shows.size() == 0) {
