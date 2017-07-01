@@ -3,6 +3,7 @@ package com.moisesborges.tvaddict;
 import com.moisesborges.tvaddict.episodes.EpisodesActivity;
 import com.moisesborges.tvaddict.showdetails.ShowDetailsActivity;
 import com.moisesborges.tvaddict.shows.ShowsFragment;
+import com.moisesborges.tvaddict.upcoming.UpcomingEpisodesFragment;
 import com.moisesborges.tvaddict.watching.WatchingShowsFragment;
 
 import javax.inject.Singleton;
@@ -25,4 +26,6 @@ public interface AppComponent {
     void inject(ShowsFragment fragment);
 
     void inject(WatchingShowsFragment fragment);
+
+    void inject(UpcomingEpisodesFragment fragment);
 }

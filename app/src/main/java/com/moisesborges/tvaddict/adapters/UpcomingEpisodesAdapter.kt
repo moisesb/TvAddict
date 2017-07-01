@@ -9,11 +9,17 @@ import com.moisesborges.tvaddict.models.UpcomingEpisode
 import kotlinx.android.synthetic.main.item_upcoming_episode.view.*
 
 /**
- * Created by moise on 13/06/2017.
+ * Created by Moisés on 13/06/2017.
  */
 class UpcomingEpisodesAdapter() : RecyclerView.Adapter<UpcomingEpisodeViewHolder>() {
 
-    private val upcomingoEpisodes = mutableListOf<UpcomingEpisode>()
+    private val upcomingEpisodes = mutableListOf<UpcomingEpisode>()
+
+    fun setEpisodes(episodes: List<UpcomingEpisode>) {
+        upcomingEpisodes.clear()
+        episodes.forEach { episode -> upcomingEpisodes.add(episode)}
+        notifyDataSetChanged()
+    }
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): UpcomingEpisodeViewHolder {
         val layout = LayoutInflater.from(viewGroup.context)
@@ -22,19 +28,20 @@ class UpcomingEpisodesAdapter() : RecyclerView.Adapter<UpcomingEpisodeViewHolder
     }
 
     override fun getItemCount(): Int {
-        return upcomingoEpisodes.size
+        return upcomingEpisodes.size
     }
 
     override fun onBindViewHolder(viewHolder: UpcomingEpisodeViewHolder, position: Int) {
-        val episode = upcomingoEpisodes[position]
+        val episode = upcomingEpisodes[position]
         viewHolder.bind(episode)
     }
 }
 
 class UpcomingEpisodeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    fun bind(episode: UpcomingEpisode) {
-        itemView.show_name_text_view.text = episode.showName
+    fun bind(upcomingEpisode: UpcomingEpisode) {
+        itemView.show_name_text_view.text = upcomingEpisode.showName
+        itemView.episode_name_text_view.text = upcomingEpisode.episode.name
     }
 
 }

@@ -28,6 +28,21 @@ android {
     packagingOptions {
         exclude 'META-INF/rxjava.properties'
     }
+    kapt {
+        generateStubs = true
+    }
+}
+
+task createTestResources << {
+    def mockMakerFile = new File("$projectDir/src/test/resources/mockito-extensions/org.mockito.plugins.MockMaker")
+    if (System.env.MOCK_MAKER != null) {
+        logger.info("Using MockMaker ${System.env.MOCK_MAKER}")
+        mockMakerFile.parentFile.mkdirs()
+        mockMakerFile.createNewFile()
+        mockMakerFile.write(System.env.MOCK_MAKER)
+    } else {
+        logger.info("Using default MockMaker")
+    }
 }
 
 def support_library_version = "25.3.1"
@@ -39,7 +54,7 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     testCompile 'junit:junit:4.12'
-    testCompile "org.mockito:mockito-core:2.7.22"
+    testCompile "org.mockito:mockito-core:2.8.9"
     testCompile "org.robolectric:robolectric:3.3.2"
 
     //Android support library
@@ -52,11 +67,12 @@ dependencies {
 
     //Dagger2
     compile 'com.google.dagger:dagger:2.10'
-    annotationProcessor 'com.google.dagger:dagger-compiler:2.10'
+    kapt 'com.google.dagger:dagger-compiler:2.10'
+    provided 'org.glassfish:javax.annotation:10.0-b28'
 
     //Butterknife
     compile 'com.jakewharton:butterknife:8.5.1'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
+    kapt 'com.jakewharton:butterknife-compiler:8.5.1'
 
     //RxJava
     compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
@@ -82,11 +98,12 @@ dependencies {
     compile 'com.github.bumptech.glide:glide:3.7.0'
 
     //DbFlow
-    annotationProcessor "com.github.Raizlabs.DBFlow:dbflow-processor:${dbflow_version}"
+    kapt "com.github.Raizlabs.DBFlow:dbflow-processor:${dbflow_version}"
     compile "com.github.Raizlabs.DBFlow:dbflow-core:${dbflow_version}"
     compile "com.github.Raizlabs.DBFlow:dbflow:${dbflow_version}"
     compile "com.github.Raizlabs.DBFlow:dbflow-rx2:${dbflow_version}"
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+    compile "com.github.Raizlabs.DBFlow:dbflow-kotlinextensions:${dbflow_version}"
 
 }
 repositories {
