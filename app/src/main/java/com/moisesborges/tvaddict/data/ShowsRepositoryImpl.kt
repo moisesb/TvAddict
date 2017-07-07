@@ -4,6 +4,7 @@ import com.moisesborges.tvaddict.models.Episode
 import com.moisesborges.tvaddict.models.Show
 import com.moisesborges.tvaddict.models.UpcomingEpisode
 import com.moisesborges.tvaddict.net.TvMazeApi
+import io.reactivex.Observable
 import io.reactivex.ObservableSource
 
 import io.reactivex.Single
@@ -60,4 +61,8 @@ class ShowsRepositoryImpl(private val tvMazeApi: TvMazeApi,
                 .requireNoNulls()
     }
 
+    override fun searchShows(showName: String): Single<List<Show>> {
+        return tvMazeApi.searchShows(showName)
+                .map { showsInfo -> showsInfo.map { showInfo -> showInfo.show }}
+    }
 }
