@@ -24,4 +24,6 @@ interface ShowsRepository {
     fun updateShow(show: Show): Single<Show>
 
     fun fetchUpcomingEpisodes(): Single<List<UpcomingEpisode>>
+
+    fun searchShows(showName: String): Single<List<Show>>
 }

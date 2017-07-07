@@ -4,6 +4,7 @@ import com.moisesborges.tvaddict.models.Episode
 import com.moisesborges.tvaddict.models.Show
 import com.moisesborges.tvaddict.models.UpcomingEpisode
 import com.moisesborges.tvaddict.net.TvMazeApi
+import io.reactivex.Observable
 import io.reactivex.ObservableSource
 
 import io.reactivex.Single
@@ -50,14 +51,18 @@ class ShowsRepositoryImpl(private val tvMazeApi: TvMazeApi,
 
     private fun upcomingEpisodes(shows: List<Show>): List<UpcomingEpisode> {
         return shows.associate { show ->
-            val name = show.name
-            val episodes = show.episodes.filter { episode -> !episode.wasWatched() }
-                    .firstOrNull()
-            Pair(name, episodes)
-        }
+                    val name = show.name
+                    val episodes = show.episodes.filter { episode -> !episode.wasWatched() }
+                            .firstOrNull()
+                    Pair(name, episodes)
+                }
                 .filter { pair -> pair.value != null }
                 .map { pair -> UpcomingEpisode(pair.key, pair.value!!) }
                 .requireNoNulls()
     }
 
+    override fun searchShows(showName: String): Single<List<Show>> {
+        return tvMazeApi.searchShows(showName)
+                .map { showsInfo -> showsInfo.map { showInfo -> showInfo.show }}
+    }
 }

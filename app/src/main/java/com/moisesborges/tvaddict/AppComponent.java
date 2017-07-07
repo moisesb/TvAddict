@@ -1,6 +1,7 @@
 package com.moisesborges.tvaddict;
 
 import com.moisesborges.tvaddict.episodes.EpisodesActivity;
+import com.moisesborges.tvaddict.search.SearchActivity;
 import com.moisesborges.tvaddict.showdetails.ShowDetailsActivity;
 import com.moisesborges.tvaddict.shows.ShowsFragment;
 import com.moisesborges.tvaddict.upcoming.UpcomingEpisodesFragment;
@@ -22,6 +23,8 @@ public interface AppComponent {
     void inject(ShowDetailsActivity activity);
 
     void inject(EpisodesActivity activity);
+
+    void inject(SearchActivity activity);
 
     void inject(ShowsFragment fragment);
 

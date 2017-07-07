@@ -24,4 +24,6 @@
     <string name="not_available">Not available</string>
     <string name="empty_watching_shows_message">Your\'re watching not shows</string>
     <string name="no_upcoming_episodes">Empty upcoming episodes !</string>
+    <string name="hint_label">Search shows</string>
+    <string name="action_search">Search</string>
 </resources>
