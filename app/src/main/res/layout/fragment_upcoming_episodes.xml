@@ -1,14 +1,31 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:id="@+id/upcoming_episodes_layout"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             tools:context="com.moisesborges.tvaddict.upcoming.UpcomingEpisodesFragment">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/upcoming_episodes_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.moisesborges.tvaddict.upcoming.UpcomingEpisodesFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/upcoming_episodes_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Upcoming episodes"/>
+        android:paddingTop="8dp" />
+
+    <ViewStub
+        android:id="@+id/no_upcoming_episodes_view_stub"
+        android:layout_gravity="center"
+        android:layout="@layout/view_stub_no_upcoming_episodes"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </FrameLayout>
