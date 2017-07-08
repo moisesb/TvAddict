@@ -12,13 +12,12 @@ import com.moisesborges.tvaddict.R
 import com.moisesborges.tvaddict.adapters.SearchResultAdapter
 import com.moisesborges.tvaddict.models.Show
 import kotlinx.android.synthetic.main.activity_search.*
-import timber.log.Timber
 import javax.inject.Inject
 
 class SearchActivity : AppCompatActivity(), SearchView {
 
     @Inject lateinit var searchPresenter: SearchPresenter
-    private val adapter = SearchResultAdapter()
+    private val adapter =  SearchResultAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
