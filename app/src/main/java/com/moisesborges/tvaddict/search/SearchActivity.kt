@@ -14,7 +14,7 @@ import com.moisesborges.tvaddict.models.Show
 import kotlinx.android.synthetic.main.activity_search.*
 import javax.inject.Inject
 
-class SearchActivity : AppCompatActivity(), SearchView {
+class SearchActivity : AppCompatActivity(), SearchView, android.support.v7.widget.SearchView.OnQueryTextListener {
 
     @Inject lateinit var searchPresenter: SearchPresenter
     private val adapter =  SearchResultAdapter()
@@ -26,20 +26,7 @@ class SearchActivity : AppCompatActivity(), SearchView {
         setupRecyclerView()
         searchPresenter.bindView(this)
 
-        search_view.setOnQueryTextListener(object : android.support.v7.widget.SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                searchShows(query)
-                return true
-            }
-
-            override fun onQueryTextChange(query: String?): Boolean {
-                if (query.isNullOrEmpty()) {
-                    adapter.clear()
-                }
-                return false
-            }
-
-        })
+        search_view.setOnQueryTextListener(this)
 
         val intent = intent
         handleIntent(intent)
@@ -73,6 +60,16 @@ class SearchActivity : AppCompatActivity(), SearchView {
         (applicationContext as App).appComponent.inject(this)
     }
 
+    override fun onQueryTextSubmit(query: String?): Boolean {
+        searchShows(query)
+        return true
+    }
+
+    override fun onQueryTextChange(query: String?): Boolean {
+        searchPresenter.handleTextChanges(query)
+        return false
+    }
+
     private fun searchShows(query: String?) {
         searchPresenter.searchShow(query ?: "")
     }
@@ -83,6 +80,20 @@ class SearchActivity : AppCompatActivity(), SearchView {
 
     override fun displayResults(result: List<Show>) {
         adapter.setResult(result)
+    }
+
+    override fun showNotFound(shouldBeDisplayed: Boolean, showName: String) {
+        if (shouldBeDisplayed) {
+            val message = resources.getString(R.string.show_not_found_message, showName)
+            show_not_found_text_view.text = message
+            show_not_found_text_view.visibility = View.VISIBLE
+        } else {
+            show_not_found_text_view.visibility = View.GONE
+        }
+    }
+
+    override fun clearResults() {
+        adapter.clear()
     }
 
     companion object {

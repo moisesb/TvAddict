@@ -9,4 +9,6 @@ import com.moisesborges.tvaddict.mvp.BaseView
 interface SearchView : BaseView {
     fun displayProgress(loading: Boolean)
     fun displayResults(result: List<Show>)
+    fun showNotFound(shouldBeDisplayed: Boolean, showName: String)
+    fun clearResults()
 }

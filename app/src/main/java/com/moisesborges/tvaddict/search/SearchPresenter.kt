@@ -1,6 +1,7 @@
 package com.moisesborges.tvaddict.search
 
 import com.moisesborges.tvaddict.data.ShowsRepository
+import com.moisesborges.tvaddict.models.Show
 import com.moisesborges.tvaddict.mvp.BasePresenter
 import com.moisesborges.tvaddict.mvp.RxJavaConfig
 import javax.inject.Inject
@@ -13,17 +14,34 @@ class SearchPresenter @Inject constructor(rxJavaConfig: RxJavaConfig,
     fun searchShow(showName: String) {
         checkView()
 
+        view.showNotFound(false, "")
         view.displayProgress(true)
         val disposable = showsRepository.searchShows(showName)
                 .compose(applySchedulersToSingle())
                 .subscribe({ shows ->
                     view.displayProgress(false)
-                    view.displayResults(shows)
+                    displayResults(shows, showName)
                 }, { t ->
                     view.displayProgress(false)
                 })
 
         addDisposable(disposable)
+    }
+
+    private fun displayResults(shows: List<Show>, showName: String) {
+        if (shows.isNotEmpty()) {
+            view.displayResults(shows)
+        } else {
+            view.showNotFound(true, showName)
+        }
+    }
+
+    fun handleTextChanges(query: String?) {
+        checkView()
+
+        if (query.isNullOrEmpty()) {
+            view.clearResults()
+        }
     }
 
 }
