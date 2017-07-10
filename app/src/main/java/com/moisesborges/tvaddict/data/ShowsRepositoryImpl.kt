@@ -16,8 +16,9 @@ import io.reactivex.Single
 class ShowsRepositoryImpl(private val tvMazeApi: TvMazeApi,
                           private val showDb: ShowDb) : ShowsRepository {
 
-    override val shows: Single<List<Show>>
-        get() = tvMazeApi.listShows(0)
+    override fun loadShows(page: Int): Single<List<Show>> {
+        return tvMazeApi.listShows(page)
+    }
 
     override fun getFullShowInfo(showId: Int): Single<Show> {
         return tvMazeApi.fetchShowFullInfo(showId)

@@ -9,7 +9,7 @@ import io.reactivex.Single
  */
 
 interface ShowsRepository {
-    val shows: Single<List<Show>>
+    fun loadShows(page: Int): Single<List<Show>>
 
     fun getFullShowInfo(showId: Int): Single<Show>
 

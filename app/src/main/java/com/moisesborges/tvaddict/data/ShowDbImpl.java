@@ -1,18 +1,12 @@
 package com.moisesborges.tvaddict.data;
 
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
-import com.moisesborges.tvaddict.models.CastMember;
-import com.moisesborges.tvaddict.models.Embedded;
-import com.moisesborges.tvaddict.models.Episode;
-import com.moisesborges.tvaddict.models.Season;
 import com.moisesborges.tvaddict.models.Show;
 import com.moisesborges.tvaddict.models.Show_Table;
 import com.raizlabs.android.dbflow.config.FlowManager;
 import com.raizlabs.android.dbflow.rx2.language.RXSQLite;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
-import com.raizlabs.android.dbflow.structure.ModelAdapter;
 
 import java.util.List;
 import java.util.concurrent.Callable;
