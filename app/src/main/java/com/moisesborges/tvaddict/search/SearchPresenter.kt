@@ -44,4 +44,10 @@ class SearchPresenter @Inject constructor(rxJavaConfig: RxJavaConfig,
         }
     }
 
+    fun openShow(show: Show) {
+        checkView()
+
+        view.navigateToShowDetails(show)
+    }
+
 }

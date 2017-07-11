@@ -9,15 +9,17 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import com.moisesborges.tvaddict.App
 import com.moisesborges.tvaddict.R
+import com.moisesborges.tvaddict.adapters.ItemClickListener
 import com.moisesborges.tvaddict.adapters.SearchResultAdapter
 import com.moisesborges.tvaddict.models.Show
+import com.moisesborges.tvaddict.showdetails.ShowDetailsActivity
 import kotlinx.android.synthetic.main.activity_search.*
 import javax.inject.Inject
 
 class SearchActivity : AppCompatActivity(), SearchView, android.support.v7.widget.SearchView.OnQueryTextListener {
 
     @Inject lateinit var searchPresenter: SearchPresenter
-    private val adapter =  SearchResultAdapter()
+    private val adapter = SearchResultAdapter(ItemClickListener { show -> searchPresenter.openShow(show) })
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -94,6 +96,10 @@ class SearchActivity : AppCompatActivity(), SearchView, android.support.v7.widge
 
     override fun clearResults() {
         adapter.clear()
+    }
+
+    override fun navigateToShowDetails(show: Show) {
+        ShowDetailsActivity.start(this, show)
     }
 
     companion object {

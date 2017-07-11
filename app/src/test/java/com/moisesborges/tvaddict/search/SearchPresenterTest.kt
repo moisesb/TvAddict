@@ -78,4 +78,12 @@ class SearchPresenterTest {
 
         verify(mockView, never()).clearResults()
     }
+
+    @Test
+    fun shouldNavigateToShowDetails() {
+        val mockShow = MockShow.newMockShowInstance()
+        presenter.openShow(mockShow)
+
+        verify(mockView).navigateToShowDetails(mockShow)
+    }
 }
