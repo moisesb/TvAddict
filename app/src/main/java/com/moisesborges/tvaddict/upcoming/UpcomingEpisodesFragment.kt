@@ -3,6 +3,7 @@ package com.moisesborges.tvaddict.upcoming
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
@@ -10,7 +11,6 @@ import android.view.ViewGroup
 import com.moisesborges.tvaddict.App
 import com.moisesborges.tvaddict.R
 import com.moisesborges.tvaddict.adapters.UpcomingEpisodesAdapter
-import com.moisesborges.tvaddict.models.Episode
 import com.moisesborges.tvaddict.models.UpcomingEpisode
 import kotlinx.android.synthetic.main.fragment_upcoming_episodes.*
 import javax.inject.Inject
@@ -53,6 +53,7 @@ class UpcomingEpisodesFragment : Fragment(), UpcomingEpisodesView {
     private fun setupRecyclerView() {
         upcoming_episodes_recycler_view.layoutManager = LinearLayoutManager(context)
         upcoming_episodes_recycler_view.adapter = adapter
+        upcoming_episodes_recycler_view.addItemDecoration( DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
     }
 
     override fun displayProgress(loading: Boolean) {
