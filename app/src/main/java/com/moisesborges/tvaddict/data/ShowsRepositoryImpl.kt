@@ -29,8 +29,7 @@ class ShowsRepositoryImpl(private val tvMazeApi: TvMazeApi,
                 .toSingle { show }
     }
 
-    override val savedShows: Single<List<Show>>
-        get() = showDb.findAllShows()
+    override fun getSavedShows(): Single<List<Show>> = showDb.findAllShows()
 
     override fun getSavedShow(showId: Int): Single<Show> {
         return showDb.findShow(showId)
@@ -64,6 +63,6 @@ class ShowsRepositoryImpl(private val tvMazeApi: TvMazeApi,
 
     override fun searchShows(showName: String): Single<List<Show>> {
         return tvMazeApi.searchShows(showName)
-                .map { showsInfo -> showsInfo.map { showInfo -> showInfo.show }}
+                .map { showsInfo -> showsInfo.map { showInfo -> showInfo.show } }
     }
 }

@@ -15,7 +15,7 @@ interface ShowsRepository {
 
     fun saveShow(show: Show): Single<Show>
 
-    val savedShows: Single<List<Show>>
+    fun getSavedShows(): Single<List<Show>>
 
     fun getSavedShow(showId: Int): Single<Show>
 
