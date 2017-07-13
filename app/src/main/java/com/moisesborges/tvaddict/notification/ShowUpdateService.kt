@@ -15,7 +15,7 @@ class ShowUpdateService(private val showsRepository: ShowsRepository) {
                 .filter { it.status == RUNNING_STATUS }
 
         val showsFromWeb = savedRunningShows.map { showsRepository.getFullShowInfo(it.id).blockingGet() }
-        val updatedShows: List<Show> = savedRunningShows.zip(showsFromWeb)
+        val updatedShows = savedRunningShows.zip(showsFromWeb)
                 .filter { (saved, fromWeb) -> fromWeb.updated > saved.updated }
                 .map { (saved, fromWeb) ->
                     saved.embedded = fromWeb.embedded
@@ -24,6 +24,8 @@ class ShowUpdateService(private val showsRepository: ShowsRepository) {
 
         return updatedShows
     }
+
+
 
     companion object {
         internal val RUNNING_STATUS = "Running"

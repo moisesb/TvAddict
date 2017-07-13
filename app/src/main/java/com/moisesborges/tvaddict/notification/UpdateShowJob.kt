@@ -2,7 +2,9 @@ package com.moisesborges.tvaddict.notification
 
 import com.evernote.android.job.Job
 import com.evernote.android.job.JobRequest
+import com.moisesborges.tvaddict.App
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
 /**
  * Created by moises.anjos on 12/07/2017.
@@ -10,13 +12,18 @@ import java.util.concurrent.TimeUnit
 
 class UpdateShowJob : Job() {
 
+    @Inject lateinit var showUpdateService: ShowUpdateService
 
     override fun onRunJob(params: Params?): Result {
-
+        injectDependecies()
+        showUpdateService.updateShows()
 
         return Result.SUCCESS
     }
 
+    private fun injectDependecies() {
+        (context.applicationContext as App).appComponent.inject(this)
+    }
 
     companion object {
         @JvmStatic

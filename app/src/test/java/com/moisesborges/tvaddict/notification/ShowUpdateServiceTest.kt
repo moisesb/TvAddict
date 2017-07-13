@@ -1,6 +1,7 @@
 package com.moisesborges.tvaddict.notification
 
 import com.moisesborges.tvaddict.data.ShowsRepository
+import com.moisesborges.tvaddict.models.Show
 import com.moisesborges.tvaddict.utils.MockShow
 import io.reactivex.Single
 import org.hamcrest.Matchers
@@ -9,11 +10,13 @@ import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import org.mockito.ArgumentMatchers
+import org.mockito.ArgumentMatchers.*
 import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.Mockito.*
 import org.mockito.MockitoAnnotations
 import org.mockito.MockitoAnnotations.*
+import java.util.concurrent.TimeUnit
 
 /**
  * Created by moises.anjos on 12/07/2017.
@@ -22,6 +25,7 @@ class ShowUpdateServiceTest {
 
     @Mock lateinit var mockRepository: ShowsRepository
     lateinit var showUpdateService: ShowUpdateService
+
     @Before
     fun setUp() {
         initMocks(this)
@@ -50,6 +54,41 @@ class ShowUpdateServiceTest {
         verify(mockRepository).getFullShowInfo(mockShow.id)
 
         assertThat(updatedShows, empty())
+    }
+
+    @Test
+    fun shouldUpdateShowIfShowIsRunning() {
+        val firstShow = MockShow.newMockShowInstance()
+        firstShow.status = "Ended"
+
+        val secondShow = MockShow.newMockShowInstance()
+        secondShow.id = 2
+        secondShow.status = "Running"
+
+        val thirdShow = MockShow.newMockShowInstance()
+        thirdShow.id = 3
+        thirdShow.status = "Running"
+
+        val mockSecondShow = mock(Show::class.java)
+        val mockThirdShow = mock(Show::class.java)
+
+        `when`(mockRepository.getSavedShows()).thenReturn(Single.just(listOf(firstShow, secondShow, thirdShow)))
+        `when`(mockRepository.getFullShowInfo(secondShow.id)).thenReturn(Single.just(mockSecondShow))
+        `when`(mockRepository.getFullShowInfo(thirdShow.id)).thenReturn(Single.just(mockThirdShow))
+        `when`(mockSecondShow.updated).thenReturn(secondShow.updated + 10000)
+        `when`(mockThirdShow.updated).thenReturn(thirdShow.updated)
+        `when`(mockSecondShow.embedded).thenReturn(MockShow.newEmbeddedInstance())
+
+        val updatedShows = showUpdateService.updateShows()
+
+        verify(mockRepository).getFullShowInfo(secondShow.id)
+        verify(mockRepository).getFullShowInfo(thirdShow.id)
+        verify(mockSecondShow).embedded
+        verify(mockThirdShow, never()).embedded
+
+        assertThat(updatedShows, iterableWithSize(1))
+        assertThat(updatedShows, contains(secondShow))
+        assertThat(secondShow.embedded, `is`(mockSecondShow.embedded))
     }
 
     @Test
