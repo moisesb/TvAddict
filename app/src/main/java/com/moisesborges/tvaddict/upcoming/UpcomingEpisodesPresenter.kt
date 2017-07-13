@@ -13,6 +13,8 @@ class UpcomingEpisodesPresenter
                     private val showsRepository: ShowsRepository) : BasePresenter<UpcomingEpisodesView>(rxJavaConfig) {
 
     fun loadUpcomingEpisodes() {
+        checkView()
+
         view.displayProgress(true)
         val diposable = showsRepository.fetchUpcomingEpisodes()
                 .compose(applySchedulersToSingle())

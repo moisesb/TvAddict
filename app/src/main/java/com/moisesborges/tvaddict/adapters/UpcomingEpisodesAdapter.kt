@@ -11,7 +11,7 @@ import kotlinx.android.synthetic.main.item_upcoming_episode.view.*
 /**
  * Created by Moisés on 13/06/2017.
  */
-class UpcomingEpisodesAdapter() : RecyclerView.Adapter<UpcomingEpisodeViewHolder>() {
+class UpcomingEpisodesAdapter() : RecyclerView.Adapter<UpcomingEpisodesAdapter.UpcomingEpisodeViewHolder>() {
 
     private val upcomingEpisodes = mutableListOf<UpcomingEpisode>()
 
@@ -35,13 +35,14 @@ class UpcomingEpisodesAdapter() : RecyclerView.Adapter<UpcomingEpisodeViewHolder
         val episode = upcomingEpisodes[position]
         viewHolder.bind(episode)
     }
-}
 
-class UpcomingEpisodeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class UpcomingEpisodeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    fun bind(upcomingEpisode: UpcomingEpisode) {
-        itemView.show_name_text_view.text = upcomingEpisode.showName
-        itemView.episode_name_text_view.text = upcomingEpisode.episode.name
+        fun bind(upcomingEpisode: UpcomingEpisode) {
+            itemView.show_name_text_view.text = upcomingEpisode.showName
+            itemView.episode_name_text_view.text = upcomingEpisode.episode.name
+        }
+
     }
-
 }
+
