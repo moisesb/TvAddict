@@ -50,9 +50,19 @@ def dbflow_version = "4.0.0-beta7"
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
+    //Android Test libraries
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+    androidTestCompile('com.android.support.test.espresso:espresso-contrib:2.2') {
+        // Necessary to avoid version conflicts
+        exclude group: 'com.android.support', module: 'appcompat'
+        exclude group: 'com.android.support', module: 'support-v4'
+        exclude group: 'com.android.support', module: 'support-annotations'
+        exclude module: 'recyclerview-v7'
+    }
+
+    //Unit test libraries
     testCompile 'junit:junit:4.12'
     testCompile "org.mockito:mockito-core:2.8.9"
     testCompile "org.robolectric:robolectric:3.3.2"
