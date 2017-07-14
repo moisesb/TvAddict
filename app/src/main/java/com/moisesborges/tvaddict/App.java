@@ -2,6 +2,9 @@ package com.moisesborges.tvaddict;
 
 import android.app.Application;
 
+import com.evernote.android.job.JobCreator;
+import com.evernote.android.job.JobManager;
+import com.moisesborges.tvaddict.notification.BackgroundJobCreator;
 import com.raizlabs.android.dbflow.config.FlowManager;
 import com.squareup.leakcanary.LeakCanary;
 
@@ -21,6 +24,8 @@ public class App extends Application {
         if (!installLeakCanary()) return;
 
         FlowManager.init(this);
+
+        JobManager.create(this).addJobCreator(new BackgroundJobCreator());
 
         Timber.plant(new Timber.DebugTree() {
             @Override
