@@ -31,6 +31,7 @@ import com.moisesborges.tvaddict.models.CastMember;
 import com.moisesborges.tvaddict.models.Externals;
 import com.moisesborges.tvaddict.models.Season;
 import com.moisesborges.tvaddict.models.Show;
+import com.moisesborges.tvaddict.utils.HtmlUtils;
 import com.moisesborges.tvaddict.utils.ProgressBarHelper;
 
 import java.util.List;
@@ -161,7 +162,7 @@ public class ShowDetailsActivity extends AppCompatActivity implements ShowDetail
 
     @Override
     public void setShowSummary(String summary) {
-        mShowSummaryTextView.setText(extractFromHtml(summary));
+        mShowSummaryTextView.setText(HtmlUtils.extractFromHtml(summary));
     }
 
     @Override
@@ -187,7 +188,7 @@ public class ShowDetailsActivity extends AppCompatActivity implements ShowDetail
 
     @Override
     public void navigateToEpisodes(Show show, int seasonNumber) {
-        EpisodesActivity.start(this, show, seasonNumber);
+        EpisodesActivity.Companion.start(this, show, seasonNumber);
     }
 
     @Override
@@ -256,13 +257,7 @@ public class ShowDetailsActivity extends AppCompatActivity implements ShowDetail
 
     }
 
-    private Spanned extractFromHtml(String html) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            return Html.fromHtml(html, Html.FROM_HTML_MODE_COMPACT);
-        } else {
-            return Html.fromHtml(html);
-        }
-    }
+
 
 
 }
