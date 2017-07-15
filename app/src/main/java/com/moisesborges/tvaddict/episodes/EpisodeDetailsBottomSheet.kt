@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.bumptech.glide.Glide
 import com.moisesborges.tvaddict.R
 import com.moisesborges.tvaddict.models.Episode
 import com.moisesborges.tvaddict.utils.HtmlUtils
@@ -24,6 +25,14 @@ class EpisodeDetailsBottomSheet: BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val episode = arguments.getParcelable<Episode>(EPISODE_ARG)
+        displayEpisodeImageAndSummary(episode)
+    }
+
+    private fun displayEpisodeImageAndSummary(episode: Episode) {
+        Glide.with(context)
+                .load(episode.image?.medium)
+                .into(episode_image_view)
+
         episode_summary_text_view.text = HtmlUtils.extractFromHtml(episode.summary)
     }
 

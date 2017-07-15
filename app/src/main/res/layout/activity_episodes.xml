@@ -7,11 +7,12 @@
     android:layout_height="match_parent"
     tools:context="com.moisesborges.tvaddict.episodes.EpisodesActivity">
 
+    <include layout="@layout/layout_toolbar"/>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/episodes_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-
-    <include layout="@layout/bottom_sheet_episode_details"/>
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
 </android.support.design.widget.CoordinatorLayout>

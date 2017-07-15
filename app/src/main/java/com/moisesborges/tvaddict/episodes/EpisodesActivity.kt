@@ -4,7 +4,9 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
+import android.view.MenuItem
 import com.moisesborges.tvaddict.App
 import com.moisesborges.tvaddict.R
 import com.moisesborges.tvaddict.adapters.EpisodesAdapter
@@ -12,6 +14,7 @@ import com.moisesborges.tvaddict.adapters.ItemClickListener
 import com.moisesborges.tvaddict.models.Episode
 import com.moisesborges.tvaddict.models.Show
 import kotlinx.android.synthetic.main.activity_episodes.*
+import kotlinx.android.synthetic.main.layout_toolbar.*
 import javax.inject.Inject
 
 class EpisodesActivity : AppCompatActivity(), EpisodesView {
@@ -35,6 +38,7 @@ class EpisodesActivity : AppCompatActivity(), EpisodesView {
         seasonNumber = intent.getIntExtra(ARG_SEASON_NUMBER, 0)
 
         setupRecyclerView()
+        setupToolbar()
     }
 
 
@@ -45,7 +49,15 @@ class EpisodesActivity : AppCompatActivity(), EpisodesView {
     private fun setupRecyclerView() {
         episodes_recycler_view.layoutManager = LinearLayoutManager(this)
         episodes_recycler_view.setHasFixedSize(true)
+        episodes_recycler_view.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
         episodes_recycler_view.adapter = mEpisodesAdapter
+    }
+
+    private fun setupToolbar() {
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        toolbar.title = show.name
+        toolbar.subtitle = resources.getString(R.string.season_number_label, seasonNumber)
     }
 
     override fun onStart() {
@@ -73,6 +85,22 @@ class EpisodesActivity : AppCompatActivity(), EpisodesView {
 
     override fun showEpisodeDetails(episode: Episode) {
         EpisodeDetailsBottomSheet.show(episode, supportFragmentManager)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item?.itemId) {
+            android.R.id.home -> {
+                close()
+            }
+            else -> {
+                return super.onOptionsItemSelected(item)
+            }
+        }
+        return true
+    }
+
+    private fun close() {
+        finish()
     }
 
     companion object {

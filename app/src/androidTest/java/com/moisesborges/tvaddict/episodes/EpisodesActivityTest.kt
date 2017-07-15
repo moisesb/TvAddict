@@ -56,9 +56,10 @@ class EpisodesActivityTest {
         onView(withId(R.id.episodes_recycler_view))
                 .perform(RecyclerViewActions.actionOnItemAtPosition<EpisodesAdapter.ViewHolder>(1, click()))
 
-        val summary = HtmlUtils.extractFromHtml(show.episodes.first().summary).toString()
         onView(withId(R.id.episode_summary_text_view))
                 .check(matches(isDisplayed()))
-                .check(matches(withText(summary)))
+
+        onView(withId(R.id.episode_image_view))
+                .check(matches(isDisplayed()))
     }
 }
