@@ -68,6 +68,14 @@ class UpcomingEpisodesFragment : Fragment(), UpcomingEpisodesView {
         no_upcoming_episodes_view_stub.inflate()
     }
 
+    override fun displayEpisode(upcomingEpisode: UpcomingEpisode) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun hideEpisode(upcomingEpisode: UpcomingEpisode) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
     companion object {
 
         @JvmStatic

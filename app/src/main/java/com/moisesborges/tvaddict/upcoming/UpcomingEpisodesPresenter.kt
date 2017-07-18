@@ -1,6 +1,7 @@
 package com.moisesborges.tvaddict.upcoming
 
 import com.moisesborges.tvaddict.data.ShowsRepository
+import com.moisesborges.tvaddict.models.UpcomingEpisode
 import com.moisesborges.tvaddict.mvp.BasePresenter
 import com.moisesborges.tvaddict.mvp.RxJavaConfig
 import javax.inject.Inject
@@ -20,7 +21,7 @@ class UpcomingEpisodesPresenter
                 .compose(applySchedulersToSingle())
                 .subscribe({ episodes ->
                     view.displayProgress(false)
-                    if (episodes.size > 0) {
+                    if (episodes.isNotEmpty()) {
                         view.displayEpisodes(episodes)
                     } else {
                         view.displayNoUpcomingEpisodes()
@@ -28,5 +29,10 @@ class UpcomingEpisodesPresenter
                 })
 
         addDisposable(diposable)
+    }
+
+
+    fun markEpisodeAsSeen(upcomingEpisode: UpcomingEpisode) {
+        checkView()
     }
 }

@@ -2,12 +2,13 @@ package com.moisesborges.tvaddict.notification
 
 import com.moisesborges.tvaddict.data.ShowsRepository
 import com.moisesborges.tvaddict.models.Show
-import io.reactivex.Observable
+import javax.inject.Inject
 
 /**
  * Created by moises.anjos on 12/07/2017.
  */
-class ShowUpdateService(private val showsRepository: ShowsRepository) {
+class ShowUpdateService
+@Inject constructor(private val showsRepository: ShowsRepository) {
 
     fun updateShows(): List<Show> {
         val savedRunningShows = showsRepository.getSavedShows()
@@ -24,7 +25,6 @@ class ShowUpdateService(private val showsRepository: ShowsRepository) {
 
         return updatedShows
     }
-
 
 
     companion object {

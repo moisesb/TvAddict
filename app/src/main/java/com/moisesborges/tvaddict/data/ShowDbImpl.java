@@ -2,11 +2,14 @@ package com.moisesborges.tvaddict.data;
 
 import android.support.annotation.NonNull;
 
+import com.moisesborges.tvaddict.models.Episode;
 import com.moisesborges.tvaddict.models.Show;
 import com.moisesborges.tvaddict.models.Show_Table;
 import com.raizlabs.android.dbflow.config.FlowManager;
 import com.raizlabs.android.dbflow.rx2.language.RXSQLite;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -74,6 +77,16 @@ public class ShowDbImpl implements ShowDb {
 
             return show;
         };
+    }
+
+    @NotNull
+    @Override
+    public Single<Episode> updateEpisode(@NotNull Episode episode) {
+        return Single.fromCallable(() -> {
+            FlowManager.getModelAdapter(Episode.class)
+                    .update(episode);
+            return episode;
+        });
     }
 
 }
