@@ -10,6 +10,6 @@ interface UpcomingEpisodesView : BaseView {
     fun displayProgress(loading: Boolean)
     fun displayEpisodes(episodes: List<UpcomingEpisode>)
     fun displayNoUpcomingEpisodes()
-    fun displayEpisode(upcomingEpisode: UpcomingEpisode)
     fun hideEpisode(upcomingEpisode: UpcomingEpisode)
+    fun replaceEpisode(upcomingEpisode: UpcomingEpisode, nextUpcomingEpisode: UpcomingEpisode)
 }

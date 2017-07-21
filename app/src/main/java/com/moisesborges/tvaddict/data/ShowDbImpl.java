@@ -79,14 +79,4 @@ public class ShowDbImpl implements ShowDb {
         };
     }
 
-    @NotNull
-    @Override
-    public Single<Episode> updateEpisode(@NotNull Episode episode) {
-        return Single.fromCallable(() -> {
-            FlowManager.getModelAdapter(Episode.class)
-                    .update(episode);
-            return episode;
-        });
-    }
-
 }

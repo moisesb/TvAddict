@@ -31,7 +31,4 @@ public interface ShowDb {
 
     @NonNull
     Single<Show> update(Show show);
-
-    @NotNull
-    Single<Episode> updateEpisode(@NotNull Episode episode);
 }

@@ -3,6 +3,7 @@ package com.moisesborges.tvaddict.models;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.google.gson.annotations.Expose;
@@ -23,6 +24,7 @@ public class Show implements Parcelable{
 
     public static final Show NOT_FOUND = new Show();
     public static final Show REMOVED = new Show();
+    public static final Episode EPISODE_NOT_FOUND = new Episode();
 
     @PrimaryKey
     @SerializedName("id")
@@ -347,6 +349,18 @@ public class Show implements Parcelable{
 
         return embedded.getEpisodes();
     }
+
+    @NonNull
+    public Episode nextEpisode() {
+        List<Episode> episodes = getEpisodes();
+        for (Episode episode : episodes) {
+            if (!episode.wasWatched()) {
+                return episode;
+            }
+        }
+        return EPISODE_NOT_FOUND;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -394,4 +408,5 @@ public class Show implements Parcelable{
         dest.writeParcelable(links, flags);
         dest.writeParcelable(embedded, flags);
     }
+
 }

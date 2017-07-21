@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.moisesborges.tvaddict.App
 import com.moisesborges.tvaddict.R
+import com.moisesborges.tvaddict.adapters.ItemClickListener
 import com.moisesborges.tvaddict.adapters.UpcomingEpisodesAdapter
 import com.moisesborges.tvaddict.models.UpcomingEpisode
 import kotlinx.android.synthetic.main.fragment_upcoming_episodes.*
@@ -17,7 +18,8 @@ import javax.inject.Inject
 
 class UpcomingEpisodesFragment : Fragment(), UpcomingEpisodesView {
 
-    private val adapter = UpcomingEpisodesAdapter()
+    private val itemClickListener = ItemClickListener<UpcomingEpisode> {upcomingEpisode -> upcomingEpisodesPresenter.markEpisodeAsSeen(upcomingEpisode)}
+    private val adapter = UpcomingEpisodesAdapter(itemClickListener)
     @Inject lateinit var upcomingEpisodesPresenter: UpcomingEpisodesPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,12 +70,12 @@ class UpcomingEpisodesFragment : Fragment(), UpcomingEpisodesView {
         no_upcoming_episodes_view_stub.inflate()
     }
 
-    override fun displayEpisode(upcomingEpisode: UpcomingEpisode) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun hideEpisode(upcomingEpisode: UpcomingEpisode) {
+        adapter.removeEpisode(upcomingEpisode)
     }
 
-    override fun hideEpisode(upcomingEpisode: UpcomingEpisode) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun replaceEpisode(upcomingEpisode: UpcomingEpisode, nextUpcomingEpisode: UpcomingEpisode) {
+        adapter.replaceEpisode(upcomingEpisode, nextUpcomingEpisode)
     }
 
     companion object {

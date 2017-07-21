@@ -1,9 +1,11 @@
 package com.moisesborges.tvaddict.upcoming
 
 import com.moisesborges.tvaddict.data.ShowsRepository
+import com.moisesborges.tvaddict.models.Show
 import com.moisesborges.tvaddict.models.UpcomingEpisode
 import com.moisesborges.tvaddict.mvp.BasePresenter
 import com.moisesborges.tvaddict.mvp.RxJavaConfig
+import timber.log.Timber
 import javax.inject.Inject
 
 /**
@@ -17,7 +19,7 @@ class UpcomingEpisodesPresenter
         checkView()
 
         view.displayProgress(true)
-        val diposable = showsRepository.fetchUpcomingEpisodes()
+        val disposable = showsRepository.fetchUpcomingEpisodes()
                 .compose(applySchedulersToSingle())
                 .subscribe({ episodes ->
                     view.displayProgress(false)
@@ -28,11 +30,26 @@ class UpcomingEpisodesPresenter
                     }
                 })
 
-        addDisposable(diposable)
+        addDisposable(disposable)
     }
 
 
     fun markEpisodeAsSeen(upcomingEpisode: UpcomingEpisode) {
         checkView()
+
+        val episode = upcomingEpisode.episode
+        episode.setWatched(true)
+        val disposable = showsRepository.updateShow(upcomingEpisode.show)
+                .compose(applySchedulersToSingle())
+                .map { show -> UpcomingEpisode(show, show.nextEpisode()) }
+                .subscribe({ nextUpcomingEpisode ->
+                    if (nextUpcomingEpisode.episode != Show.EPISODE_NOT_FOUND) {
+                        view.replaceEpisode(upcomingEpisode, nextUpcomingEpisode)
+                    } else {
+                        view.hideEpisode(upcomingEpisode)
+                    }
+                }, { t -> Timber.e(t) })
+
+        addDisposable(disposable)
     }
 }

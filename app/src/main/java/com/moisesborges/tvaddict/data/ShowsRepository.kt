@@ -1,6 +1,5 @@
 package com.moisesborges.tvaddict.data
 
-import com.moisesborges.tvaddict.models.Episode
 import com.moisesborges.tvaddict.models.Show
 import com.moisesborges.tvaddict.models.UpcomingEpisode
 import io.reactivex.Single
@@ -27,8 +26,4 @@ interface ShowsRepository {
     fun fetchUpcomingEpisodes(): Single<List<UpcomingEpisode>>
 
     fun searchShows(showName: String): Single<List<Show>>
-
-    fun updateEpisode(episode: Episode): Single<Episode>
-
-    fun fetchUpcomingEpisode(showId: Int) : Single<UpcomingEpisode>
 }
