@@ -22,5 +22,11 @@ object MockShow {
         val gson = Gson()
         return gson.fromJson(MOCK_EMBEDDED_JSON, Embedded::class.java)
     }
+
+    fun newFullMockShowInstance(): Show {
+        val show = newMockShowInstance()
+        show.embedded = newEmbeddedInstance()
+        return show
+    }
 }
 

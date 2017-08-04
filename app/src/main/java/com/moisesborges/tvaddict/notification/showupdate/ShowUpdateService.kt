@@ -1,4 +1,4 @@
-package com.moisesborges.tvaddict.notification
+package com.moisesborges.tvaddict.notification.showupdate
 
 import com.moisesborges.tvaddict.data.ShowsRepository
 import com.moisesborges.tvaddict.models.Show

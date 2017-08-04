@@ -1,4 +1,4 @@
-package com.moisesborges.tvaddict.notification
+package com.moisesborges.tvaddict.notification.showupdate
 
 import com.evernote.android.job.Job
 import com.evernote.android.job.JobRequest

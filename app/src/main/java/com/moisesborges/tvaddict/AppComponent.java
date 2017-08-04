@@ -1,14 +1,13 @@
 package com.moisesborges.tvaddict;
 
 import com.moisesborges.tvaddict.episodes.EpisodesActivity;
-import com.moisesborges.tvaddict.notification.UpdateShowJob;
+import com.moisesborges.tvaddict.notification.newepisode.EpisodeNotificationSchedulerJob;
+import com.moisesborges.tvaddict.notification.showupdate.UpdateShowJob;
 import com.moisesborges.tvaddict.search.SearchActivity;
 import com.moisesborges.tvaddict.showdetails.ShowDetailsActivity;
 import com.moisesborges.tvaddict.shows.ShowsFragment;
 import com.moisesborges.tvaddict.upcoming.UpcomingEpisodesFragment;
 import com.moisesborges.tvaddict.watching.WatchingShowsFragment;
-
-import org.jetbrains.annotations.NotNull;
 
 import javax.inject.Singleton;
 
@@ -36,4 +35,6 @@ public interface AppComponent {
     void inject(UpcomingEpisodesFragment fragment);
 
     void inject(UpdateShowJob job);
+
+    void inject(EpisodeNotificationSchedulerJob job);
 }

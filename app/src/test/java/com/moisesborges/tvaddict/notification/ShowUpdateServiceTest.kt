@@ -2,21 +2,16 @@ package com.moisesborges.tvaddict.notification
 
 import com.moisesborges.tvaddict.data.ShowsRepository
 import com.moisesborges.tvaddict.models.Show
+import com.moisesborges.tvaddict.notification.showupdate.ShowUpdateService
 import com.moisesborges.tvaddict.utils.MockShow
 import io.reactivex.Single
-import org.hamcrest.Matchers
 import org.hamcrest.Matchers.*
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
-import org.mockito.ArgumentMatchers
-import org.mockito.ArgumentMatchers.*
 import org.mockito.Mock
-import org.mockito.Mockito
 import org.mockito.Mockito.*
-import org.mockito.MockitoAnnotations
 import org.mockito.MockitoAnnotations.*
-import java.util.concurrent.TimeUnit
 
 /**
  * Created by moises.anjos on 12/07/2017.

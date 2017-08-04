@@ -16,6 +16,8 @@ import com.raizlabs.android.dbflow.annotation.ForeignKey;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -409,4 +411,14 @@ public class Show implements Parcelable{
         dest.writeParcelable(embedded, flags);
     }
 
+    @Nullable
+    public Episode episodeAiredAt(@NotNull String airdate) {
+        List<Episode> episodes = getEpisodes();
+        for (Episode episode : episodes) {
+            if (episode.getAirdate().equals(airdate)) {
+                return episode;
+            }
+        }
+        return null;
+    }
 }

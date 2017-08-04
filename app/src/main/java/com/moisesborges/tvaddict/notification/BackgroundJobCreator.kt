@@ -2,6 +2,7 @@ package com.moisesborges.tvaddict.notification
 
 import com.evernote.android.job.Job
 import com.evernote.android.job.JobCreator
+import com.moisesborges.tvaddict.notification.showupdate.UpdateShowJob
 
 /**
  * Created by Moisés on 12/07/2017.
