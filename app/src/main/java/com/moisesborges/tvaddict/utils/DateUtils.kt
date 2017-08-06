@@ -14,4 +14,9 @@ object DateUtils {
         return dateFormat.format(date)
     }
 
+    fun stringDateToLong(date: String): Date {
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm")
+        return dateFormat.parse(date)
+    }
+
 }

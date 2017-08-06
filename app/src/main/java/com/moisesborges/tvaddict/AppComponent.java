@@ -1,7 +1,8 @@
 package com.moisesborges.tvaddict;
 
 import com.moisesborges.tvaddict.episodes.EpisodesActivity;
-import com.moisesborges.tvaddict.notification.newepisode.EpisodeNotificationSchedulerJob;
+import com.moisesborges.tvaddict.notification.newepisode.EpisodeNotificationJob;
+import com.moisesborges.tvaddict.notification.newepisode.EpisodesNotificationSchedulerJob;
 import com.moisesborges.tvaddict.notification.showupdate.UpdateShowJob;
 import com.moisesborges.tvaddict.search.SearchActivity;
 import com.moisesborges.tvaddict.showdetails.ShowDetailsActivity;
@@ -36,5 +37,7 @@ public interface AppComponent {
 
     void inject(UpdateShowJob job);
 
-    void inject(EpisodeNotificationSchedulerJob job);
+    void inject(EpisodesNotificationSchedulerJob job);
+
+    void inject(EpisodeNotificationJob job);
 }

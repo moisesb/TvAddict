@@ -44,18 +44,18 @@ class NewEpisodeNotificationSchedulerTest {
         val newEpisode = Episode()
         newEpisode.id = 500
         val today = Date()
-        newEpisode.airdate = DateUtils.dateToAirdate(today)
+        val airdate = DateUtils.dateToAirdate(today)
+        newEpisode.airdate = airdate
         newEpisode.airtime = "20:00"
 
-        embedded.episodes.plus(newEpisode)
+        embedded.episodes.add(newEpisode)
+        show.embedded = embedded
 
         `when`(mockShowRepository.getSavedShows()).thenReturn(Single.just(listOf(show)))
 
         notificationScheduler.scheduleJobs()
 
-        val calendar = Calendar.getInstance()
-        calendar.set(today.year, today.month, today.day, 16, 0)
-        val expectedTime = calendar.time.time
+        val expectedTime = DateUtils.stringDateToLong("${airdate} 16:00").time
 
         verify(mockJobScheduler).scheduleEpisode(newEpisode, expectedTime, TimeUnit.HOURS.toMillis(1))
     }

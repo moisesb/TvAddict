@@ -8,7 +8,10 @@ import javax.inject.Inject
  */
 class JobScheduler @Inject constructor() {
 
-    fun scheduleEpisode(episode: Episode, time: Long, flex: Long) {
-
+    fun scheduleEpisode(showId: Int, episode: Episode, time: Long, flex: Long) {
+        val delta = flex / 2
+        val startTime = time - delta
+        val endTime = time + delta
+        EpisodeNotificationJob.schedule(showId, episode.id, startTime, endTime)
     }
 }

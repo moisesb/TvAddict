@@ -9,7 +9,7 @@ import javax.inject.Inject
 /**
  * Created by moises.anjos on 04/08/2017.
  */
-class EpisodeNotificationSchedulerJob : Job() {
+class EpisodesNotificationSchedulerJob : Job() {
 
     @Inject lateinit var notificationScheduler: NewEpisodeNotificationScheduler
 
@@ -24,7 +24,7 @@ class EpisodeNotificationSchedulerJob : Job() {
     companion object {
 
         @JvmStatic
-        val TAG = "${EpisodeNotificationSchedulerJob::class.java.simpleName}.job"
+        val TAG = "${EpisodesNotificationSchedulerJob::class.java.simpleName}.job"
 
         @JvmStatic
         fun schedule() {

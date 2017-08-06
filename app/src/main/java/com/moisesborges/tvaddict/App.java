@@ -5,6 +5,8 @@ import android.app.Application;
 import com.evernote.android.job.JobCreator;
 import com.evernote.android.job.JobManager;
 import com.moisesborges.tvaddict.notification.BackgroundJobCreator;
+import com.moisesborges.tvaddict.notification.newepisode.EpisodesNotificationSchedulerJob;
+import com.moisesborges.tvaddict.notification.showupdate.UpdateShowJob;
 import com.raizlabs.android.dbflow.config.FlowManager;
 import com.squareup.leakcanary.LeakCanary;
 
@@ -35,7 +37,10 @@ public class App extends Application {
         });
 
         mAppComponent = createComponent();
+
+        scheduleJobs();
     }
+
 
     private boolean installLeakCanary() {
         if (LeakCanary.isInAnalyzerProcess(this)) {
@@ -55,5 +60,11 @@ public class App extends Application {
 
     public AppComponent getAppComponent() {
         return mAppComponent;
+    }
+
+
+    private void scheduleJobs() {
+        EpisodesNotificationSchedulerJob.schedule();
+        UpdateShowJob.schedule();
     }
 }

@@ -26,7 +26,6 @@ class SearchActivity : AppCompatActivity(), SearchView, android.support.v7.widge
         setContentView(R.layout.activity_search)
         injectDepencies()
         setupRecyclerView()
-        searchPresenter.bindView(this)
 
         search_view.setOnQueryTextListener(this)
 
@@ -53,8 +52,13 @@ class SearchActivity : AppCompatActivity(), SearchView, android.support.v7.widge
         results_recycler_view.adapter = adapter
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onStart() {
+        super.onStart()
+        searchPresenter.bindView(this)
+    }
+
+    override fun onStop() {
+        super.onStop()
         searchPresenter.unbindView()
     }
 
