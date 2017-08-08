@@ -6,13 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import com.moisesborges.tvaddict.R
 import com.moisesborges.tvaddict.models.Episode
+import com.moisesborges.tvaddict.utils.DateUtils
 import kotlinx.android.synthetic.main.item_episode.view.*
 import java.util.*
 
 /**
  * Created by moises.anjos on 13/07/2017.
  */
-class EpisodesAdapter(private val togglerEpisodeStatusListener: ItemClickListener<Episode>,
+class EpisodesAdapter(private val toggleEpisodeStatusListener: ItemClickListener<Episode>,
                       private val openEpisodeDetailsListener: ItemClickListener<Episode>) : RecyclerView.Adapter<EpisodesAdapter.ViewHolder>() {
 
     private val episodes = ArrayList<Episode>()
@@ -57,7 +58,7 @@ class EpisodesAdapter(private val togglerEpisodeStatusListener: ItemClickListene
 
         private fun onWatchedCheckBoxClick() {
             val episode = selectedEpisode()
-            togglerEpisodeStatusListener.consume(episode)
+            toggleEpisodeStatusListener.consume(episode)
         }
 
         private fun selectedEpisode(): Episode {
@@ -67,7 +68,8 @@ class EpisodesAdapter(private val togglerEpisodeStatusListener: ItemClickListene
         }
 
         fun bind(episode: Episode) {
-            itemView.episode_name_text_view.text = episode.name
+            itemView.episode_name_text_view.text = "${episode.number} - ${episode.name}"
+            itemView.episode_airdate_text_view.text = DateUtils.airdateToUiString(episode.airdate)
             itemView.watched_check_box.isChecked = episode.wasWatched()
         }
     }

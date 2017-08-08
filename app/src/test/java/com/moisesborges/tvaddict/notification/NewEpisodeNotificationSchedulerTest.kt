@@ -25,9 +25,9 @@ import java.util.concurrent.TimeUnit
  */
 class NewEpisodeNotificationSchedulerTest {
 
-    lateinit var notificationScheduler : NewEpisodeNotificationScheduler
+    lateinit var notificationScheduler: NewEpisodeNotificationScheduler
 
-    @Mock lateinit var mockShowRepository : ShowsRepository
+    @Mock lateinit var mockShowRepository: ShowsRepository
     @Mock lateinit var mockJobScheduler: JobScheduler
 
     @Before
@@ -57,7 +57,7 @@ class NewEpisodeNotificationSchedulerTest {
 
         val expectedTime = DateUtils.stringDateToLong("${airdate} 16:00").time
 
-        verify(mockJobScheduler).scheduleEpisode(newEpisode, expectedTime, TimeUnit.HOURS.toMillis(1))
+        verify(mockJobScheduler).scheduleEpisode(show.id, newEpisode, expectedTime, TimeUnit.HOURS.toMillis(1))
     }
 
     @Test @Ignore

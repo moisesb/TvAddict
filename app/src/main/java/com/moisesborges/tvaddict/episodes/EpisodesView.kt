@@ -16,4 +16,6 @@ interface EpisodesView : BaseView {
     fun setShow(showFromDb: Show)
 
     fun showEpisodeDetails(episode: Episode)
+
+    fun refreshAllEpisodes()
 }

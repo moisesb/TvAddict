@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
+import android.view.Menu
 import android.view.MenuItem
 import com.moisesborges.tvaddict.App
 import com.moisesborges.tvaddict.R
@@ -27,7 +28,7 @@ class EpisodesActivity : AppCompatActivity(), EpisodesView {
 
     private val toggleEpisodeStatusListener = ItemClickListener<Episode> { episode -> episodesPresenter.changeEpisodeSeenStatus(episode, show) }
     private val openEpisodeDetailsListener = ItemClickListener<Episode> { episode -> episodesPresenter.openEpisodeDetails(episode) }
-    private val mEpisodesAdapter = EpisodesAdapter(toggleEpisodeStatusListener, openEpisodeDetailsListener)
+    private val episodesAdapter = EpisodesAdapter(toggleEpisodeStatusListener, openEpisodeDetailsListener)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,7 +51,7 @@ class EpisodesActivity : AppCompatActivity(), EpisodesView {
         episodes_recycler_view.layoutManager = LinearLayoutManager(this)
         episodes_recycler_view.setHasFixedSize(true)
         episodes_recycler_view.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
-        episodes_recycler_view.adapter = mEpisodesAdapter
+        episodes_recycler_view.adapter = episodesAdapter
     }
 
     private fun setupToolbar() {
@@ -72,11 +73,11 @@ class EpisodesActivity : AppCompatActivity(), EpisodesView {
     }
 
     override fun displayEpisodes(episodes: List<Episode>) {
-        mEpisodesAdapter.setEpisodes(episodes)
+        episodesAdapter.setEpisodes(episodes)
     }
 
     override fun refreshEpisode(episode: Episode) {
-        mEpisodesAdapter.updateEpisode(episode)
+        episodesAdapter.updateEpisode(episode)
     }
 
     override fun setShow(showFromDb: Show) {
@@ -87,10 +88,25 @@ class EpisodesActivity : AppCompatActivity(), EpisodesView {
         EpisodeDetailsBottomSheet.show(episode, supportFragmentManager)
     }
 
+    override fun refreshAllEpisodes() {
+        episodesAdapter.notifyDataSetChanged()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_episodes, menu)
+        return true
+    }
+
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
             android.R.id.home -> {
                 close()
+            }
+            R.id.action_set_all_as_seen -> {
+                episodesPresenter.setAllEpisodesStatusAsSeen(seasonNumber, show)
+            }
+            R.id.action_set_all_as_unseen -> {
+                episodesPresenter.setAllEpisodesStatusAsUnseen(seasonNumber, show)
             }
             else -> {
                 return super.onOptionsItemSelected(item)

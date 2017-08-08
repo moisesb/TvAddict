@@ -6,14 +6,8 @@ import com.moisesborges.tvaddict.models.Show
 import com.moisesborges.tvaddict.mvp.BasePresenter
 import com.moisesborges.tvaddict.mvp.RxJavaConfig
 
-import java.util.ArrayList
-import java.util.Timer
-
 import javax.inject.Inject
 
-import io.reactivex.Observable
-import io.reactivex.disposables.Disposable
-import io.reactivex.functions.BiFunction
 import timber.log.Timber
 
 
@@ -23,12 +17,12 @@ import timber.log.Timber
 
 class EpisodesPresenter
 @Inject constructor(rxJavaConfig: RxJavaConfig,
-                    private val mShowsRepository: ShowsRepository) : BasePresenter<EpisodesView>(rxJavaConfig) {
+                    private val showsRepository: ShowsRepository) : BasePresenter<EpisodesView>(rxJavaConfig) {
 
     fun loadEpisodes(seasonNumber: Int, show: Show) {
         checkView()
 
-        val disposable = mShowsRepository.getSavedShow(show.id!!)
+        val disposable = showsRepository.getSavedShow(show.id!!)
                 .compose(applySchedulersToSingle<Show>())
                 .onErrorReturn { ignored -> Show.NOT_FOUND }
                 .doOnSuccess { showFromDb ->
@@ -47,7 +41,7 @@ class EpisodesPresenter
         checkView()
 
         episode.setWatched(!episode.wasWatched())
-        val disposable = mShowsRepository.updateShow(show)
+        val disposable = showsRepository.updateShow(show)
                 .compose(applySchedulersToSingle<Show>())
                 .subscribe({ ignored -> view.refreshEpisode(episode) }, { Timber.e(it) })
 
@@ -59,4 +53,29 @@ class EpisodesPresenter
 
         view.showEpisodeDetails(episode)
     }
+
+    fun setAllEpisodesStatusAsSeen(seasonNumber: Int, show: Show) {
+        setAllEpisodesSeenStatus(show, seasonNumber, true)
+
+    }
+
+    private fun setAllEpisodesSeenStatus(show: Show, seasonNumber: Int, watched: Boolean) {
+        checkView()
+
+        show.episodes
+                .filter { episode -> episode.season == seasonNumber }
+                .forEach { episode -> episode.setWatched(watched) }
+
+        val disposable = showsRepository.updateShow(show)
+                .compose(applySchedulersToSingle<Show>())
+                .subscribe({ ignored -> view.refreshAllEpisodes() }, { Timber.e(it) })
+
+        addDisposable(disposable)
+    }
+
+    fun setAllEpisodesStatusAsUnseen(seasonNumber: Int, show: Show) {
+        setAllEpisodesSeenStatus(show, seasonNumber, false)
+    }
+
+
 }

@@ -8,15 +8,23 @@ import java.util.*
  */
 object DateUtils {
 
+    private val stringDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm")
+    private val uiDateFormat = SimpleDateFormat("MMM d, yyyy")
+    private val airdateFormat = SimpleDateFormat("yyyy-MM-dd")
 
     fun dateToAirdate(date: Date): String {
         val dateFormat = SimpleDateFormat("yyyy-MM-dd")
         return dateFormat.format(date)
     }
 
+
     fun stringDateToLong(date: String): Date {
-        val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm")
-        return dateFormat.parse(date)
+        return stringDateFormat.parse(date)
+    }
+
+
+    fun airdateToUiString(airdate: String): String {
+        return uiDateFormat.format(airdateFormat.parse(airdate)).capitalize()
     }
 
 }

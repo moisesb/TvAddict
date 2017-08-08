@@ -8,10 +8,22 @@
         android:id="@+id/episode_name_text_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
+        android:layout_marginTop="16dp"
         android:layout_toStartOf="@+id/watched_check_box"
-        android:layout_margin="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:textSize="16sp"
         tools:text="Pilot"/>
+
+    <TextView
+        android:id="@+id/episode_airdate_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@id/episode_name_text_view"
+        android:layout_alignEnd="@id/episode_name_text_view"
+        android:layout_below="@id/episode_name_text_view"
+        android:layout_marginBottom="16dp"
+        tools:text="Aug 8th, 2017"/>
 
 
     <CheckBox
