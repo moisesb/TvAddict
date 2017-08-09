@@ -1,5 +1,6 @@
 package com.moisesborges.tvaddict.adapters
 
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -47,7 +48,7 @@ class EpisodesAdapter(private val toggleEpisodeStatusListener: ItemClickListener
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         init {
-            itemView.watched_check_box.setOnClickListener({ onWatchedCheckBoxClick() })
+            itemView.episode_seen_image_button.setOnClickListener({ onWatchedCheckBoxClick() })
             itemView.setOnClickListener({ onEpisodeClick()})
         }
 
@@ -70,7 +71,12 @@ class EpisodesAdapter(private val toggleEpisodeStatusListener: ItemClickListener
         fun bind(episode: Episode) {
             itemView.episode_name_text_view.text = "${episode.number} - ${episode.name}"
             itemView.episode_airdate_text_view.text = DateUtils.airdateToUiString(episode.airdate)
-            itemView.watched_check_box.isChecked = episode.wasWatched()
+            itemView.episode_seen_image_button.visibility = if (episode.wasAired()) View.VISIBLE else View.GONE
+            val context = itemView.context
+            val backgroundColor = if (episode.wasWatched()) ContextCompat.getDrawable(context, R.color.colorAccent) else null
+            itemView.watched_frame_layout.background = backgroundColor
+            val imageColor = ContextCompat.getColor(context, if (episode.wasWatched()) android.R.color.white else R.color.colorAccent)
+            itemView.episode_seen_image_button.setColorFilter(imageColor)
         }
     }
 }

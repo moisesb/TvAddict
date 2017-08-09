@@ -40,6 +40,10 @@ class EpisodesPresenter
     fun changeEpisodeSeenStatus(episode: Episode, show: Show) {
         checkView()
 
+        if (!episode.wasAired()) {
+            return
+        }
+
         episode.setWatched(!episode.wasWatched())
         val disposable = showsRepository.updateShow(show)
                 .compose(applySchedulersToSingle<Show>())
@@ -64,6 +68,7 @@ class EpisodesPresenter
 
         show.episodes
                 .filter { episode -> episode.season == seasonNumber }
+                .filter { episode -> episode.wasAired() }
                 .forEach { episode -> episode.setWatched(watched) }
 
         val disposable = showsRepository.updateShow(show)

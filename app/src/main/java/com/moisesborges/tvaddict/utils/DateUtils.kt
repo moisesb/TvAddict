@@ -11,20 +11,38 @@ object DateUtils {
     private val stringDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm")
     private val uiDateFormat = SimpleDateFormat("MMM d, yyyy")
     private val airdateFormat = SimpleDateFormat("yyyy-MM-dd")
+    private val airtimeFormat = SimpleDateFormat("HH:mm")
 
+    @JvmStatic
     fun dateToAirdate(date: Date): String {
-        val dateFormat = SimpleDateFormat("yyyy-MM-dd")
-        return dateFormat.format(date)
+        return airdateFormat.format(date)
     }
 
+    @JvmStatic
+    fun dateToAirtime(date: Date): String {
+        return airtimeFormat.format(date)
+    }
 
-    fun stringDateToLong(date: String): Date {
+    @JvmStatic
+    fun stringToDateAndHour(date: String): Date {
         return stringDateFormat.parse(date)
     }
 
+    @JvmStatic
+    fun dateAndHourToString(date: Date): String {
+        return stringDateFormat.format(date)
+    }
 
+    @JvmStatic
     fun airdateToUiString(airdate: String): String {
         return uiDateFormat.format(airdateFormat.parse(airdate)).capitalize()
     }
+
+    @JvmStatic
+    fun timeInTheFuture(time: String): Boolean {
+        return stringToDateAndHour(time).after(Date())
+    }
+
+
 
 }

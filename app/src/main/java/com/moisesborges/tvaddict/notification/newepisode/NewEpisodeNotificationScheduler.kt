@@ -34,7 +34,7 @@ class NewEpisodeNotificationScheduler
 
     private fun fourHoursBefore(episode: Episode): Long {
         val calendar = Calendar.getInstance()
-        calendar.time = DateUtils.stringDateToLong("${episode.airdate} ${episode.airtime}")
+        calendar.time = DateUtils.stringToDateAndHour("${episode.airdate} ${episode.airtime}")
         calendar.add(Calendar.HOUR, -4)
         return calendar.time.time
     }

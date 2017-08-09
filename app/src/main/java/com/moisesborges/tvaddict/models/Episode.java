@@ -7,6 +7,7 @@ import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.moisesborges.tvaddict.data.AppDatabase;
+import com.moisesborges.tvaddict.utils.DateUtils;
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.ForeignKey;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
@@ -213,6 +214,10 @@ public class Episode implements Parcelable {
 
     public void setWatched(boolean watched) {
         this.watched = watched;
+    }
+
+    public boolean wasAired() {
+        return !DateUtils.timeInTheFuture(airdate + " " + airtime);
     }
 
     @Override

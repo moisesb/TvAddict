@@ -11,10 +11,7 @@ import io.reactivex.Single
 import org.junit.Before
 import org.junit.Ignore
 import org.junit.Test
-import org.mockito.ArgumentMatchers
-import org.mockito.ArgumentMatchers.*
 import org.mockito.Mock
-import org.mockito.Mockito
 import org.mockito.Mockito.*
 import org.mockito.MockitoAnnotations.initMocks
 import java.util.*
@@ -55,7 +52,7 @@ class NewEpisodeNotificationSchedulerTest {
 
         notificationScheduler.scheduleJobs()
 
-        val expectedTime = DateUtils.stringDateToLong("${airdate} 16:00").time
+        val expectedTime = DateUtils.stringToDateAndHour("${airdate} 16:00").time
 
         verify(mockJobScheduler).scheduleEpisode(show.id, newEpisode, expectedTime, TimeUnit.HOURS.toMillis(1))
     }
