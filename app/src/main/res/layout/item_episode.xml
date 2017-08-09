@@ -44,6 +44,7 @@
             android:clickable="false"
             android:padding="16dp"
             android:src="@drawable/ic_check_black_24px"
+            style="@style/SelectableItemBackground"
             android:background="?attr/selectableItemBackground"
             android:tint="@color/colorAccent" />
 
