@@ -15,6 +15,7 @@ import com.moisesborges.tvaddict.adapters.ItemClickListener
 import com.moisesborges.tvaddict.adapters.ShowsAdapter
 import com.moisesborges.tvaddict.models.Show
 import com.moisesborges.tvaddict.showdetails.ShowDetailsActivity
+import com.moisesborges.tvaddict.ui.SpacesItemDecoration
 import kotlinx.android.synthetic.main.fragment_watching_shows.*
 import javax.inject.Inject
 
@@ -23,7 +24,9 @@ class WatchingShowsFragment : Fragment(), WatchingShowsView {
     @Inject
     internal lateinit var presenter: WatchingShowsPresenter
 
-    private val adapter = ShowsAdapter(ItemClickListener<Show> { show -> presenter.openShowDetails(show) })
+    private val openShowDetailsListener = ItemClickListener<Show> { show -> presenter.openShowDetails(show) }
+
+    private val adapter = ShowsAdapter( openShowDetailsListener, null)
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
@@ -47,8 +50,10 @@ class WatchingShowsFragment : Fragment(), WatchingShowsView {
 
 
     private fun setupRecyclerView() {
-        shows_recycler_view.layoutManager = GridLayoutManager(context, 3)
+        val rows = 3
+        shows_recycler_view.layoutManager = GridLayoutManager(context, rows)
         shows_recycler_view.setHasFixedSize(true)
+        shows_recycler_view.addItemDecoration(SpacesItemDecoration(16, rows))
         shows_recycler_view.adapter = adapter
     }
 

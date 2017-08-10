@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.GridLayoutManager
+import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +14,7 @@ import com.moisesborges.tvaddict.adapters.ItemClickListener
 import com.moisesborges.tvaddict.adapters.ShowsAdapter
 import com.moisesborges.tvaddict.models.Show
 import com.moisesborges.tvaddict.showdetails.ShowDetailsActivity
+import com.moisesborges.tvaddict.ui.SpacesItemDecoration
 import com.moisesborges.tvaddict.utils.ProgressBarHelper
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -30,8 +32,9 @@ class ShowsFragment : Fragment(), ShowsView {
     internal lateinit var showsPresenter: ShowsPresenter
 
     private val showItemClickListener: ItemClickListener<Show> = ItemClickListener { show -> showsPresenter.openShowDetails(show) }
+    private val followShowListener = ItemClickListener<Show> { show -> }
 
-    private val showsAdapter = ShowsAdapter(showItemClickListener)
+    private val showsAdapter = ShowsAdapter(showItemClickListener, followShowListener)
 
     private val compositeDisposable = CompositeDisposable()
 
@@ -80,7 +83,9 @@ class ShowsFragment : Fragment(), ShowsView {
     }
 
     private fun setupRecyclerView() {
-        shows_recycler_view.layoutManager = GridLayoutManager(context, 3)
+        val rows = 3
+        shows_recycler_view.layoutManager = GridLayoutManager(context, rows)
+        shows_recycler_view.addItemDecoration(SpacesItemDecoration(16, rows))
         shows_recycler_view.adapter = showsAdapter
     }
 

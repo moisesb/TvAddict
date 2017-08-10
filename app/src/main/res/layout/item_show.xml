@@ -1,27 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:id="@+id/show_item_layout"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:orientation="vertical">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/show_item_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/off_white"
+    android:orientation="vertical">
 
-    <com.moisesborges.tvaddict.ui.SquareFrameLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <ImageView
+        <com.moisesborges.tvaddict.ui.ThreeFourImageView
             android:id="@+id/show_image_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-    </com.moisesborges.tvaddict.ui.SquareFrameLayout>
+            android:layout_height="wrap_content"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/more_actions_image_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:visibility="gone"
+            android:src="@drawable/ic_more_vert_white_24px" />
+
+    </FrameLayout>
+
 
     <TextView
         android:id="@+id/show_name_text_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="16dp"
-        android:textSize="16sp"
+        android:layout_height="48dp"
+        android:layout_marginBottom="8dp"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:paddingEnd="8dp"
+        android:paddingStart="8dp"
+        android:paddingTop="8dp"
         android:textColor="@color/primary_text"
-        tools:text="Breaking Bad"/>
+        android:textSize="13sp"
+        tools:text="Breaking Bad" />
+
+
 </LinearLayout>
