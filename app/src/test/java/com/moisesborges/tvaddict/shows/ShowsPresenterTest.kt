@@ -13,6 +13,7 @@ import org.mockito.Mock
 import java.util.Arrays
 
 import io.reactivex.Single
+import org.mockito.ArgumentMatchers
 
 import org.mockito.Mockito.*
 import org.mockito.MockitoAnnotations.initMocks
@@ -22,7 +23,7 @@ import org.mockito.MockitoAnnotations.initMocks
  */
 class ShowsPresenterTest {
 
-    internal lateinit var showsPresenter: ShowsPresenter
+    private lateinit var showsPresenter: ShowsPresenter
     internal lateinit var show: Show
     @Mock lateinit var mockShowsRepository: ShowsRepository
     @Mock lateinit var mockShowsView: ShowsView
@@ -98,5 +99,46 @@ class ShowsPresenterTest {
         verify(mockShowsRepository).loadShows(nextPage)
         verify(mockShowsView).displayMoreTvShows(nextShows)
         verify(mockShowsView).setPage(nextPage)
+    }
+
+    @Test
+    fun shouldFollowShow() {
+        showsPresenter.bindView(mockShowsView)
+
+        val show = MockShow.newMockShowInstance()
+
+        `when`(mockShowsRepository.saveShow(show)).thenReturn(Single.just(show))
+
+        showsPresenter.followShow(show)
+
+        verify(mockShowsRepository).saveShow(show)
+        verify(mockShowsView).hideShow(show)
+        verify(mockShowsView).displayFollowingShowMessage(show)
+    }
+
+    @Test
+    fun shouldNotDisplayFollowingShows() {
+        showsPresenter.bindView(mockShowsView)
+
+        val firstShow = MockShow.newMockShowInstance()
+        firstShow.id = 1
+        val secondShow = MockShow.newMockShowInstance()
+        secondShow.id = 2
+        val thirdShow = MockShow.newFullMockShowInstance()
+        thirdShow.id = 3
+
+        val showsFromWeb = listOf(firstShow, secondShow, thirdShow)
+
+        `when`(mockShowsRepository.loadShows(0)).thenReturn(Single.just(showsFromWeb))
+        `when`(mockShowsRepository.getSavedShows()).thenReturn(Single.just(listOf(secondShow)))
+
+        showsPresenter.loadShows()
+
+        val unseenTvShows = showsFromWeb.filter { it.id != secondShow.id }
+
+        verify(mockShowsView).displayProgress(true)
+        verify(mockShowsView).displayProgress(false)
+        verify(mockShowsView).displayTvShows(unseenTvShows)
+        verify(mockShowsView).setPage(0)
     }
 }

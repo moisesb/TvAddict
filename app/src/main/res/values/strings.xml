@@ -34,4 +34,5 @@
     <string name="action_set_all_as_seen">Set all as seen</string>
     <string name="action_set_all_as_unseen">Set all as unseen</string>
     <string name="action_follow">Follow</string>
+    <string name="following_show_message">Following %1$s</string>
 </resources>

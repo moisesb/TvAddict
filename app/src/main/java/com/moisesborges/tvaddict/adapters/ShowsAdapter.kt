@@ -46,6 +46,12 @@ class ShowsAdapter(private val openDetailsListener: ItemClickListener<Show>?,
         notifyDataSetChanged()
     }
 
+    fun removeShow(show: Show) {
+        val indexOfShow = this.shows.indexOf(show)
+        this.shows.removeAt(indexOfShow)
+        notifyItemRemoved(indexOfShow)
+    }
+
     fun lastItemReachedEvent(): Observable<Int> {
         return publish.debounce(300, TimeUnit.MILLISECONDS)
     }
@@ -73,8 +79,8 @@ class ShowsAdapter(private val openDetailsListener: ItemClickListener<Show>?,
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         init {
-            itemView.setOnClickListener({onShowClick()})
-            itemView.more_actions_image_view.setOnClickListener({onMoreClick()})
+            itemView.setOnClickListener({ onShowClick() })
+            itemView.more_actions_image_view.setOnClickListener({ onMoreClick() })
         }
 
         @OnClick(R.id.more_actions_image_view)
@@ -120,5 +126,6 @@ class ShowsAdapter(private val openDetailsListener: ItemClickListener<Show>?,
             itemView.more_actions_image_view.visibility = if (followShowListener != null) View.VISIBLE else View.GONE
         }
     }
+
 
 }

@@ -20,4 +20,8 @@ interface ShowsView : BaseView {
     fun setPage(page: Int)
 
     fun displayMoreTvShows(shows: List<Show>)
+
+    fun hideShow(show: Show)
+
+    fun displayFollowingShowMessage(show: Show)
 }

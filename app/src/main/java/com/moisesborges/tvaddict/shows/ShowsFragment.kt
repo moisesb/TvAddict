@@ -8,6 +8,7 @@ import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.moisesborges.tvaddict.App
 import com.moisesborges.tvaddict.R
 import com.moisesborges.tvaddict.adapters.ItemClickListener
@@ -32,7 +33,7 @@ class ShowsFragment : Fragment(), ShowsView {
     internal lateinit var showsPresenter: ShowsPresenter
 
     private val showItemClickListener: ItemClickListener<Show> = ItemClickListener { show -> showsPresenter.openShowDetails(show) }
-    private val followShowListener = ItemClickListener<Show> { show -> }
+    private val followShowListener = ItemClickListener<Show> { show -> showsPresenter.followShow(show)}
 
     private val showsAdapter = ShowsAdapter(showItemClickListener, followShowListener)
 
@@ -115,6 +116,15 @@ class ShowsFragment : Fragment(), ShowsView {
 
     override fun displayMoreTvShows(shows: List<Show>) {
         showsAdapter.addShows(shows)
+    }
+
+    override fun displayFollowingShowMessage(show: Show) {
+        val text = context.resources.getString(R.string.following_show_message, show.name)
+        Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun hideShow(show: Show) {
+        showsAdapter.removeShow(show)
     }
 
     companion object {
