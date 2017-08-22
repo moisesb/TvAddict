@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import com.moisesborges.tvaddict.App
@@ -19,7 +20,10 @@ import javax.inject.Inject
 class SearchActivity : AppCompatActivity(), SearchView, android.support.v7.widget.SearchView.OnQueryTextListener {
 
     @Inject lateinit var searchPresenter: SearchPresenter
-    private val adapter = SearchResultAdapter(ItemClickListener { show -> searchPresenter.openShow(show) })
+
+    private val openDetailsClickListener = ItemClickListener<Show> { show -> searchPresenter.openShow(show) }
+    private val changeFollowingStatusClickListener = ItemClickListener<ShowResult> { showResult -> searchPresenter.toggleFollowShowStatus(showResult) }
+    private val adapter = SearchResultAdapter(openDetailsClickListener, changeFollowingStatusClickListener)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,6 +53,7 @@ class SearchActivity : AppCompatActivity(), SearchView, android.support.v7.widge
 
     private fun setupRecyclerView() {
         results_recycler_view.layoutManager = LinearLayoutManager(this)
+        results_recycler_view.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
         results_recycler_view.adapter = adapter
     }
 
@@ -84,8 +89,8 @@ class SearchActivity : AppCompatActivity(), SearchView, android.support.v7.widge
         progress_bar.visibility = if (loading) View.VISIBLE else View.GONE
     }
 
-    override fun displayResults(result: List<Show>) {
-        adapter.setResult(result)
+    override fun displayResults(result: List<ShowResult>) {
+        adapter.setResults(result)
     }
 
     override fun showNotFound(shouldBeDisplayed: Boolean, showName: String) {
@@ -104,6 +109,10 @@ class SearchActivity : AppCompatActivity(), SearchView, android.support.v7.widge
 
     override fun navigateToShowDetails(show: Show) {
         ShowDetailsActivity.start(this, show)
+    }
+
+    override fun updateShowResult(showResult: ShowResult) {
+        adapter.updateResult(showResult)
     }
 
     companion object {

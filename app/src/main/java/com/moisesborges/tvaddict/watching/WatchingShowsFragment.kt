@@ -15,11 +15,12 @@ import com.moisesborges.tvaddict.adapters.ItemClickListener
 import com.moisesborges.tvaddict.adapters.ShowsAdapter
 import com.moisesborges.tvaddict.models.Show
 import com.moisesborges.tvaddict.showdetails.ShowDetailsActivity
+import com.moisesborges.tvaddict.ui.FragmentVisibleListener
 import com.moisesborges.tvaddict.ui.SpacesItemDecoration
 import kotlinx.android.synthetic.main.fragment_watching_shows.*
 import javax.inject.Inject
 
-class WatchingShowsFragment : Fragment(), WatchingShowsView {
+class WatchingShowsFragment : Fragment(), WatchingShowsView, FragmentVisibleListener {
 
     @Inject
     internal lateinit var presenter: WatchingShowsPresenter
@@ -57,15 +58,19 @@ class WatchingShowsFragment : Fragment(), WatchingShowsView {
         shows_recycler_view.adapter = adapter
     }
 
+
     override fun onStart() {
         super.onStart()
         presenter.bindView(this)
-        presenter.loadWatchingShows()
     }
 
     override fun onStop() {
         super.onStop()
         presenter.unbindView()
+    }
+
+    override fun refresh() {
+        presenter?.loadWatchingShows()
     }
 
     override fun displayWatchingShows(shows: List<Show>) {

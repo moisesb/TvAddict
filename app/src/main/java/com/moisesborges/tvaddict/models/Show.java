@@ -10,6 +10,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.moisesborges.tvaddict.data.AppDatabase;
 import com.moisesborges.tvaddict.data.typeadapters.EmbeddedDataTypeAdapter;
+import com.moisesborges.tvaddict.data.typeadapters.RatingTypeAdapter;
 import com.moisesborges.tvaddict.data.typeadapters.StringListTypeAdapter;
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.ForeignKey;
@@ -78,7 +79,7 @@ public class Show implements Parcelable{
     @Expose
     private Schedule schedule;
 
-    @ForeignKey(saveForeignKeyModel = true)
+    @Column(typeConverter = RatingTypeAdapter.class)
     @SerializedName("rating")
     @Expose
     private Rating rating;

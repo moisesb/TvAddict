@@ -22,6 +22,7 @@ import android.view.MenuItem;
 import com.moisesborges.tvaddict.R;
 import com.moisesborges.tvaddict.search.SearchActivity;
 import com.moisesborges.tvaddict.shows.ShowsFragment;
+import com.moisesborges.tvaddict.ui.FragmentVisibleListener;
 import com.moisesborges.tvaddict.upcoming.UpcomingEpisodesFragment;
 import com.moisesborges.tvaddict.watching.WatchingShowsFragment;
 
@@ -85,8 +86,27 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         mViewPager.setAdapter(mSectionsPagerAdapter);
-
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                Fragment fragment = mSectionsPagerAdapter.getItem(position);
+                if (fragment instanceof FragmentVisibleListener) {
+                    FragmentVisibleListener listener = (FragmentVisibleListener) fragment;
+                    listener.refresh();
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
         mTabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
     }
 

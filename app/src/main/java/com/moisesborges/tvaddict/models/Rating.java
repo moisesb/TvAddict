@@ -12,10 +12,8 @@ import com.raizlabs.android.dbflow.annotation.Table;
 
 import dagger.Provides;
 
-@Table(database = AppDatabase.class)
 public class Rating implements Parcelable {
 
-    @PrimaryKey
     @SerializedName("average")
     @Expose
     private Double average;

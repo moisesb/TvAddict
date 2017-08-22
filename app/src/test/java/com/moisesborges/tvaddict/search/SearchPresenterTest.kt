@@ -9,6 +9,7 @@ import org.junit.Before
 
 import org.junit.Assert.*
 import org.junit.Test
+import org.mockito.ArgumentMatchers
 import org.mockito.Mock
 import org.mockito.Mockito.*
 import org.mockito.MockitoAnnotations
@@ -33,12 +34,12 @@ class SearchPresenterTest {
 
     @Test
     fun shouldSearchShow() {
-
         val showName = "Under the Dome"
         val show = MockShow.newMockShowInstance()
         val mockResult = listOf(show)
 
         `when`(mockRepository.searchShows(showName)).thenReturn(Single.just(mockResult))
+        `when`(mockRepository.getSavedShows()).thenReturn(Single.just(emptyList()))
 
         presenter.searchShow(showName)
 
@@ -46,7 +47,32 @@ class SearchPresenterTest {
         verify(mockView).displayProgress(true)
         verify(mockRepository).searchShows(showName)
         verify(mockView).displayProgress(false)
-        verify(mockView).displayResults(mockResult)
+        verify(mockView).displayResults(mockResult.map { ShowResult(it, false) })
+    }
+
+    @Test
+    fun shouldAddCorrectFollowingStatus() {
+        val showName = "Under the Dome"
+        val firstShow = MockShow.newMockShowInstance()
+        firstShow.id = 1
+        val secondShow = MockShow.newMockShowInstance()
+        secondShow.id = 2
+        val thirdShow = MockShow.newMockShowInstance()
+        thirdShow.id = 3
+        val mockResult = listOf(firstShow, secondShow, thirdShow)
+
+        `when`(mockRepository.searchShows(showName)).thenReturn(Single.just(mockResult))
+        `when`(mockRepository.getSavedShows()).thenReturn(Single.just(listOf(secondShow, thirdShow)))
+
+        presenter.searchShow(showName)
+
+        verify(mockView).showNotFound(false, "")
+        verify(mockView).displayProgress(true)
+        verify(mockRepository).searchShows(showName)
+        verify(mockView).displayProgress(false)
+
+        val expectedShowResults = listOf(ShowResult(firstShow, false), ShowResult(secondShow, true), ShowResult(thirdShow, true))
+        verify(mockView).displayResults(expectedShowResults)
     }
 
     @Test
@@ -55,6 +81,7 @@ class SearchPresenterTest {
         val mockResult = emptyList<Show>()
 
         `when`(mockRepository.searchShows(showName)).thenReturn(Single.just(mockResult))
+        `when`(mockRepository.getSavedShows()).thenReturn(Single.just(emptyList()))
 
         presenter.searchShow(showName)
 
@@ -85,5 +112,30 @@ class SearchPresenterTest {
         presenter.openShow(mockShow)
 
         verify(mockView).navigateToShowDetails(mockShow)
+    }
+
+    @Test
+    fun shouldFollowShow() {
+        val mockShow = MockShow.newMockShowInstance()
+        val mockShowResult = ShowResult(mockShow, false)
+
+        `when`(mockRepository.saveShow(mockShow)).thenReturn(Single.just(mockShow))
+
+        presenter.toggleFollowShowStatus(mockShowResult)
+
+        verify(mockRepository).saveShow(mockShow)
+        verify(mockView).updateShowResult(ShowResult(mockShow, true))
+    }
+
+    @Test
+    fun shouldUnfollowShow() {
+        val mockShow = MockShow.newMockShowInstance()
+        val mockShowResult = ShowResult(mockShow, true)
+
+        `when`(mockRepository.removeShow(mockShow.id)).thenReturn(Single.just(mockShow))
+
+        presenter.toggleFollowShowStatus(mockShowResult)
+        verify(mockRepository).removeShow(mockShow.id)
+        verify(mockView).updateShowResult(ShowResult(mockShow, false))
     }
 }

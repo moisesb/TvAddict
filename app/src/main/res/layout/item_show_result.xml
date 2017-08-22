@@ -25,6 +25,8 @@
         android:paddingStart="72dp"
         android:textColor="@color/primary_text"
         android:textSize="16sp"
+        android:layout_toStartOf="@id/follow_show_frame_layout"
+        android:layout_marginEnd="16dp"
         tools:text="Show Name here" />
 
     <TextView
@@ -37,6 +39,25 @@
         android:maxLines="1"
         android:paddingEnd="16dp"
         android:paddingStart="72dp"
+        android:layout_alignEnd="@id/show_name_text_view"
         tools:text="Show network" />
+
+    <FrameLayout
+        android:id="@+id/follow_show_frame_layout"
+        android:layout_width="56dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentEnd="true">
+
+        <ImageButton
+            android:id="@+id/follow_show_image_button"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:background="?attr/selectableItemBackground"
+            style="@style/SelectableItemBackground"
+            android:src="@drawable/ic_add_white_24px"
+            android:tint="@color/colorAccent"/>
+    </FrameLayout>
+
 
 </RelativeLayout>
