@@ -4,6 +4,7 @@ import com.moisesborges.tvaddict.models.Show
 import com.moisesborges.tvaddict.models.UpcomingEpisode
 import com.moisesborges.tvaddict.net.TvMazeApi
 import io.reactivex.Single
+import io.reactivex.functions.Function
 
 /**
  * Created by Moisés on 16/04/2017.
@@ -18,6 +19,13 @@ class ShowsRepositoryImpl(private val tvMazeApi: TvMazeApi,
 
     override fun getFullShowInfo(showId: Int): Single<Show> {
         return tvMazeApi.fetchShowFullInfo(showId)
+    }
+
+    override fun saveFullShowInfo(show: Show): Single<Show> {
+        return getFullShowInfo(showId = show.id)
+                .onErrorReturn { Show.NOT_FOUND }
+                .flatMap { fullShowInfo -> saveShow(if (fullShowInfo != Show.NOT_FOUND) fullShowInfo else show) }
+
     }
 
     override fun saveShow(show: Show): Single<Show> {

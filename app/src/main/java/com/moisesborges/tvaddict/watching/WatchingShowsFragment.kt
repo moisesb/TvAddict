@@ -31,7 +31,6 @@ class WatchingShowsFragment : Fragment(), WatchingShowsView, FragmentVisibleList
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
-        injectDependencies()
     }
 
     private fun injectDependencies() {
@@ -47,6 +46,7 @@ class WatchingShowsFragment : Fragment(), WatchingShowsView, FragmentVisibleList
         super.onViewCreated(view, savedInstanceState)
         ButterKnife.bind(this, view!!)
         setupRecyclerView()
+        injectDependencies()
     }
 
 

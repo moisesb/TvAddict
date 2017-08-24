@@ -67,7 +67,7 @@ class SearchPresenter @Inject constructor(rxJavaConfig: RxJavaConfig,
 
             addDisposable(disposable)
         } else {
-            val disposable = showsRepository.saveShow(showResult.show)
+            val disposable = showsRepository.saveFullShowInfo(showResult.show)
                     .compose(applySchedulersToSingle())
                     .subscribe({ show ->
                         view.updateShowResult(ShowResult(show, true))

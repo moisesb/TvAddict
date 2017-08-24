@@ -117,14 +117,15 @@ class SearchPresenterTest {
     @Test
     fun shouldFollowShow() {
         val mockShow = MockShow.newMockShowInstance()
+        val fullMockShow = MockShow.newFullMockShowInstance()
         val mockShowResult = ShowResult(mockShow, false)
 
-        `when`(mockRepository.saveShow(mockShow)).thenReturn(Single.just(mockShow))
+        `when`(mockRepository.saveFullShowInfo(mockShow)).thenReturn(Single.just(fullMockShow))
 
         presenter.toggleFollowShowStatus(mockShowResult)
 
-        verify(mockRepository).saveShow(mockShow)
-        verify(mockView).updateShowResult(ShowResult(mockShow, true))
+        verify(mockRepository).saveFullShowInfo(mockShow)
+        verify(mockView).updateShowResult(ShowResult(fullMockShow, true))
     }
 
     @Test

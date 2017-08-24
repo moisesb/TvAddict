@@ -71,7 +71,7 @@ class ShowsPresenter
     fun followShow(show: Show) {
         checkView()
 
-        val disposable = showsRepository.saveShow(show)
+        val disposable = showsRepository.saveFullShowInfo(show)
                 .compose(applySchedulersToSingle())
                 .subscribe({ savedShow ->
                     view.hideShow(savedShow)

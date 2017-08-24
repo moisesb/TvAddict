@@ -13,10 +13,11 @@ import com.moisesborges.tvaddict.R
 import com.moisesborges.tvaddict.adapters.ItemClickListener
 import com.moisesborges.tvaddict.adapters.UpcomingEpisodesAdapter
 import com.moisesborges.tvaddict.models.UpcomingEpisode
+import com.moisesborges.tvaddict.ui.FragmentVisibleListener
 import kotlinx.android.synthetic.main.fragment_upcoming_episodes.*
 import javax.inject.Inject
 
-class UpcomingEpisodesFragment : Fragment(), UpcomingEpisodesView {
+class UpcomingEpisodesFragment : Fragment(), UpcomingEpisodesView, FragmentVisibleListener {
 
     private val itemClickListener = ItemClickListener<UpcomingEpisode> {upcomingEpisode -> upcomingEpisodesPresenter.markEpisodeAsSeen(upcomingEpisode)}
     private val adapter = UpcomingEpisodesAdapter(itemClickListener)
@@ -44,7 +45,7 @@ class UpcomingEpisodesFragment : Fragment(), UpcomingEpisodesView {
     override fun onStart() {
         super.onStart()
         upcomingEpisodesPresenter.bindView(this)
-        upcomingEpisodesPresenter.loadUpcomingEpisodes()
+        refresh()
     }
 
     override fun onStop() {
@@ -56,6 +57,10 @@ class UpcomingEpisodesFragment : Fragment(), UpcomingEpisodesView {
         upcoming_episodes_recycler_view.layoutManager = LinearLayoutManager(context)
         upcoming_episodes_recycler_view.adapter = adapter
         upcoming_episodes_recycler_view.addItemDecoration( DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+    }
+
+    override fun refresh() {
+        upcomingEpisodesPresenter.loadUpcomingEpisodes()
     }
 
     override fun displayProgress(loading: Boolean) {

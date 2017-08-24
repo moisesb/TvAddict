@@ -47,7 +47,7 @@ class ShowsAdapter(private val openDetailsListener: ItemClickListener<Show>?,
     }
 
     fun removeShow(show: Show) {
-        val indexOfShow = this.shows.indexOf(show)
+        val indexOfShow = this.shows.indexOfFirst { it.id == show.id }
         this.shows.removeAt(indexOfShow)
         notifyItemRemoved(indexOfShow)
     }

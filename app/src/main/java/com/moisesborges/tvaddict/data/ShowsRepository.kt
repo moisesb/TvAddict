@@ -15,6 +15,8 @@ interface ShowsRepository {
 
     fun saveShow(show: Show): Single<Show>
 
+    fun saveFullShowInfo(show: Show): Single<Show>
+
     fun getSavedShows(): Single<List<Show>>
 
     fun getSavedShow(showId: Int): Single<Show>

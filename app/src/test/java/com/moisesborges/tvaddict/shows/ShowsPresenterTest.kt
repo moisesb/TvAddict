@@ -47,6 +47,8 @@ class ShowsPresenterTest {
     @Throws(Exception::class)
     fun shouldDisplayShows() {
         val shows = Arrays.asList(Show(), Show())
+
+        `when`(mockShowsRepository.getSavedShows()).thenReturn(Single.just(emptyList()))
         `when`(mockShowsRepository.loadShows(0)).thenReturn(Single.just(shows))
 
         showsPresenter.bindView(mockShowsView)
@@ -92,6 +94,8 @@ class ShowsPresenterTest {
         val nextPage = currentPage + 1
 
         val nextShows = listOf(MockShow.newMockShowInstance())
+
+        `when`(mockShowsRepository.getSavedShows()).thenReturn(Single.just(emptyList()))
         `when`(mockShowsRepository.loadShows(nextPage))
                 .thenReturn(Single.just(nextShows))
 
@@ -106,14 +110,13 @@ class ShowsPresenterTest {
         showsPresenter.bindView(mockShowsView)
 
         val show = MockShow.newMockShowInstance()
-
-        `when`(mockShowsRepository.saveShow(show)).thenReturn(Single.just(show))
-
+        val fullShow = MockShow.newFullMockShowInstance()
+        `when`(mockShowsRepository.saveFullShowInfo(show)).thenReturn(Single.just(fullShow))
         showsPresenter.followShow(show)
 
-        verify(mockShowsRepository).saveShow(show)
-        verify(mockShowsView).hideShow(show)
-        verify(mockShowsView).displayFollowingShowMessage(show)
+        verify(mockShowsRepository).saveFullShowInfo(show)
+        verify(mockShowsView).hideShow(fullShow)
+        verify(mockShowsView).displayFollowingShowMessage(fullShow)
     }
 
     @Test
