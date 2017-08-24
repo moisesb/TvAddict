@@ -5,6 +5,10 @@ import com.moisesborges.tvaddict.models.Show
 import com.moisesborges.tvaddict.models.UpcomingEpisode
 import com.moisesborges.tvaddict.mvp.BasePresenter
 import com.moisesborges.tvaddict.mvp.RxJavaConfig
+import com.moisesborges.tvaddict.mvp.asContentObserverView
+import com.raizlabs.android.dbflow.runtime.FlowContentObserver
+import com.raizlabs.android.dbflow.sql.language.SQLOperator
+import com.raizlabs.android.dbflow.structure.BaseModel
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -14,6 +18,19 @@ import javax.inject.Inject
 class UpcomingEpisodesPresenter
 @Inject constructor(rxJavaConfig: RxJavaConfig,
                     private val showsRepository: ShowsRepository) : BasePresenter<UpcomingEpisodesView>(rxJavaConfig) {
+
+    private val contentObserver: FlowContentObserver = FlowContentObserver()
+
+    override fun bindView(view: UpcomingEpisodesView) {
+        super.bindView(view)
+        view.asContentObserverView()?.registerContentObserver(contentObserver, Show::class.java)
+        contentObserver.addModelChangeListener { clazz: Class<*>?, action: BaseModel.Action, arrayOfSQLOperators: Array<SQLOperator> -> loadUpcomingEpisodes() }
+    }
+
+    override fun unbindView() {
+        view.asContentObserverView()?.unregisterContentObserver(contentObserver)
+        super.unbindView()
+    }
 
     fun loadUpcomingEpisodes() {
         checkView()

@@ -31,7 +31,7 @@ public abstract class BasePresenter<T extends BaseView> {
         return mRxJavaConfig;
     }
 
-    public void bindView(T view) {
+    public void bindView(@NonNull T view) {
         mView = view;
     }
 

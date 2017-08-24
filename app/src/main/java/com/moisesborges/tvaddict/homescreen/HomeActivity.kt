@@ -7,7 +7,6 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
 import android.support.v4.view.GravityCompat
-import android.support.v4.view.ViewPager
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
@@ -15,7 +14,6 @@ import android.view.MenuItem
 import com.moisesborges.tvaddict.R
 import com.moisesborges.tvaddict.search.SearchActivity
 import com.moisesborges.tvaddict.shows.ShowsFragment
-import com.moisesborges.tvaddict.ui.FragmentVisibleListener
 import com.moisesborges.tvaddict.upcoming.UpcomingEpisodesFragment
 import com.moisesborges.tvaddict.watching.WatchingShowsFragment
 import kotlinx.android.synthetic.main.activity_home.*
@@ -53,20 +51,6 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         container.adapter = sectionsPagerAdapter
         container.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabs))
-        container.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-
-            }
-
-            override fun onPageSelected(position: Int) {
-                val fragmentVisibleListener = sectionsPagerAdapter.getItem(position) as? FragmentVisibleListener
-                fragmentVisibleListener?.refresh()
-            }
-
-            override fun onPageScrollStateChanged(state: Int) {
-
-            }
-        })
         tabs.addOnTabSelectedListener(TabLayout.ViewPagerOnTabSelectedListener(container))
     }
 

@@ -14,13 +14,14 @@ import com.moisesborges.tvaddict.R
 import com.moisesborges.tvaddict.adapters.ItemClickListener
 import com.moisesborges.tvaddict.adapters.ShowsAdapter
 import com.moisesborges.tvaddict.models.Show
+import com.moisesborges.tvaddict.mvp.ContentObserverView
 import com.moisesborges.tvaddict.showdetails.ShowDetailsActivity
-import com.moisesborges.tvaddict.ui.FragmentVisibleListener
 import com.moisesborges.tvaddict.ui.SpacesItemDecoration
+import com.raizlabs.android.dbflow.runtime.FlowContentObserver
 import kotlinx.android.synthetic.main.fragment_watching_shows.*
 import javax.inject.Inject
 
-class WatchingShowsFragment : Fragment(), WatchingShowsView, FragmentVisibleListener {
+class WatchingShowsFragment : Fragment(), WatchingShowsView, ContentObserverView {
 
     @Inject
     internal lateinit var presenter: WatchingShowsPresenter
@@ -62,6 +63,7 @@ class WatchingShowsFragment : Fragment(), WatchingShowsView, FragmentVisibleList
     override fun onStart() {
         super.onStart()
         presenter.bindView(this)
+        presenter.loadWatchingShows()
     }
 
     override fun onStop() {
@@ -69,9 +71,6 @@ class WatchingShowsFragment : Fragment(), WatchingShowsView, FragmentVisibleList
         presenter.unbindView()
     }
 
-    override fun refresh() {
-        presenter?.loadWatchingShows()
-    }
 
     override fun displayWatchingShows(shows: List<Show>) {
         adapter.setShows(shows)
@@ -83,6 +82,14 @@ class WatchingShowsFragment : Fragment(), WatchingShowsView, FragmentVisibleList
 
     override fun navigateToShowDetails(show: Show) {
         ShowDetailsActivity.start(context, show)
+    }
+
+    override fun <T> registerContentObserver(contentObserver: FlowContentObserver, classOf: Class<T>) {
+        contentObserver.registerForContentChanges(context, classOf)
+    }
+
+    override fun unregisterContentObserver(contentObserver: FlowContentObserver) {
+        contentObserver.unregisterForContentChanges(context)
     }
 
     companion object {
