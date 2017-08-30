@@ -35,7 +35,7 @@ public class HomeActivityTest {
         onView(withText(R.string.tab_shows))
                 .check(matches(isDisplayed()));
 
-        onView(withText(R.string.tab_watching))
+        onView(withText(R.string.tab_watch_list))
                 .check(matches(isDisplayed()));
 
         onView(withText(R.string.tab_upcoming))
@@ -53,7 +53,7 @@ public class HomeActivityTest {
 
     @Test
     public void shouldDisplayWatchingShows() throws Exception {
-        onView(withText(R.string.tab_watching))
+        onView(withText(R.string.tab_watch_list))
                 .perform(click());
 
         onView(withId(R.id.watching_shows_layout))

@@ -21,6 +21,7 @@ class UpcomingEpisodesFragment : Fragment(), UpcomingEpisodesView {
     private val itemClickListener = ItemClickListener<UpcomingEpisode> {upcomingEpisode -> upcomingEpisodesPresenter.markEpisodeAsSeen(upcomingEpisode)}
     private val adapter = UpcomingEpisodesAdapter(itemClickListener)
     @Inject lateinit var upcomingEpisodesPresenter: UpcomingEpisodesPresenter
+    private var noUpcomingEpisodesView: View? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,8 +67,16 @@ class UpcomingEpisodesFragment : Fragment(), UpcomingEpisodesView {
         adapter.setEpisodes(episodes)
     }
 
-    override fun displayNoUpcomingEpisodes() {
-        no_upcoming_episodes_view_stub.inflate()
+    override fun displayNoUpcomingEpisodesMessage() {
+        if (noUpcomingEpisodesView == null) {
+            noUpcomingEpisodesView = no_upcoming_episodes_view_stub.inflate()
+        } else {
+            noUpcomingEpisodesView?.visibility = View.VISIBLE
+        }
+    }
+
+    override fun hideNoUpcomingEpisodesMessage() {
+        noUpcomingEpisodesView?.visibility = View.GONE
     }
 
     override fun hideEpisode(upcomingEpisode: UpcomingEpisode) {

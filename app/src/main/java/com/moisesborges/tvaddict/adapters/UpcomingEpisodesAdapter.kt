@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import com.moisesborges.tvaddict.R
 import com.moisesborges.tvaddict.models.UpcomingEpisode
+import com.moisesborges.tvaddict.utils.DateUtils
 import kotlinx.android.synthetic.main.item_upcoming_episode.view.*
 
 /**
@@ -64,10 +65,12 @@ class UpcomingEpisodesAdapter(val itemClickListener: ItemClickListener<UpcomingE
                     .into(itemView.episode_image_view)
 
             itemView.show_name_text_view.text = upcomingEpisode.show.name
-            itemView.episode_name_text_view.text = upcomingEpisode.episode.name
+            val episode = upcomingEpisode.episode
+            itemView.episode_name_text_view.text = "S${episode.season}E${episode.number} - ${episode.name}"
+            val airdate = DateUtils.airdateToUiString(episode.airdate)
+            itemView.episode_airdate_text_view.text = "$airdate ${episode.airtime}"
             itemView.episode_seen_button.setOnClickListener({
-                val upcomingEpisode = upcomingEpisodes[adapterPosition]
-                itemClickListener.consume(upcomingEpisode)
+                itemClickListener.consume(upcomingEpisodes[adapterPosition])
             })
         }
 

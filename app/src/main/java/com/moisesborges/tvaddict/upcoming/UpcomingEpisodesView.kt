@@ -9,7 +9,8 @@ import com.moisesborges.tvaddict.mvp.BaseView
 interface UpcomingEpisodesView : BaseView {
     fun displayProgress(loading: Boolean)
     fun displayEpisodes(episodes: List<UpcomingEpisode>)
-    fun displayNoUpcomingEpisodes()
+    fun displayNoUpcomingEpisodesMessage()
     fun hideEpisode(upcomingEpisode: UpcomingEpisode)
     fun replaceEpisode(upcomingEpisode: UpcomingEpisode, nextUpcomingEpisode: UpcomingEpisode)
+    fun hideNoUpcomingEpisodesMessage()
 }

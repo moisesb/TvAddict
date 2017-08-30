@@ -21,10 +21,11 @@ import com.raizlabs.android.dbflow.runtime.FlowContentObserver
 import kotlinx.android.synthetic.main.fragment_watching_shows.*
 import javax.inject.Inject
 
-class WatchingShowsFragment : Fragment(), WatchingShowsView, ContentObserverView {
+class WatchListFragment : Fragment(), WatchListView, ContentObserverView {
 
     @Inject
-    internal lateinit var presenter: WatchingShowsPresenter
+    internal lateinit var presenter: WatchListPresenter
+    private var emptyWatchListView: View? = null
 
     private val openShowDetailsListener = ItemClickListener<Show> { show -> presenter.openShowDetails(show) }
 
@@ -77,7 +78,15 @@ class WatchingShowsFragment : Fragment(), WatchingShowsView, ContentObserverView
     }
 
     override fun displayEmptyListMessage() {
-        watching_no_shows_view_stub.inflate()
+        if (emptyWatchListView == null) {
+            emptyWatchListView = watching_no_shows_view_stub.inflate()
+        } else {
+            emptyWatchListView?.visibility = View.VISIBLE
+        }
+    }
+
+    override fun hideEmptyListMessage() {
+        emptyWatchListView?.visibility = View.GONE
     }
 
     override fun navigateToShowDetails(show: Show) {
@@ -96,7 +105,7 @@ class WatchingShowsFragment : Fragment(), WatchingShowsView, ContentObserverView
 
         @JvmStatic
         fun newInstance(): Fragment {
-            return WatchingShowsFragment()
+            return WatchListFragment()
         }
     }
 }

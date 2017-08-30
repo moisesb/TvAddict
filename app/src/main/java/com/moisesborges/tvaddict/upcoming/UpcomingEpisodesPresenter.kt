@@ -41,9 +41,10 @@ class UpcomingEpisodesPresenter
                 .subscribe({ episodes ->
                     view.displayProgress(false)
                     if (episodes.isNotEmpty()) {
+                        view.hideNoUpcomingEpisodesMessage()
                         view.displayEpisodes(episodes)
                     } else {
-                        view.displayNoUpcomingEpisodes()
+                        view.displayNoUpcomingEpisodesMessage()
                     }
                 })
 

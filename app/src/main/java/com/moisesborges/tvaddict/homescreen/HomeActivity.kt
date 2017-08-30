@@ -15,7 +15,7 @@ import com.moisesborges.tvaddict.R
 import com.moisesborges.tvaddict.search.SearchActivity
 import com.moisesborges.tvaddict.shows.ShowsFragment
 import com.moisesborges.tvaddict.upcoming.UpcomingEpisodesFragment
-import com.moisesborges.tvaddict.watching.WatchingShowsFragment
+import com.moisesborges.tvaddict.watching.WatchListFragment
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.content_home.*
 import java.util.*
@@ -98,7 +98,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         private fun initFragments() {
             fragments.add(ShowsFragment.newInstance())
-            fragments.add(WatchingShowsFragment.newInstance())
+            fragments.add(WatchListFragment.newInstance())
             fragments.add(UpcomingEpisodesFragment.newInstance())
         }
 

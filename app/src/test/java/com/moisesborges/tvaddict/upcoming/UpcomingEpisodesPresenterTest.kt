@@ -1,14 +1,11 @@
 package com.moisesborges.tvaddict.upcoming
 
 import com.moisesborges.tvaddict.data.ShowsRepository
-import com.moisesborges.tvaddict.models.Episode
 import com.moisesborges.tvaddict.models.Show
 import com.moisesborges.tvaddict.models.UpcomingEpisode
 import com.moisesborges.tvaddict.utils.MockShow
 import com.moisesborges.tvaddict.utils.RxJavaTestConfig
-import com.raizlabs.android.dbflow.kotlinextensions.update
 import io.reactivex.Single
-import org.hamcrest.Matchers
 import org.hamcrest.Matchers.`is`
 import org.hamcrest.Matchers.notNullValue
 import org.junit.Assert.assertThat
@@ -50,6 +47,7 @@ class UpcomingEpisodesPresenterTest {
         verify(mockView).displayProgress(true)
         verify(mockRepository).fetchUpcomingEpisodes()
         verify(mockView).displayProgress(false)
+        verify(mockView).hideNoUpcomingEpisodesMessage()
         verify(mockView).displayEpisodes(upcomingEpisodes)
 
     }
@@ -66,7 +64,7 @@ class UpcomingEpisodesPresenterTest {
         verify(mockRepository).fetchUpcomingEpisodes()
         verify(mockView).displayProgress(false)
         verify(mockView, never()).displayEpisodes(upcomingEpisodes)
-        verify(mockView).displayNoUpcomingEpisodes()
+        verify(mockView).displayNoUpcomingEpisodesMessage()
     }
 
     @Test

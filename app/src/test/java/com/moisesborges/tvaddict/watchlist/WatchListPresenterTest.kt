@@ -20,20 +20,20 @@ import org.mockito.Mockito.`when`
 /**
  * Created by Moisés on 22/05/2017.
  */
-class WatchingShowsPresenterTest {
+class WatchListPresenterTest {
 
-    private lateinit var presenter: WatchingShowsPresenter
+    private lateinit var presenter: WatchListPresenter
 
     @Mock
     internal lateinit var mockShowsRepository: ShowsRepository
     @Mock
-    internal lateinit var mockView: WatchingShowsView
+    internal lateinit var mockView: WatchListView
 
     @Before
     @Throws(Exception::class)
     fun setUp() {
         MockitoAnnotations.initMocks(this)
-        presenter = WatchingShowsPresenter(RxJavaTestConfig(), mockShowsRepository)
+        presenter = WatchListPresenter(RxJavaTestConfig(), mockShowsRepository)
     }
 
     @Test
@@ -43,7 +43,7 @@ class WatchingShowsPresenterTest {
         `when`(mockShowsRepository.getSavedShows()).thenReturn(Single.just<List<Show>>(ArrayList<Show>()))
 
         presenter.loadWatchingShows()
-        verify<WatchingShowsView>(mockView).displayEmptyListMessage()
+        verify<WatchListView>(mockView).displayEmptyListMessage()
     }
 
     @Test
@@ -56,7 +56,8 @@ class WatchingShowsPresenterTest {
         `when`(mockShowsRepository.getSavedShows()).thenReturn(Single.just<List<Show>>(shows))
 
         presenter.loadWatchingShows()
-        verify<WatchingShowsView>(mockView).displayWatchingShows(shows)
+        verify(mockView).hideEmptyListMessage()
+        verify(mockView).displayWatchingShows(shows)
     }
 
     @Test
