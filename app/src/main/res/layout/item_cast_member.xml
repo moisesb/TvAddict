@@ -2,26 +2,21 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:tools="http://schemas.android.com/tools"
               android:orientation="vertical"
-              android:layout_width="match_parent"
+              android:layout_width="96dp"
               android:layout_height="wrap_content">
 
-    <com.moisesborges.tvaddict.ui.SquareFrameLayout
+    <com.moisesborges.tvaddict.ui.ThreeFourImageView
+        android:id="@+id/cast_member_image_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <ImageView
-            android:id="@+id/cast_member_image_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-    </com.moisesborges.tvaddict.ui.SquareFrameLayout>
+        android:layout_height="wrap_content"/>
 
     <TextView
         android:id="@+id/cast_member_name_text_view"
         tools:text="Actor name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
         android:layout_marginTop="8dp"
         android:textColor="@color/primary_text"
         android:singleLine="true"
@@ -33,8 +28,8 @@
         tools:text="Character"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
         android:layout_marginBottom="8dp"
         android:textColor="@color/primary_text"
         android:singleLine="true"
